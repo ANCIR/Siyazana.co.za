@@ -29,3 +29,43 @@
   label: Organization
   obj: entity
   attributes: []
+
+- name: details
+  label: Generic Entity Details
+  obj: entity
+  hidden: true
+  attributes:
+    - name: website
+      label: Website
+    - name: email
+      label: Email Address
+    - name: telephone_number
+      label: Telephone
+    - name: fax_number
+      label: Fax Number
+    - name: postal_address
+      label: Postal Address
+    - name: physical_address
+      label: Physical Address
+
+- name: jse_company
+  label: Company (JSE)
+  obj: entity
+  attributes:
+    - name: jse_status
+      label: Status at JSE
+    - name: jse_registration_number
+      label: Registration Number
+    - name: jse_code
+      label: Alphabetic Code
+    - name: jse_role
+      label: Role at JSE
+    - name: jse_nature_business
+      label: Nature of business
+
+- name: jse_role
+  label: Role at JSE
+  obj: relation
+  attributes:
+    - name: role
+      label: Role Description
