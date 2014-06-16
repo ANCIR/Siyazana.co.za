@@ -6,7 +6,18 @@ This project maps out connections between politically exposed persons, business 
 
 This package works in combination with a running instance of [grano](http://granoproject.org), a toolkit for journalistic influence mapping. Based on that API, this package provides ETL/loading scripts and a Flask-based frontend.
 
+
 ## Installation/Deployment
+
+As a developer, set up a local virtual environment (using ``virtualenv``) and clone the ``connectedafrica`` package from GitHub:
+
+    git clone https://github.com/codeforafrica/connectedAFRICA.git 
+    cd connectedAFRICA
+    virtualenv pyenv
+    source pyenv/bin/activate
+    python setup.py develop
+
+After that, you need to set up a configuration file, e.g. ``settings.py`` to hold the configuration for the front-end.
 
 
 ## Credits and License
