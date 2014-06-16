@@ -1,8 +1,11 @@
 from flask.ext.script import Manager
 from flask.ext.assets import ManageAssets
 
-from connectedafrica.core import assets
-from connectedafrica.web import app
+from connectedafrica.core import assets, app
+from connectedafrica.views.base import blueprint as base_blueprint
+
+
+app.register_blueprint(base_blueprint)
 
 manager = Manager(app)
 manager.add_command("assets", ManageAssets(assets))
@@ -12,11 +15,6 @@ manager.add_command("assets", ManageAssets(assets))
 def load():
     """ Load all the datas. """
     pass
-
-
-@manager.command
-def run(port):
-    app.run(host='0.0.0.0', port=int(port), debug=app.debug)
 
 
 if __name__ == "__main__":
