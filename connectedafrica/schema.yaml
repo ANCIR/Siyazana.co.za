@@ -1,0 +1,31 @@
+
+- name: popolo_entity
+  label: Popolo Entity
+  obj: entity
+  attributes:
+    - name: identity
+      label: Foreign system identifiers
+
+- name: popolo_person
+  label: Person
+  obj: entity
+  attributes:
+    - name: given_name
+      label: Given name
+    - name: family_name
+      label: Family name
+    - name: gender
+      label: Gender
+    - name: honorific_prefix
+      label: Honorific Prefix
+    - name: popit_api_url
+      label: PopIt API URL
+      hidden: true
+    - name: pa_api_url
+      label: People's Assembly API URL
+      hidden: true
+
+- name: popolo_organization
+  label: Organization
+  obj: entity
+  attributes: []
