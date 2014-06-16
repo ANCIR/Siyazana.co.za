@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request, url_for
+from flask import Blueprint, render_template
 
-from connectedafrica.core import grano, app
+#from connectedafrica.core import grano
 
 
 blueprint = Blueprint('base', __name__)

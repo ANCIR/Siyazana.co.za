@@ -29,5 +29,4 @@ try:
     grano = client.get(project_name)
 except NotFound:
     data = {'slug': project_name, 'label': project_name}
-    #grano = client.projects.create(data)
-    grano = None
+    grano = client.projects.create(data)
