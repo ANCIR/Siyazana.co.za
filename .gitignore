@@ -3,3 +3,4 @@ _site/
 .env
 *.egg-info
 pyenv/*
+*.pyc
