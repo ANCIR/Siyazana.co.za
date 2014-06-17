@@ -1,5 +1,14 @@
+#
+# Scrape the Johannesburg Stock Exchange Listed Companies.
+#
+# This scraper runs against a JSON interface provided by JSE and retrieve
+# data related to all listed companies; the companies related to them
+# (their Auditors, Sponsors etc.); and contact persons for some of them.
+#
+# TODO: Load contact persons - is that worth it, or polluting the database?
+
 import logging
-from pprint import pprint
+#from pprint import pprint
 import json
 
 from thready import threaded
