@@ -20,6 +20,7 @@ setup(
         "Flask-Assets==0.9",
         "Flask-Script==2.0.5",
         "PyYAML==3.10",
+        "thready>=0.1.4",
         "unicodecsv==0.9.4"
     ],
     tests_require=[],
