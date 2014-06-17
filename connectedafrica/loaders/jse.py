@@ -1,8 +1,6 @@
 import logging
 from pprint import pprint
-#from threading import RLock
 import json
-from itertools import count
 
 from thready import threaded
 from granoclient.loader import Loader
@@ -13,7 +11,6 @@ from connectedafrica.loaders.util import write_json, read_json
 
 
 log = logging.getLogger(__name__)
-#scrape_lock = RLock()
 
 INDEX = 'https://www.jse.co.za/_vti_bin/JSE/CustomerRoleService.svc/GetAllIssuers'
 ISSUER = 'https://www.jse.co.za/_vti_bin/JSE/CustomerRoleService.svc/GetIssuer'
@@ -84,12 +81,14 @@ def scrape_record(records, i):
     
     try:
         res = requests.post(BUSINESS, **req)
-        record['NatureOfBusiness'] = res.json().get('GetIssuerNatureOfBusinessResult')
+        res = res.json()
+        record['NatureOfBusiness'] = res.get('GetIssuerNatureOfBusinessResult')
     except Exception, e:
         log.exception(e)
 
     res = requests.post(ASSOCIATED, **req)
-    record['AssociatedRoles'] = res.json().get('GetIssuerAssociatedRolesResult')
+    res = res.json()
+    record['AssociatedRoles'] = res.get('GetIssuerAssociatedRolesResult')
 
     records[i] = record
 
@@ -109,7 +108,9 @@ def scrape_index(records):
 
 def scrape():
     records = read_json('jse.json') or {}
-    threaded(scrape_index(records), lambda i: scrape_record(records, i), num_threads=30)
+    threaded(scrape_index(records),
+             lambda i: scrape_record(records, i),
+             num_threads=30)
     write_json('jse.json', records)
 
 
