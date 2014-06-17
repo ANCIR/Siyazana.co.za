@@ -8,7 +8,6 @@
 # TODO: Load contact persons - is that worth it, or polluting the database?
 
 import logging
-#from pprint import pprint
 import json
 
 from thready import threaded
@@ -61,7 +60,6 @@ def load_record(i, record):
 
     for role in record.pop('AssociatedRoles'):
         role_desc = role.get('RoleDescription')
-        print role_desc
         alt = create_entity(loader, role)
 
         rel = loader.make_relation('jse_role', alt, ent)
