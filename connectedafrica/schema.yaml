@@ -1,34 +1,5 @@
 
-- name: popolo_entity
-  label: Popolo Entity
-  obj: entity
-  attributes:
-    - name: identity
-      label: Foreign system identifiers
-
-- name: popolo_person
-  label: Person
-  obj: entity
-  attributes:
-    - name: given_name
-      label: Given name
-    - name: family_name
-      label: Family name
-    - name: gender
-      label: Gender
-    - name: honorific_prefix
-      label: Honorific Prefix
-    - name: popit_api_url
-      label: PopIt API URL
-      hidden: true
-    - name: pa_api_url
-      label: People's Assembly API URL
-      hidden: true
-
-- name: popolo_organization
-  label: Organization
-  obj: entity
-  attributes: []
+# Generic schemata
 
 - name: details
   label: Generic Entity Details
@@ -48,8 +19,71 @@
     - name: physical_address
       label: Physical Address
 
+- name: political_committee
+  label: Committee
+  obj: entity
+  attributes: []
+
+- name: political_party
+  label: Party
+  obj: entity
+  attributes: []
+
+# Popolo, PA Edition
+
+- name: popolo_entity
+  label: Popolo Entity
+  hidden: true
+  obj: entity
+  attributes:
+    - name: popit_id
+      label: Foreign system identifiers
+      hidden: true
+    - name: pa_url
+      label: People's Assembly URL
+
+- name: popolo_person
+  label: Person
+  obj: entity
+  attributes:
+    - name: given_name
+      label: Given name
+    - name: family_name
+      label: Family name
+    - name: gender
+      label: Gender
+    - name: honorific_prefix
+      label: Honorific Prefix
+    - name: popit_api_url
+      label: PopIt API URL
+      hidden: true
+
+- name: popolo_organization
+  label: Popolo Organization
+  obj: entity
+  attributes:
+    - name: org_category
+      label: Category
+    - name: org_classification
+      label: Classification
+
+- name: popolo_membership
+  label: Membership
+  obj: relation
+  attributes:
+    - name: role
+      label: Role
+    - name: start_date
+      label: Start date
+      datatype: datetime
+    - name: end_date
+      label: End date
+      datatype: datetime
+
+# Johannesburg Stock Exchange
+
 - name: jse_company
-  label: Company (JSE)
+  label: Listed Company
   obj: entity
   attributes:
     - name: jse_status
