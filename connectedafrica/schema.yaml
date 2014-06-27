@@ -66,6 +66,8 @@
       label: Category
     - name: org_classification
       label: Classification
+    - name: org_identifier
+      label: Identifier
 
 - name: popolo_membership
   label: Membership
