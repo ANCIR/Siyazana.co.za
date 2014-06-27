@@ -25,17 +25,15 @@ def _parse_date(datestr):
         return None
 
 
-# TODO: don't create duplicate entities
-# Registration number + country can be used as ID for organization
 def load_directorship_entry(loader, data):
     person = loader.make_entity(['popolo_entity', 'popolo_person'],
                                 source_url=data['Source URL for information'])
     person.set('name', data['Person Name'])
     person.save()
 
-    org = loader.make_entity(['popolo_entity', 'popolo_organization'],
+    org = loader.make_entity(['popolo_entity', 'popolo_organization', 'popolo_area'],
                              source_url=data['Source URL for information'])
-    org.set('name', 'Organisation Name')
+    org.set('name', data['Organisation Name'])
     # TODO: not sure if this is the correct use of classification?
     org.set('org_classification', data['Org type'])
     org.set('physical_address', data['Address'])

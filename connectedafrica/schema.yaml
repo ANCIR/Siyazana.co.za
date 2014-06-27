@@ -82,6 +82,13 @@
       label: End date
       datatype: datetime
 
+- name: popolo_area
+  label: Geographic area
+  obj: entity
+  attributes:
+    - name: area_classification
+      label: Area classification
+
 # Johannesburg Stock Exchange
 
 - name: jse_company
