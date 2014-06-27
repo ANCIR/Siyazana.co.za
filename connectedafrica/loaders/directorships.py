@@ -13,9 +13,6 @@ log = logging.getLogger(__name__)
 
 
 DATE_FORMAT = '%m/%d/%Y'
-FIELD_NAMES = ('Person Name', 'Organisation Name', 'Org type', 'Address',
-               'Role description', 'Registration number', 'Status',
-               'Director since', 'Director until', 'Source URL for information')
 
 
 def _parse_date(datestr):
@@ -55,7 +52,7 @@ def load():
     csv_path = os.path.join(os.path.dirname(__file__),
                             '..', '..', 'data', 'directorships.csv')
     with open(csv_path) as f:
-        for row in csv.DictReader(f, FIELD_NAMES):
+        for row in csv.DictReader(f):
             load_directorship_entry(loader, row)
 
 
