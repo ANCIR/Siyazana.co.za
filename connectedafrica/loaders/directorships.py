@@ -25,7 +25,8 @@ def load_directorship_entry(loader, data):
     org.set('physical_address', data['Address'])
     org.set('org_identifier', data['Registration number'])
     
-    relation = loader.make_relation('popolo_membership', person, org)
+    relation = loader.make_relation('popolo_membership', person, org,
+                                    source_url=data['Source URL for information'])
     relation.set('role', data['Role description'])
     start_date = parse_date(data['Director since'])
     end_date = parse_date(data['Director until'])
