@@ -1,25 +1,14 @@
-from datetime import datetime
 import logging
 import os
-from pprint import pprint
 import unicodecsv as csv
 
 from granoclient.loader import Loader
 
 from connectedafrica.core import grano
+from connectedafrica.loaders.util import parse_date, DATA_PATH
 
 
 log = logging.getLogger(__name__)
-
-
-DATE_FORMAT = '%m/%d/%Y'
-
-
-def _parse_date(datestr):
-    try:
-        return datetime.strptime(datestr, DATE_FORMAT)
-    except ValueError:
-        return None
 
 
 def load_directorship_entry(loader, data):
@@ -38,8 +27,8 @@ def load_directorship_entry(loader, data):
     
     relation = loader.make_relation('popolo_membership', person, org)
     relation.set('role', data['Role description'])
-    start_date = _parse_date(data['Director since'])
-    end_date = _parse_date(data['Director until'])
+    start_date = parse_date(data['Director since'])
+    end_date = parse_date(data['Director until'])
     if start_date is not None:
         relation.set('start_date', start_date)
     if end_date is not None:
@@ -49,8 +38,7 @@ def load_directorship_entry(loader, data):
 
 def load():
     loader = Loader(grano, source_url=None)
-    csv_path = os.path.join(os.path.dirname(__file__),
-                            '..', '..', 'data', 'directorships.csv')
+    csv_path = os.path.join(DATA_PATH, 'directorships.csv')
     with open(csv_path) as f:
         for row in csv.DictReader(f):
             load_directorship_entry(loader, row)
