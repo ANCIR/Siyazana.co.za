@@ -42,17 +42,52 @@
       list-style: none;
       padding: 0;
     }
-    #relations li > p {
-      padding-left: 2em;
+    #relations > div > ul {
+      font-size: larger;
+      margin-top: 15px;
+    }
+    #relations > div > ul > li {
+      font-weight: bolder;
+      padding: 10px 0;
+      border-top: thin solid #eee;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    #relations li li {
+      padding-left: 1em;
+      font-weight: normal;
+      font-size: smaller;
+    }
+
+    #relations #sources ul {
+      font-size: small;
+    }
+    #relations #sources li {
+      font-weight: normal;
+      border: none;
+      padding: 0;
+    }
+
+    #related-entities {
+      text-align: center;
+    }
+    #related-entities img {
+      margin: 0 10px 15px 0;
+    }
+    #related-entities div > a:last-child img {
+      margin-right: 0;
     }
   </style>
   <script type="text/javascript">
     $(function(){
-      $('a.sources').popover({
-        trigger: 'click',
-        html: true,
-        container: 'body',
-      });
+      $('a.sources')
+        .click(function(e){ e.preventDefault(); }) 
+        .popover({
+          trigger: 'click',
+          html: true,
+          container: 'body',
+        });
     });
   </script>
   <link rel="shortcut icon" href="http://www.codeforafrica.org/favicon.png">
@@ -96,15 +131,12 @@
             A section could have introductory text - optional because it cannot necessarily be scraped and it requires a large amount of writing effort.
           </p>
           <ul>
-            <li><strong>Relation type: </strong> Entity name and/or link (date range) <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></li>
-          </ul>
-          <ul>
-            <li><strong>Spouse: </strong><a href="#">Gertrude Sizakele Khumalo</a> (1973–present) <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></li>
-            <li><strong>Spouse: </strong><a href="#">Kate Zuma</a> (1976–2000) <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></li>
-            <li><strong>Spouse: </strong><a href="#">Nkosazana Dlamini</a> (1982–1998) <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></li>
-            <li><strong>Spouse: </strong><a href="#">Nompumelelo Ntuli</a> (2008–present) <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></li>
-            <li><strong>Spouse: </strong><a href="#">Thobeka Mabhija</a> (2010–present) <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></li>
-            <li><strong>Spouse: </strong><a href="#">Gloria Bongekile Ngema</a> (2010–present) <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></li>
+            <li><a href="#">Gertrude Sizakele Khumalo</a><ul><li><a href="#">Spouse (1973–present)</a></li></ul></li>
+            <li><a href="#">Kate Zuma</a><ul><li><a href="#">Spouse (1976–2000)</a></li></ul></li>
+            <li><a href="#">Nkosazana Dlamini</a><ul><li><a href="#">Spouse (1982–1998)</a></li></ul></li>
+            <li><a href="#">Nompumelelo Ntuli</a><ul><li><a href="#">Spouse (2008–present)</a></li></ul></li>
+            <li><a href="#">Thobeka Mabhija</a><ul><li><a href="#">Spouse (2010–present)</a></li></ul></li>
+            <li><a href="#">Gloria Bongekile Ngema</a><ul><li><a href="#">Spouse (2010–present)</a></li></ul></li>
           </ul>
         </div>
         <div id="relations-organizations">
@@ -113,10 +145,10 @@
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel lacinia dui. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
           </p>
           <ul>
-            <li><strong>Director: </strong><a href="#">NATIONAL PRIDE TRADING 259</a> (July 2005–October 2009) <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></li>
-            <li><strong>Director: </strong><a href="#">JACOB ZUMA FOUNDATION</a> (September 2008–April 2009) <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></li>
-            <li><strong>Member: </strong><a href="#">MICHIGAN INVESTMENTS</a> (October 1995–present) <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></li>
-            <li><strong>Member: </strong><a href="#">AMAQHAWE WASE AFRICA PETROLEUM</a> (September 2005–present) <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></li>
+            <li><a href="#">NATIONAL PRIDE TRADING 259</a><ul><li><a href="#">Director (July 2005–October 2009)</a></li></ul></li>
+            <li><a href="#">JACOB ZUMA FOUNDATION</a><ul><li><a href="#">Director (September 2008–April 2009)</a></li></ul></li>
+            <li><a href="#">MICHIGAN INVESTMENTS</a><ul><li><a href="#">Member (October 1995–present)</a></li></ul></li>
+            <li><a href="#">AMAQHAWE WASE AFRICA PETROLEUM</a><ul><li><a href="#">Member (September 2005–present)</a></li></ul></li>
           </ul>
         </div>
         <div id="relations-legal">
@@ -125,9 +157,8 @@
             Mauris lacus mi, porta sit amet molestie sed, ultrices et sapien. Curabitur in ante porta, consectetur massa ut, consectetur lorem. Integer sit amet suscipit nulla.
           </p>
           <ul>
-            <li><strong>Relation type: </strong> Entity name and/or link (date range) <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a>
-              <p>Other parties involved</p>
-            </li>
+            <li><a href="#">Decision by the office of the National Director of Public Prosecutions to discontinue prosecution subject to constitutional review – the Democratic Alliance, a registered political party, has locus standi to bring application to review – record of decision is compellable.</a><ul><li><a href="#">Applicant (February–April 2012)</a></li></ul></li>
+            <li><a href="#">This is an appeal against a judgment of Hurt J, sitting in the Durban High Court, in which he declared five search warrants invalid and the searches pursuant to them unlawful and ordered the appellants to return to the respondents all items seized under them together with all copies that had been made and to pay the costs of the application.</a><ul><li><a href="#">Respondent (November 2007)</a></li></ul></li>
           </ul>
         </div>
         <div id="sources">
@@ -137,6 +168,7 @@
           </p>
           <ul>
             <li>[1] <a href='http://source.example.com'>http://source.example.com</a></li>
+            <li>[2] <a href='http://source.example.com'>http://source.example.com</a></li>
           </ul>
         </div>
       </div>
@@ -151,6 +183,24 @@
           <strong>Born: </strong>12 April 1942 <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a><br/>
           <strong>Full name: </strong>Jacob Gedleyihlekisa Zuma <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></br>
         </p>
+        <div id="related-entities">
+          <p><em>Show notable entities removed by 1 or 2 degrees. The purpose is to aid discovery of relationships. Would this type of suggestion be too informal for a research tool?</em></p>
+          <div>
+            <a href="#"><img src="hulley.jpg" alt="Michael Hulley image" width="80" height="80"/></a>
+            <a href="#"><img src="ancyl.gif" alt="ANC Youth League image" width="80" height="80"/></a>
+            <a href="#"><img src="shaik.jpg" alt="Shabir Shaik image" width="80" height="80"/></a>
+          </div>
+          <div>
+            <a href="#"><img src="hulley.jpg" alt="Michael Hulley image" width="80" height="80"/></a>
+            <a href="#"><img src="ancyl.gif" alt="ANC Youth League image" width="80" height="80"/></a>
+            <a href="#"><img src="shaik.jpg" alt="Shabir Shaik image" width="80" height="80"/></a>
+          </div>
+          <div>
+            <a href="#"><img src="hulley.jpg" alt="Michael Hulley image" width="80" height="80"/></a>
+            <a href="#"><img src="ancyl.gif" alt="ANC Youth League image" width="80" height="80"/></a>
+            <a href="#"><img src="shaik.jpg" alt="Shabir Shaik image" width="80" height="80"/></a>
+          </div>
+        </div>
       </div>
 
     </div>
