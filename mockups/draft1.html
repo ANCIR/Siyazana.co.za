@@ -68,14 +68,26 @@
       border: none;
       padding: 0;
     }
+
+    #related-entities {
+      text-align: center;
+    }
+    #related-entities img {
+      margin: 0 10px 15px 0;
+    }
+    #related-entities div > a:last-child img {
+      margin-right: 0;
+    }
   </style>
   <script type="text/javascript">
     $(function(){
-      $('a.sources').popover({
-        trigger: 'click',
-        html: true,
-        container: 'body',
-      });
+      $('a.sources')
+        .click(function(e){ e.preventDefault(); }) 
+        .popover({
+          trigger: 'click',
+          html: true,
+          container: 'body',
+        });
     });
   </script>
   <link rel="shortcut icon" href="http://www.codeforafrica.org/favicon.png">
@@ -171,6 +183,24 @@
           <strong>Born: </strong>12 April 1942 <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a><br/>
           <strong>Full name: </strong>Jacob Gedleyihlekisa Zuma <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></br>
         </p>
+        <div id="related-entities">
+          <p><em>Show notable entities removed by 1 or 2 degrees. The purpose is to aid discovery of relationships. Would this type of suggestion be too informal for a research tool?</em></p>
+          <div>
+            <a href="#"><img src="hulley.jpg" alt="Michael Hulley image" width="80" height="80"/></a>
+            <a href="#"><img src="ancyl.gif" alt="ANC Youth League image" width="80" height="80"/></a>
+            <a href="#"><img src="shaik.jpg" alt="Shabir Shaik image" width="80" height="80"/></a>
+          </div>
+          <div>
+            <a href="#"><img src="hulley.jpg" alt="Michael Hulley image" width="80" height="80"/></a>
+            <a href="#"><img src="ancyl.gif" alt="ANC Youth League image" width="80" height="80"/></a>
+            <a href="#"><img src="shaik.jpg" alt="Shabir Shaik image" width="80" height="80"/></a>
+          </div>
+          <div>
+            <a href="#"><img src="hulley.jpg" alt="Michael Hulley image" width="80" height="80"/></a>
+            <a href="#"><img src="ancyl.gif" alt="ANC Youth League image" width="80" height="80"/></a>
+            <a href="#"><img src="shaik.jpg" alt="Shabir Shaik image" width="80" height="80"/></a>
+          </div>
+        </div>
       </div>
 
     </div>
