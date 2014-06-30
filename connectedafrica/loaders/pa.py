@@ -30,14 +30,25 @@ def load_persons(api_meta, loader, orgs):
         log.info("Loading person: %s", person.get('name'))
         
         source_url = person.pop('url')
-        ent = loader.make_entity(['popolo_entity', 'popolo_person'],
+        ent = loader.make_entity(['popolo_entity', 'popolo_person', 'details'],
                                  source_url=source_url)
         ent.set('name', person.pop('name'))
         ent.set('popit_id', person.pop('id'))
-        ent.set('given_name', person.get('given_name'))
-        ent.set('family_name', person.get('family_name'))
+        if person.get('given_name') is not None:
+            ent.set('given_name', person.pop('given_name'))
+        if person.get('family_name') is not None:
+            ent.set('family_name', person.pop('family_name'))
+        if person.get('summary') is not None:
+            ent.set('summary', person.pop('summary'))
         ent.set('pa_url', person.pop('pa_url'))
         ent.set('popit_api_url', source_url)
+
+        for contact in ent.pop('contacts'):
+            if contact.get('type') == 'voice':
+                ent.set('telephone_number', contact.get('value'))
+            if contact.get('type') == 'email':
+                ent.set('email', contact.get('value'))
+
         ent.save()
 
         for membership in person.pop('memberships'):
@@ -51,6 +62,9 @@ def load_persons(api_meta, loader, orgs):
             if membership.get('end_date') is not None:
                 rel.set('end_date', membership.pop('endt_date'))
             rel.save()
+
+        #print person.keys()
+        pprint(person)
 
 
 def load_organizations(api_meta, loader):
@@ -88,7 +102,8 @@ def load_organizations(api_meta, loader):
 def load():
     loader = Loader(grano, source_url=INSTANCE_URL)
     api_meta = requests.get(INSTANCE_URL).json().get('meta')
-    orgs = load_organizations(api_meta, loader)
+    #orgs = load_organizations(api_meta, loader)
+    orgs = {}
     load_persons(api_meta, loader, orgs)
 
 
