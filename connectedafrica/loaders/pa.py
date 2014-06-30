@@ -60,7 +60,7 @@ def load_persons(api_meta, loader, orgs):
             if membership.get('start_date') is not None:
                 rel.set('start_date', membership.pop('start_date'))
             if membership.get('end_date') is not None:
-                rel.set('end_date', membership.pop('endt_date'))
+                rel.set('end_date', membership.pop('end_date'))
             rel.save()
 
         #print person.keys()

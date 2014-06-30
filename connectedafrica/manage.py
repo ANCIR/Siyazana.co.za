@@ -24,5 +24,14 @@ def load():
     pass
 
 
+@manager.command
+def truncateproject():
+    """ Delete the project's entities, relations and schemata (dev only) """
+    from connectedafrica.core import client as grano_instance, grano as project
+    client = grano_instance.client
+    resp = client.session.delete(client.path('/projects/%s/_truncate' % project.slug))
+    client.evaluate(resp)
+
+
 if __name__ == "__main__":
     manager.run()

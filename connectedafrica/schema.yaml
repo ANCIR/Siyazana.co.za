@@ -31,6 +31,24 @@
   obj: entity
   attributes: []
 
+- name: legal_case
+  label: Legal case
+  obj: entity
+  attributes:
+    - name: title
+      label: Offical case title
+    - name: start_date
+      label: Hearing start date
+      datatype: datetime
+    - name: end_date
+      label: Hearing end date
+      datatype: datetime
+    - name: date_decided
+      label: Date decided
+      datatype: datetime
+    - name: citation
+      label: Case citation
+
 # Popolo, PA Edition
 
 - name: popolo_entity
@@ -68,6 +86,8 @@
       label: Category
     - name: org_classification
       label: Classification
+    - name: org_identifier
+      label: Identifier
 
 - name: popolo_membership
   label: Membership
@@ -81,6 +101,13 @@
     - name: end_date
       label: End date
       datatype: datetime
+
+- name: popolo_area
+  label: Geographic area
+  obj: entity
+  attributes:
+    - name: area_classification
+      label: Area classification
 
 # Johannesburg Stock Exchange
 
