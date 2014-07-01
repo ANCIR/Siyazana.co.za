@@ -18,6 +18,8 @@
       label: Postal Address
     - name: physical_address
       label: Physical Address
+    - name: summary
+      label: Summary
 
 - name: political_committee
   label: Committee
