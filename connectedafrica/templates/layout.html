@@ -12,13 +12,13 @@
 
     <meta name="og:site_name" content="{{APP_NAME}}">
 
-    {% assets filters="less,cssmin,cssrewrite", output="gen/style.css",
+    {% assets filters="less,cssmin,cssrewrite", output="style.css",
         "style/style.less"
     %}
       <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet">
     {% endassets %}
 
-    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}">
   </head>
   <body>
     {% block content %}{% endblock %}
@@ -30,12 +30,12 @@
       </p>
     </footer>
 
-    {% assets filters="uglifyjs", output="gen/app.js",
+    {% assets filters="uglifyjs", output="app.js",
           "vendor/jquery/dist/jquery.js",
           "vendor/bootstrap/js/collapse.js",
           "vendor/bootstrap/js/dropdown.js"
       %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+      <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
 
     {% block js %}{% endblock %}
