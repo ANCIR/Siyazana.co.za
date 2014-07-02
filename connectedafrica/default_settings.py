@@ -1,7 +1,9 @@
 import os
 
 DEBUG = True
-ASSETS_DEBUG = True
+ASSETS_DEBUG = False
+
+APP_NAME = 'brasskap'
 
 GRANO_HOST = os.environ.get('GRANO_HOST', 'http://beta.grano.cc/')
 GRANO_APIKEY = os.environ.get('GRANO_APIKEY')
