@@ -10,5 +10,8 @@ data/litigation.csv:
 clean:
 	rm data/*.csv
 
+install:
+	bower install
+
 web:
 	python connectedafrica/manage.py runserver -p 5001

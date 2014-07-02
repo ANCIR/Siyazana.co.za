@@ -13,7 +13,6 @@
     <meta name="og:site_name" content="{{APP_NAME}}">
 
     {% assets filters="less,cssmin,cssrewrite", output="gen/style.css",
-        "vendor/bootstrap/less/bootstrap.less",
         "style/style.less"
     %}
       <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet">
