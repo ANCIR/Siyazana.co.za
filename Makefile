@@ -9,3 +9,6 @@ data/litigation.csv:
 
 clean:
 	rm data/*.csv
+
+web:
+	python connectedafrica/manage.py runserver -p 5001

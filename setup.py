@@ -22,7 +22,8 @@ setup(
         "lxml==3.3.5",
         "PyYAML==3.10",
         "thready>=0.1.4",
-        "unicodecsv==0.9.4"
+        "unicodecsv==0.9.4",
+        "cssmin==0.2.0"
     ],
     tests_require=[],
     entry_points=""" """,

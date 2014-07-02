@@ -4,3 +4,8 @@ _site/
 *.egg-info
 pyenv/*
 *.pyc
+
+connectedafrica/static/vendor/*
+connectedafrica/static/gen/*
+connectedafrica/static/.webassets-cache/*
+
