@@ -21,13 +21,43 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}">
   </head>
   <body>
-    {% block content %}{% endblock %}
+    <div id="pagewrapper">
+      <div class="container">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
 
-    <footer class="container">
-      <p class="text-center">
-        <a href="https://github.com/pudo/kompromatron">GitHub</a> &middot;
-        <a href="http://grano.pudo.org/">grano</a>
-      </p>
+    <footer>
+      <div class="container">
+        <p class="text-center">
+          <a href="https://github.com/pudo/kompromatron">GitHub</a> &middot;
+          <a href="http://grano.pudo.org/">grano</a>
+        </p>
+      </div>
+      <hr>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <p>
+              {{APP_NAME}} is a project of the <a href="http://iss.co.za">Institute
+                for Security Studies</a> and the <a href="http://www.investigativecenters.org/">
+                African Network of Centers for Investigative Reporting</a>, with support
+              from the <a href="http://icfj.org">International Center for Journalists</a>.
+            </p>
+          </div>
+          <div class="col-md-6 partners">
+            <a href="http://www.iss.co.za">
+              <img src="/static/images/iss_africa_alpha.png" alt="Institute for Security Studies">
+            </a>
+            <a href="http://www.icfj.org">
+              <img src="/static/images/icfj_alpha.png" alt="International Center for Journalists">
+            </a>
+            <a href="http://www.investigativecenters.org/">
+              <img src="/static/images/ancir_alpha.png" alt="African Network of Centers for Investigative Reporting">
+            </a>
+          </div>
+        </div>
+      </div>
     </footer>
 
     {% assets filters="uglifyjs", output="app.js",
