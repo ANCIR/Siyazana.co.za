@@ -1,4 +1,4 @@
-import re
+import re, sys
 from datetime import datetime
 import urlparse
 
@@ -14,11 +14,16 @@ R_YEAR_RANGE = re.compile(
 )
 
 
+# TODO: thread scraping
+
+
 class ScraperException(Exception):
     pass
 
 
 def scrape(url, degrees=0, scraped_urls=None):
+    sys.stderr.write('Scraping %s\n' % url)
+
     if scraped_urls is None:
         scraped_urls = set()
 
@@ -151,28 +156,92 @@ def parse_content(content):
                     continue
                 data['professional_details'].append(role_data)
 
+    # education info
+    edu_el = root.get_element_by_id('education', None)
+    if edu_el is not None:
+        level = None
+        for el in edu_el.xpath("h1[1]/following-sibling::node()"):
+            if not isinstance(el, html.HtmlElement):
+                continue
+            if el.tag == 'h2':
+                level = el.text.lower()
+                continue
+            elif el.tag != 'div' or el.get('class', None) == 'clear':
+                continue
+            # parse secondary education (single line)
+            if level == 'secondary':
+                org_parts = el.xpath('h6[1]/text()')[0]
+                org_parts = [s.strip() for s in org_parts.split(',')]
+                place = ', '.join(org_parts[1:])
+                edu_data = {
+                    'organization_name': org_parts[0],
+                    'level': level,
+                    'place': place,
+                }
+                match = re.match(r'.*(?P<year>\d{4})$', place)
+                if match:
+                    edu_data['year_awarded'] = int(match.group('year'))
+                    edu_data['status'] = 'complete'
+                    edu_data['place'] = place[:-7]
+            # parse tertiary education (complex tags)
+            elif level == 'tertiary':
+                edu_data = {'level': level}
+                org_name = el.xpath('h6[1]/a')
+                if org_name:
+                    edu_data['organization_name'] = org_name[0].text
+                else:
+                    org_name = el.xpath('h6[1]/text()')
+                    if org_name:
+                        edu_data['organization_name'] = org_name[0]
+                date_parts = el.xpath('p[1]/text()')[0].split('|')[-1].strip()
+                if date_parts.startswith('Awarded in ') or \
+                        date_parts.startswith('Completed '):
+                    edu_data['year_awarded'] = int(date_parts[-4:])
+                    if date_parts.startswith('Completed '):
+                        edu_data['status'] = 'complete'
+                    qualification = el.xpath('p[2]/text()')
+                    if qualification:
+                        edu_data['qualification'] = qualification[0]
+                else:
+                    date_parts = R_YEAR_RANGE.match(date_parts)
+                    if date_parts:
+                        qualification = el.xpath('p[2]/text()')
+                        if qualification:
+                            edu_data['qualification'] = qualification[0]
+                        edu_data['start_year'] = int(date_parts.group('start'))
+                        if date_parts.group('current'):
+                            role_data['status'] = 'in progress'
+                        elif date_parts.group('end'):
+                            role_data['status'] = 'complete'
+                            role_data['year_awarded'] = int(date_parts.group('end'))
+                    else:
+                        edu_data['qualification'] = date_parts
+            data['education'].append(edu_data)
+
     # activities info
     activity_el = root.get_element_by_id('activities', None)
     if activity_el is not None:
         # only doing memberships
         for el in activity_el.xpath("h2[.='Memberships']/following-sibling::node()"):
-            if not isinstance(el, html.HtmlElement) or el.tag != 'div':
+            if not isinstance(el, html.HtmlElement):
+                continue
+            if el.tag != 'div' or el.get('class', None) == 'clear':
                 break
             org_name = el.xpath('h6[1]/text()')[0]
-            role_parts = el.xpath('p[1]/em/text()')[0].split(',')
-            role_data = {
-                'role_name': role_parts[0].strip(),
-                'organization_name': org_name,
-            }
-            if len(role_parts) == 2:
-                date_parts = R_YEAR_RANGE.match(role_parts[1].strip())
-                if date_parts:
-                    role_data['role_start_year'] = int(date_parts.group('start'))
-                    if date_parts.group('current'):
-                        role_data['status'] = 'active'
-                    elif date_parts.group('end'):
-                        role_data['status'] = 'inactive'
-                        role_data['role_end_year'] = int(date_parts.group('end'))
+            role_data = {'organization_name': org_name}
+            role_parts = el.xpath('p[1]/em')[0].text
+            if role_parts:
+                role_parts = role_parts.split(',')
+                role_data['role_name'] = role_parts[0].strip()
+                if len(role_parts) == 2:
+                    date_parts = R_YEAR_RANGE.match(role_parts[1].strip())
+                    if date_parts:
+                        role_data['role_start_year'] = int(date_parts.group('start'))
+                        if date_parts.group('current'):
+                            role_data['status'] = 'active'
+                        elif date_parts.group('end'):
+                            role_data['status'] = 'inactive'
+                            role_data['role_end_year'] = int(date_parts.group('end'))
             data['activities'].append(role_data)
 
     # related profile info
@@ -192,9 +261,8 @@ def parse_content(content):
 
 
 if __name__ == '__main__':
-    import json, sys
-    from time import mktime
-    profiles = [data for data in scrape('/jacob-zuma-927', 1)]
+    import json
+    profiles = [data for data in scrape('/jacob-zuma-927', 2)]
 
     class DatetimeEncoder(json.JSONEncoder):
         def default(self, obj):
