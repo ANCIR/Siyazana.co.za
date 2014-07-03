@@ -1,10 +1,11 @@
 import re, sys
 from datetime import datetime
 import urlparse
-from urllib import urlencode
 
 from lxml import html
 import requests
+
+from connectedafrica.scrapers.util import ScraperException
 
 
 ENDPOINT_URL = 'http://whoswho.co.za/'
@@ -16,11 +17,6 @@ R_YEAR_RANGE = re.compile(
 
 
 # TODO: thread scraping
-
-
-class ScraperException(Exception):
-    pass
-
 
 def lookup(search_term):
     response = requests.get('%ssearch/site/%s' % (ENDPOINT_URL, search_term))

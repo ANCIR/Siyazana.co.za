@@ -1,6 +1,5 @@
-import re
 import logging
-from pprint import pprint
+#from pprint import pprint
 from itertools import count
 from threading import RLock
 from urlparse import urljoin
@@ -10,21 +9,14 @@ from thready import threaded
 import requests
 import dataset
 
-logging.basicConfig(level=logging.INFO)
+from connectedafrica.scrapers.util import make_path, clean_space
 
 log = logging.getLogger()
 GEN = 2
 lock = RLock()
-engine = dataset.connect('sqlite:///npo.db')
+engine = dataset.connect('sqlite:///' + make_path('npo.db'))
 pages, orgs, roles = engine['page'], engine['organisation'], engine['role']
 URL_PATTERN = "http://www.npo.gov.za/PublicNpo/Npo/DetailsPublicDocs/%s"
-
-
-def clean_space(text):
-    if text is None:
-        return None
-    text = re.sub('\s+', ' ', text)
-    return text.strip()
 
 
 def make_urls():
@@ -114,15 +106,8 @@ def scrape_npo(url):
         #pprint(data)
 
 
-def exc_scrape_npo(url):
-    try:
-        scrape_npo(url)
-    except Exception, e:
-        log.exception(e)
-
-
 def scrape_npos():
-    threaded(make_urls(), exc_scrape_npo, num_threads=10)
+    threaded(make_urls(), scrape_npo, num_threads=10)
 
 if __name__ == '__main__':
     scrape_npos()
