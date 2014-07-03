@@ -1,13 +1,15 @@
 {% macro paginate(paginator) %}
+  {% if paginator.pages > 1 %}
     <div class="text-center">
-        <ul class="pagination">
-            {% for page, url in paginator.links %}
-                {% if page == paginator.page %}
-                    <li class="active"><a>{{page}}</a></li>
-                {% else %}
-                    <li><a href="{{url}}">{{page}}</a></li>
-                {% endif %}
-            {% endfor %}
-        </ul>
+      <ul class="pagination">
+        {% for page, url in paginator.links %}
+          {% if page == paginator.page %}
+            <li class="active"><a>{{page}}</a></li>
+          {% else %}
+            <li><a href="{{url}}">{{page}}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
     </div>
+  {% endif %}
 {% endmacro %}

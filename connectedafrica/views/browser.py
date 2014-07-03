@@ -9,11 +9,11 @@ blueprint = Blueprint('browser', __name__)
 
 @blueprint.route('/browse')
 def view():
-    limit = 15
+    limit = 20
     params = {
         'q': request.args.get('q', ''),
         'limit': limit,
-        'offset': request.args.get('offset', 20),
+        'offset': request.args.get('offset', 0),
         'schema': request.args.get('schema', ''),
         'project': grano.slug
     }

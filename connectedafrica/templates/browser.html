@@ -6,15 +6,37 @@
 {% endblock %}
 
 {% block content %}
-    <ul class="search-results">
+  <div class="row">
+    <div class="col-xs-12">
+      <form class="form-horizontal" role="form">
+        <div class="form-group col-xs-12">
+          <input type="text" class="form-control" name="q"
+            value="{{query}}"
+            placeholder="Search for people, companies and institutions...">
+        </div>
+        <!--div class="form-group col-xs-2">
+          <button type="submit" class="btn btn-default">Search</button>
+        </div-->
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="search-results table">
         {% for result in paginator.results.results %}
-            <li>
+          <tr>
+             <td>
                 <a href="/entities/{{result.id}}.html">{{result.properties.name.value}}</a>
-            </li>
+             </td>
+             <td>
+                <a href="{{result.api_url}}">api url</a>
+             </td>
+          </tr>
         {% endfor %}
-    </ul>
-
-    {{ paginate(paginator) }}
+      </table>
+      {{ paginate(paginator) }}
+    </div>
+  </div>
 {% endblock %}
 
 {% block js %}{% endblock %}
