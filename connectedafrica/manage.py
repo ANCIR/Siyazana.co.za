@@ -3,11 +3,8 @@ import os
 from flask.ext.script import Manager
 from flask.ext.assets import ManageAssets
 
-from connectedafrica.core import assets, app, grano
-from connectedafrica.views.base import blueprint as base_blueprint
-
-
-app.register_blueprint(base_blueprint)
+from connectedafrica.core import assets, grano
+from connectedafrica.views import app
 
 manager = Manager(app)
 manager.add_command("assets", ManageAssets(assets))
@@ -18,12 +15,6 @@ def loadschemata():
     """ Load the pre-defined schemata for this project. """
     fn = os.path.join(os.path.dirname(__file__), 'schema.yaml')
     grano.schemata.upsert_from_file(fn)
-
-
-@manager.command
-def load():
-    """ Load all the datas. """
-    pass
 
 
 @manager.command

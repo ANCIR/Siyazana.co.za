@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% from 'paginator.html' import paginate %}
+
+{% block title %}
+  Explore
+{% endblock %}
+
+{% block content %}
+    <ul class="search-results">
+        {% for result in paginator.results.results %}
+            <li>
+                <a href="/entities/{{result.id}}.html">{{result.properties.name.value}}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {{ paginate(paginator) }}
+{% endblock %}
+
+{% block js %}{% endblock %}
+
+

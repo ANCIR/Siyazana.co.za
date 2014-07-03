@@ -17,7 +17,7 @@ setup(
     install_requires=[
         "grano-client>=0.3",
         "Flask==0.10.1",
-        "Flask-Assets==0.9",
+        "Flask-Assets==0.10",
         "Flask-Script==2.0.5",
         "Flask-FlatPages==0.5",
         "lxml==3.3.5",

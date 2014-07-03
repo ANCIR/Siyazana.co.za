@@ -1,5 +1,5 @@
 
-from flask import Flask
+from flask import Flask, url_for
 from flask.ext.assets import Environment
 from flask_flatpages import FlatPages
 from granoclient import Grano, NotFound
