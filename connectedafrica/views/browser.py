@@ -14,11 +14,15 @@ def view():
         'q': request.args.get('q', ''),
         'limit': limit,
         'offset': request.args.get('offset', 0),
-        'schema': request.args.get('schema', ''),
-        'project': grano.slug
+        'schema': request.args.getlist('schema'),
+        'project': grano.slug,
+        'facet': 'schema'
     }
     s, results = grano.client.get('/entities', params=params)
+    schema_facet = results.get('facets').get('schema')
+    schema_facet['active'] = request.args.getlist('schema')
     paginator = Paginator(results)
     return render_template('browser.html',
+                           schema_facet=schema_facet,
                            paginator=paginator,
                            query=request.args.get('q', ''))

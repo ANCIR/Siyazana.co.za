@@ -1,6 +1,6 @@
 {% macro paginate(paginator) %}
   {% if paginator.pages > 1 %}
-    <div class="text-center">
+    <div class="text-left">
       <ul class="pagination">
         {% for page, url in paginator.links %}
           {% if page == paginator.page %}

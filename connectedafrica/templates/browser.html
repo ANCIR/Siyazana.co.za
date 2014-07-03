@@ -21,7 +21,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-12">
+    <div class="col-md-9">
       <table class="search-results table">
         {% for result in paginator.results.results %}
           <tr>
@@ -34,9 +34,22 @@
           </tr>
         {% endfor %}
       </table>
-      {{ paginate(paginator) }}
+    </div>
+    <div class="col-md-3">
+      <ul>
+        {% for schema, count in schema_facet.results %}
+          <li>
+            {% if schema.name in schema_facet.active %}
+              <a href="{{query_remove('schema', schema.name)}}">{{schema.label}}</a> ({{count}})
+            {% else %}
+              <a href="{{query_add('schema', schema.name)}}">{{schema.label}}</a> ({{count}})
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
     </div>
   </div>
+  {{ paginate(paginator) }}
 {% endblock %}
 
 {% block js %}{% endblock %}
