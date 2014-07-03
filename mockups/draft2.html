@@ -36,6 +36,10 @@
       padding-bottom: 15px;
     }
 
+    .col-md-10 {
+      padding-right: 0;
+    }
+
     #relations {
       padding-left: 0;
     }
@@ -82,6 +86,10 @@
       font-size: small;
     }
 
+    #filters .form-control {
+      font-size: smaller;
+    }
+
     #related-entities img {
       margin: 0 10px 15px 0;
     }
@@ -123,9 +131,9 @@
 
   <div id="content" class="container">
 
-    <div class="col-md-3"></div>
+    <div class="col-md-2"></div>
 
-    <div class="col-md-9">
+    <div class="col-md-10">
       <h1>
         Jacob Zuma
       </h1>
@@ -134,10 +142,10 @@
       </p>
     </div>
 
-    <div class="col-md-3 panel panel-default panel-body" id="filters">
+    <div class="col-md-2 panel-body" id="filters">
       <form>
-        <h3>Entities</h3>
-        <div class="panel-body">
+        <h4>Entities</h4>
+        <div>
             <div class="form-control">
               <input type="checkbox" checked>
               <label>People</label>
@@ -151,8 +159,8 @@
               <label>Legal cases</label>
             </div>
         </div>
-        <h3>Relationships</h3>
-        <div class="panel-body">
+        <h4>Relationships</h4>
+        <div>
             <div class="form-control">
               <input type="checkbox" checked>
               <label>Business</label>
@@ -170,7 +178,7 @@
               <label>Social</label>
             </div>
         </div>
-        <div class="panel-body">
+        <div>
           <input type="text" class="form-control">
           <input type="submit" class="form-control" value="Search">
         </div>
@@ -178,9 +186,9 @@
 
     </div>
 
-    <div class="col-md-9" id="content">
+    <div class="col-md-10" id="main-content">
 
-      <div class="col-md-7" id="relations">
+      <div class="col-md-8" id="relations">
         <h2>Timeline</h2>
         <ul>
           <li class="text-center"><h3><span class="label label-info">2012</span></h3></li>
@@ -224,7 +232,7 @@
         </ul>
       </div>
 
-      <div class="col-md-5" id="right-panels">
+      <div class="col-md-4" id="right-panels">
         <div id="bio" class="panel panel-default panel-body">
           <img src="zuma.jpg" alt="Jacob Zuma image" />
           <p>
