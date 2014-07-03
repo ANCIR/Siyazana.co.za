@@ -3,7 +3,11 @@ import os
 DEBUG = True
 ASSETS_DEBUG = False
 
-APP_NAME = 'brasskap'
+FLATPAGES_ROOT = '../pages'
+FLATPAGES_EXTENSION = '.md'
+
+
+APP_NAME = 'The Brass Kap'
 
 GRANO_HOST = os.environ.get('GRANO_HOST', 'http://beta.grano.cc/')
 GRANO_APIKEY = os.environ.get('GRANO_APIKEY')

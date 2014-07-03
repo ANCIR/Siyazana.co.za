@@ -1,22 +1,18 @@
-import logging
 
 from flask import Flask
 from flask.ext.assets import Environment
+from flask_flatpages import FlatPages
 from granoclient import Grano, NotFound
 
 from connectedafrica import default_settings
-
-
-logging.basicConfig(level=logging.DEBUG)
-
-requests_log = logging.getLogger("requests")
-requests_log.setLevel(logging.WARNING)
+from connectedafrica import logs
 
 app = Flask(__name__)
 app.config.from_object(default_settings)
 app.config.from_envvar('COAF_SETTINGS', silent=True)
 
 assets = Environment(app)
+pages = FlatPages(app)
 
 
 # Set up an API client for the grano instance:
