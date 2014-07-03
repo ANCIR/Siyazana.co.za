@@ -1,15 +1,31 @@
 
 // Variables
 
-@footer-background: #333;
-@footer-foreground: #ddd;
+@theme1: #66B3A7;
+@theme2: #C0D4B6;
+@theme3: #EEF0BD;
+@theme4: #F0563D;
+@theme5: #2C2F3B;
 
+@theme-color: @theme4;
+@light-gray: #ddd;
+@dark-gray: #333;
+
+
+// Functional
+
+@footer-background: @dark-gray;
+@footer-foreground: @light-gray;
+@header-background: white;
+@header-foreground: @theme-color;
+@body-background: white;
 
 // Core variables and mixins
 @import "../vendor/bootstrap/less/variables.less";
 @import "../vendor/bootstrap/less/mixins.less";
 
 @grid-float-breakpoint: @screen-desktop;
+@brand-primary: @theme-color;
 
 // Reset
 @import "../vendor/bootstrap/less/normalize.less";
@@ -61,7 +77,7 @@
 
 .container-fixed, .jumbotron .container-fixed {
   margin: 0 auto;
-  max-width: 800px;
+  max-width: 940px;
 }
 
 // Base layout 
@@ -72,11 +88,22 @@ body {
   background-color: @footer-background;
 }
 
+// Header style
+
+.navbar.navbar-default {
+  background-color: @header-background;
+  border-bottom: 1px solid @light-gray;
+
+  .navbar-brand {
+    color: @theme-color;
+  }
+}
+
 
 // Footer style
 
 #pagewrapper {
-  background-color: white;
+  background-color: @body-background;
   padding-bottom: 2em;
 }
 
@@ -96,7 +123,7 @@ footer {
   }
 
   p {
-    font-size: 0.9em;
+    font-size: 0.85em;
     color: @footer-fg-dark;
 
     a, a:hover, a:visited {
