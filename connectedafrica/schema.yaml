@@ -77,6 +77,16 @@
     - name: popit_api_url
       label: PopIt API URL
       hidden: true
+    - name: date_of_birth
+      label: Date of birth
+    - name: birth_town
+      label: Birth town
+    - name: birth_country
+      label: Country of origin
+    - name: name_short
+      label: Name (short)
+    - name: name_full
+      label: Name (full)
 
 - name: popolo_organization
   label: Popolo Organization
@@ -132,3 +142,27 @@
   attributes:
     - name: role
       label: Role Description
+
+# Who's Who
+
+- name: whoswho_entity
+  label: Who's Who Entity
+  obj: entity
+  attributes:
+    - name: blurb
+      label: Blurb on Who's Who
+    - name: whoswho_url
+      label: Who's Who profile URL
+
+# Education
+
+- name: qualification
+  label: Educational Qualification
+  obj: entity
+  attributes:
+    - name: qualification_name
+      label: Qualification Name
+    - name: level
+      label: Level
+    - name: honorary
+      label: Honorary
