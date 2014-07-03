@@ -22,6 +22,11 @@
   </head>
   <body>
     <div id="pagewrapper">
+      <nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">
+          <a class="navbar-brand">{{APP_NAME}}</a>
+        </div>
+      </nav>
       <div class="container">
         {% block content %}{% endblock %}
       </div>
@@ -29,10 +34,14 @@
 
     <footer>
       <div class="container">
-        <p class="text-center">
-          <a href="https://github.com/pudo/kompromatron">GitHub</a> &middot;
-          <a href="http://grano.pudo.org/">grano</a>
-        </p>
+        <div class="row">
+          <div class="col-md-3">
+            <ul>
+              <li><a href="https://github.com/CodeForAfrica/connectedAFRIKA">Source code</a></li>
+              <li>Powered by <a href="http://grano.pudo.org/">grano</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
       <hr>
       <div class="container">
@@ -43,6 +52,9 @@
                 for Security Studies</a> and the <a href="http://www.investigativecenters.org/">
                 African Network of Centers for Investigative Reporting</a>, with support
               from the <a href="http://icfj.org">International Center for Journalists</a>.
+            </p>
+            <p>
+            Content licensed under the terms of <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons 4.0 BY</a>
             </p>
           </div>
           <div class="col-md-6 partners">
