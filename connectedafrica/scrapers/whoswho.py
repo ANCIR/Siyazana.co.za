@@ -1,6 +1,7 @@
 import re, sys
 from datetime import datetime
 import urlparse
+from urllib import urlencode
 
 from lxml import html
 import requests
@@ -19,6 +20,19 @@ R_YEAR_RANGE = re.compile(
 
 class ScraperException(Exception):
     pass
+
+
+def lookup(search_term):
+    response = requests.get('%ssearch/site/%s' % (ENDPOINT_URL, search_term))
+    response.raise_for_status()
+    root = html.fromstring(response.content)
+    result_el = root.find_class('searchResult')
+    if not result_el:
+        raise ScraperException("Profile page for search term '%s' not found"
+                               % search_term)
+    result_el = result_el[0]
+    url = result_el.xpath('a[1]/@href')[0]
+    return url
 
 
 def scrape(url, degrees=0, scraped_urls=None):
@@ -75,10 +89,10 @@ def parse_content(content):
     if len(basic_el) == 0:
         raise ScraperException("Content doesn't appear to be a person's profile")
     basic_el = basic_el[0]
-    name_short = basic_el.xpath("//*[@itemprop='name'][1]/text()")[0].strip()
-    name_full = basic_el.xpath("//*[@itemprop='name']/following-sibling::p[1]/em/text()")[0].strip()
-    job_title = basic_el.xpath("//*[@itemprop='jobTitle'][1]/text()")[0].strip()
-    bio = basic_el.xpath("//*[@id='contact_info']/preceding-sibling::p[1]/text()")[0].strip()
+    name_short = basic_el.xpath("*[@itemprop='name'][1]/text()")[0].strip()
+    name_full = basic_el.xpath("*[@itemprop='name']/following-sibling::p[1]/em/text()")[0].strip()
+    job_title = basic_el.xpath("*[@itemprop='jobTitle'][1]/text()")[0].strip()
+    bio = basic_el.xpath("*[@id='contact_info']/preceding-sibling::p[1]/text()")[0].strip()
     data['basic_info'] = {
         'name_short': name_short,
         'name_full': name_full,
@@ -104,7 +118,7 @@ def parse_content(content):
                 if text.startswith('in '):
                     text = text[3:]
                 data['basic_info']['birth_town'] = text
-        birth_country = birth_node.xpath("//*[@itemprop='nationality'][1]/text()")
+        birth_country = birth_node.xpath("*[@itemprop='nationality'][1]/text()")
         if birth_country:
             data['basic_info']['country'] = birth_country[0]
 
@@ -262,7 +276,6 @@ def parse_content(content):
 
 if __name__ == '__main__':
     import json
-    profiles = [data for data in scrape('/jacob-zuma-927', 2)]
 
     class DatetimeEncoder(json.JSONEncoder):
         def default(self, obj):
@@ -270,4 +283,12 @@ if __name__ == '__main__':
                 return obj.strftime(DATE_FORMAT)
             return json.JSONEncoder.default(self, obj)
 
-    sys.stdout.write(json.dumps(profiles, indent=4, cls=DatetimeEncoder))
+    url = lookup('Jacob Zuma')
+    sys.stdout.write('[\n')
+    generator = scrape(url, 1)
+    data = next(generator)
+    sys.stdout.write(json.dumps(data, indent=4, cls=DatetimeEncoder))
+    for data in generator:
+        sys.stdout.write(',\n')
+        sys.stdout.write(json.dumps(data, indent=4, cls=DatetimeEncoder))
+    sys.stdout.write('\n]')
