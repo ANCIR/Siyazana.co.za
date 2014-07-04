@@ -27,26 +27,35 @@
       font-size: 1.1em;
     }
 
+    #right-panels {
+      padding: 0;
+    }
+
     #bio > img {
       width: 100%;
       padding-bottom: 15px;
     }
 
+    .col-md-10 {
+      padding-right: 0;
+    }
+
     #relations {
       padding-left: 0;
     }
-    #relations ul {
+    #relations ul,
+    #sources ul {
       list-style: none;
       padding: 0;
     }
-    #relations > div > ul {
+    #relations > ul {
       font-size: larger;
       margin-top: 15px;
     }
-    #relations > div > ul > li {
+    #relations > ul > li {
       font-weight: bolder;
       padding: 10px 0;
-      border-top: thin solid #eee;
+      border-bottom: thin solid #eee;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -56,14 +65,29 @@
       font-weight: normal;
       font-size: smaller;
     }
+    #relations .person, #relations .organization, #relations .legal-case {
+      padding-left: 72px;
+      background-size: 48px;
+      background-position: 8px 8px;
+      background-repeat: no-repeat;
+    }
 
-    #relations #sources ul {
+    .person {
+      background-image: url("people.png");
+    }
+    .organization {
+      background-image: url("organization.png")
+    }
+    .legal-case {
+      background-image: url("legal.png")
+    }
+
+    #sources ul {
       font-size: small;
     }
-    #relations #sources li {
-      font-weight: normal;
-      border: none;
-      padding: 0;
+
+    #filters .form-control {
+      font-size: smaller;
     }
 
     #related-entities img {
@@ -107,9 +131,9 @@
 
   <div id="content" class="container">
 
-    <div class="col-md-3"></div>
+    <div class="col-md-2"></div>
 
-    <div class="col-md-9">
+    <div class="col-md-10">
       <h1>
         Jacob Zuma
       </h1>
@@ -118,10 +142,10 @@
       </p>
     </div>
 
-    <div class="col-md-3 panel panel-default panel-body" id="filters">
+    <div class="col-md-2 panel-body" id="filters">
       <form>
-        <h3>Entities</h3>
-        <div class="panel-body">
+        <h4>Entities</h4>
+        <div>
             <div class="form-control">
               <input type="checkbox" checked>
               <label>People</label>
@@ -135,8 +159,8 @@
               <label>Legal cases</label>
             </div>
         </div>
-        <h3>Relationships</h3>
-        <div class="panel-body">
+        <h4>Relationships</h4>
+        <div>
             <div class="form-control">
               <input type="checkbox" checked>
               <label>Business</label>
@@ -154,7 +178,7 @@
               <label>Social</label>
             </div>
         </div>
-        <div class="panel-body">
+        <div>
           <input type="text" class="form-control">
           <input type="submit" class="form-control" value="Search">
         </div>
@@ -162,47 +186,85 @@
 
     </div>
 
-    <div class="col-md-9" id="content">
+    <div class="col-md-10" id="main-content">
 
       <div class="col-md-8" id="relations">
-        <div id="relations-family">
-          <h2>Family</h2>
+        <h2>Timeline</h2>
+        <ul>
+          <li class="text-center"><h3><span class="label label-info">2012</span></h3></li>
+
+          <li class="legal-case"><a href="#">Decision by the office of the National Director of Public Prosecutions to discontinue prosecution subject to constitutional review – the Democratic Alliance, a registered political party, has locus standi to bring application to review – record of decision is compellable.</a><ul><li><a href="#">Applicant (February–April 2012)</a></li></ul></li>
+
+          <li class="text-center"><h3><span class="label label-info">2010</span></h3></li>
+
+          <li class="person family"><a href="#">Gloria Bongekile Ngema</a><ul><li><a href="#">Spouse (2010–present)</a></li></ul></li>
+          <li class="person family"><a href="#">Thobeka Mabhija</a><ul><li><a href="#">Spouse (2010–present)</a></li></ul></li>
+
+          <li class="text-center"><h3><span class="label label-info">2008</span></h3></li>
+
+          <li class="organization"><a href="#">JACOB ZUMA FOUNDATION</a><ul><li><a href="#">Director (September 2008–April 2009)</a></li></ul></li>
+          <li class="person family"><a href="#">Nompumelelo Ntuli</a><ul><li><a href="#">Spouse (2008–present)</a></li></ul></li>
+
+          <li class="text-center"><h3><span class="label label-info">2007</span></h3></li>
+
+          <li class="legal-case"><a href="#">This is an appeal against a judgment of Hurt J, sitting in the Durban High Court, in which he declared five search warrants invalid and the searches pursuant to them unlawful and ordered the appellants to return to the respondents all items seized under them together with all copies that had been made and to pay the costs of the application.</a><ul><li><a href="#">Respondent (November 2007)</a></li></ul></li>
+
+          <li class="text-center"><h3><span class="label label-info">2005</span></h3></li>
+
+          <li class="organization"><a href="#">AMAQHAWE WASE AFRICA PETROLEUM</a><ul><li><a href="#">Member (September 2005–present)</a></li></ul></li>
+          <li class="organization"><a href="#">NATIONAL PRIDE TRADING 259</a><ul><li><a href="#">Director (July 2005–October 2009)</a></li></ul></li>
+
+          <li class="text-center"><h3><span class="label label-info">1995</span></h3></li>
+
+          <li class="organization"><a href="#">MICHIGAN INVESTMENTS</a><ul><li><a href="#">Member (October 1995–present)</a></li></ul></li>
+
+          <li class="text-center"><h3><span class="label label-info">1982</span></h3></li>
+
+          <li class="person family"><a href="#">Nkosazana Dlamini</a><ul><li><a href="#">Spouse (1982–1998)</a></li></ul></li>
+
+          <li class="text-center"><h3><span class="label label-info">1976</span></h3></li>
+
+          <li class="person family"><a href="#">Kate Zuma</a><ul><li><a href="#">Spouse (1976–2000)</a></li></ul></li>
+
+          <li class="text-center"><h3><span class="label label-info">1973</span></h3></li>
+
+          <li class="person family"><a href="#">Gertrude Sizakele Khumalo</a><ul><li><a href="#">Spouse (1973–present)</a></li></ul></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4" id="right-panels">
+        <div id="bio" class="panel panel-default panel-body">
+          <img src="zuma.jpg" alt="Jacob Zuma image" />
           <p>
-            A section could have introductory text - optional because it cannot necessarily be scraped and it requires a large amount of writing effort.
+            Here goes some bio text. Google Search's bio snippet (<a href="https://www.google.co.za/#q=Jacob+Zuma">here</a>), which they scrape from Wikipedia, has a nice layout. We could put a widget at the end to show sources, like this <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a>.
           </p>
-          <ul>
-            <li><a href="#">Gertrude Sizakele Khumalo</a><ul><li><a href="#">Spouse (1973–present)</a></li></ul></li>
-            <li><a href="#">Kate Zuma</a><ul><li><a href="#">Spouse (1976–2000)</a></li></ul></li>
-            <li><a href="#">Nkosazana Dlamini</a><ul><li><a href="#">Spouse (1982–1998)</a></li></ul></li>
-            <li><a href="#">Nompumelelo Ntuli</a><ul><li><a href="#">Spouse (2008–present)</a></li></ul></li>
-            <li><a href="#">Thobeka Mabhija</a><ul><li><a href="#">Spouse (2010–present)</a></li></ul></li>
-            <li><a href="#">Gloria Bongekile Ngema</a><ul><li><a href="#">Spouse (2010–present)</a></li></ul></li>
-          </ul>
-        </div>
-        <div id="relations-organizations">
-          <h2>Organizations</h2>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel lacinia dui. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+            <strong>Types: </strong>Person, Elected Representative, Political Candidate <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a><br/>
+            <strong>Born: </strong>12 April 1942 <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a><br/>
+            <strong>Full name: </strong>Jacob Gedleyihlekisa Zuma <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></br>
           </p>
-          <ul>
-            <li><a href="#">NATIONAL PRIDE TRADING 259</a><ul><li><a href="#">Director (July 2005–October 2009)</a></li></ul></li>
-            <li><a href="#">JACOB ZUMA FOUNDATION</a><ul><li><a href="#">Director (September 2008–April 2009)</a></li></ul></li>
-            <li><a href="#">MICHIGAN INVESTMENTS</a><ul><li><a href="#">Member (October 1995–present)</a></li></ul></li>
-            <li><a href="#">AMAQHAWE WASE AFRICA PETROLEUM</a><ul><li><a href="#">Member (September 2005–present)</a></li></ul></li>
-          </ul>
+          <div id="related-entities" class="text-center">
+            <p><em>Show notable entities removed by 1 or 2 degrees. The purpose is to aid discovery of relationships. Would this type of suggestion be too informal for a research tool?</em></p>
+            <div>
+              <a href="#"><img src="hulley.jpg" alt="Michael Hulley image" width="80" height="80"/></a>
+              <a href="#"><img src="ancyl.gif" alt="ANC Youth League image" width="80" height="80"/></a>
+              <a href="#"><img src="shaik.jpg" alt="Shabir Shaik image" width="80" height="80"/></a>
+            </div>
+            <div>
+              <a href="#"><img src="hulley.jpg" alt="Michael Hulley image" width="80" height="80"/></a>
+              <a href="#"><img src="ancyl.gif" alt="ANC Youth League image" width="80" height="80"/></a>
+              <a href="#"><img src="shaik.jpg" alt="Shabir Shaik image" width="80" height="80"/></a>
+            </div>
+            <div>
+              <a href="#"><img src="hulley.jpg" alt="Michael Hulley image" width="80" height="80"/></a>
+              <a href="#"><img src="ancyl.gif" alt="ANC Youth League image" width="80" height="80"/></a>
+              <a href="#"><img src="shaik.jpg" alt="Shabir Shaik image" width="80" height="80"/></a>
+            </div>
+          </div>
         </div>
-        <div id="relations-legal">
-          <h2>Legal</h2>
-          <p>
-            Mauris lacus mi, porta sit amet molestie sed, ultrices et sapien. Curabitur in ante porta, consectetur massa ut, consectetur lorem. Integer sit amet suscipit nulla.
-          </p>
-          <ul>
-            <li><a href="#">Decision by the office of the National Director of Public Prosecutions to discontinue prosecution subject to constitutional review – the Democratic Alliance, a registered political party, has locus standi to bring application to review – record of decision is compellable.</a><ul><li><a href="#">Applicant (February–April 2012)</a></li></ul></li>
-            <li><a href="#">This is an appeal against a judgment of Hurt J, sitting in the Durban High Court, in which he declared five search warrants invalid and the searches pursuant to them unlawful and ordered the appellants to return to the respondents all items seized under them together with all copies that had been made and to pay the costs of the application.</a><ul><li><a href="#">Respondent (November 2007)</a></li></ul></li>
-          </ul>
-        </div>
-        <div id="sources">
-          <h2>Sources</h2>
+
+        <div id="sources" class="panel panel-default panel-body">
+          <h3>Sources</h3>
           <p>
             LittleSis provides a long list of sources, e.g. <a href='http://littlesis.org/person/13503/Barack_Obama/references'>Obama's sources</a>. It's not obvious where a particular piece of information comes from though. Wikipedia-style citations solves that problem, although it might make the page too cluttered if there are many citations.
           </p>
@@ -210,36 +272,6 @@
             <li>[1] <a href='http://source.example.com'>http://source.example.com</a></li>
             <li>[2] <a href='http://source.example.com'>http://source.example.com</a></li>
           </ul>
-        </div>
-      </div>
-
-      <div class="col-md-4 panel panel-default panel-body" id="bio">
-        <img src="zuma.jpg" alt="Jacob Zuma image" />
-        <p>
-          Here goes some bio text. Google Search's bio snippet (<a href="https://www.google.co.za/#q=Jacob+Zuma">here</a>), which they scrape from Wikipedia, has a nice layout. We could put a widget at the end to show sources, like this <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a>.
-        </p>
-        <p>
-          <strong>Types: </strong>Person, Elected Representative, Political Candidate <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a><br/>
-          <strong>Born: </strong>12 April 1942 <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a><br/>
-          <strong>Full name: </strong>Jacob Gedleyihlekisa Zuma <a href="#" class="sources" data-toggle="popover" title="Sources" data-content="<a href='http://source.example.com'>http://source.example.com</a>">[1]</a></br>
-        </p>
-        <div id="related-entities" class="text-center">
-          <p><em>Show notable entities removed by 1 or 2 degrees. The purpose is to aid discovery of relationships. Would this type of suggestion be too informal for a research tool?</em></p>
-          <div>
-            <a href="#"><img src="hulley.jpg" alt="Michael Hulley image" width="80" height="80"/></a>
-            <a href="#"><img src="ancyl.gif" alt="ANC Youth League image" width="80" height="80"/></a>
-            <a href="#"><img src="shaik.jpg" alt="Shabir Shaik image" width="80" height="80"/></a>
-          </div>
-          <div>
-            <a href="#"><img src="hulley.jpg" alt="Michael Hulley image" width="80" height="80"/></a>
-            <a href="#"><img src="ancyl.gif" alt="ANC Youth League image" width="80" height="80"/></a>
-            <a href="#"><img src="shaik.jpg" alt="Shabir Shaik image" width="80" height="80"/></a>
-          </div>
-          <div>
-            <a href="#"><img src="hulley.jpg" alt="Michael Hulley image" width="80" height="80"/></a>
-            <a href="#"><img src="ancyl.gif" alt="ANC Youth League image" width="80" height="80"/></a>
-            <a href="#"><img src="shaik.jpg" alt="Shabir Shaik image" width="80" height="80"/></a>
-          </div>
         </div>
       </div>
 

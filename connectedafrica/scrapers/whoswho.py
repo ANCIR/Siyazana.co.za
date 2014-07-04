@@ -18,14 +18,23 @@ R_YEAR_RANGE = re.compile(
 
 # TODO: thread scraping
 
+
+class ScraperException(Exception):
+    pass
+
+
+class ProfileNotFound(ScraperException):
+    pass
+
+
 def lookup(search_term):
     response = requests.get('%ssearch/site/%s' % (ENDPOINT_URL, search_term))
     response.raise_for_status()
     root = html.fromstring(response.content)
     result_el = root.find_class('searchResult')
     if not result_el:
-        raise ScraperException("Profile page for search term '%s' not found"
-                               % search_term)
+        raise ProfileNotFound("Profile page for search term '%s' not found"
+                              % search_term)
     result_el = result_el[0]
     url = result_el.xpath('a[1]/@href')[0]
     return url
