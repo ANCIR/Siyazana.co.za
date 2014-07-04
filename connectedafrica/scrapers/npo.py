@@ -1,55 +1,58 @@
 import logging
+import json
+import os
 #from pprint import pprint
 from itertools import count
-from threading import RLock
 from urlparse import urljoin
 
 from lxml import html
 from thready import threaded
 import requests
-import dataset
 
+from connectedafrica.scrapers.util import MultiCSV
 from connectedafrica.scrapers.util import make_path, clean_space
 
-log = logging.getLogger()
-GEN = 2
-lock = RLock()
-engine = dataset.connect('sqlite:///' + make_path('npo.db'))
-pages, orgs, roles = engine['page'], engine['organisation'], engine['role']
+
+log = logging.getLogger('npo')
 URL_PATTERN = "http://www.npo.gov.za/PublicNpo/Npo/DetailsPublicDocs/%s"
+
+
+def make_cache(i):
+    return make_path('.cache/npo/%s/%s/%s.json' % (
+        i % 1000, i % 100, i))
 
 
 def make_urls():
     for i in count(1):
-        yield URL_PATTERN % i
+        yield i
 
 
-def scrape_npo(url):
-    with lock:
-        if orgs.find_one(source_url=url, data_gen=GEN):
-            return
-        page = pages.find_one(url=url)
-    if page is None or page.get('re_check'):
+def scrape_npo(csv, i):
+    url = URL_PATTERN % i
+    cache_path = make_cache(i)
+    if not os.path.exists(cache_path):
         res = requests.get(url)
         page = {
             'url': url,
             'http_status': res.status_code,
-            'content': res.content.decode('utf-8'),
-            're_check': False
+            'content': res.content.decode('utf-8')
         }
-        with lock:
-            pages.insert(page)
+        with open(cache_path, 'wb') as fh:
+            json.dump(page, fh)
+    else:
+        with open(cache_path, 'rb') as fh:
+            page = json.load(fh)
     if 'internal server error' in page['content']:
         return
     data = {}
     doc = html.fromstring(page['content'])
     data = {
         'source_url': url,
-        'data_gen': GEN,
-        'name': doc.find('.//h1').find('.//span').text,
+        'name': doc.find('.//h1').find('.//span').text.strip(),
         'status': doc.find('.//h1').find('.//span[@class="npo-status"]').text,
-        'officers': []
+        'email': None
     }
+    log.info("Scraping: %s", data['name'])
     sub_titles = doc.findall('.//h5')
     next_heading = None
     for sub_title in sub_titles:
@@ -87,27 +90,24 @@ def scrape_npo(url):
                 }.get(li.get('class'))
                 data[contact_type] = contact
     off_div = './/li[@data-sha-context-enttype="Npo.AppointedOfficeBearer"]'
+    csv.write('npo_organisations.csv', data)
     for li in doc.findall(off_div):
         s = li.find('.//strong')
         a = s.find('./a')
         officer = {
             'role': clean_space(s.text).replace(' :', ''),
+            'npo_name': data['name'],
             'source_url': url,
             'officer_id': urljoin(url, a.get('href')),
-            'name': clean_space(a.text)
+            'officer_name': clean_space(a.text)
         }
-        data['officers'].append(officer)
-
-    with lock:
-        for officer in data.pop('officers'):
-            roles.upsert(officer, ['source_url', 'officer_id'])
-        orgs.upsert(data, ['source_url'])
-        print data['name']
-        #pprint(data)
+        csv.write('npo_officers.csv', officer)
 
 
 def scrape_npos():
-    threaded(make_urls(), scrape_npo, num_threads=10)
+    csv = MultiCSV()
+    threaded(make_urls(), lambda i: scrape_npo(csv, i), num_threads=30)
+    csv.close()
 
 if __name__ == '__main__':
     scrape_npos()
