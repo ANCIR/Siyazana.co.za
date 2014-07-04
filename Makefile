@@ -19,5 +19,10 @@ clean:
 install:
 	bower install
 
+loadjse:
+	granoloader csv data/jse_entities.csv.yaml data/jse_entities.csv
+	granoloader csv data/jse_links.csv.yaml data/jse_links.csv
+
+
 web:
 	python connectedafrica/manage.py runserver -p 5001

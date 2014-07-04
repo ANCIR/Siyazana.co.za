@@ -1,0 +1,24 @@
+entities:
+  officer:
+    schemata: ['popolo_person', 'popolo_entity']
+    source_url_column: 'source_url'
+    columns:
+      - column: 'officer_name'
+        property: 'name'
+      - column: 'officer_id'
+        property: 'popit_id'
+  npo:
+    schemata: ['details', 'popolo_organization']
+    source_url_column: 'source_url'
+    columns:
+      - column: 'npo_name'
+        property: 'name'
+relations:
+  relation:
+    source_url_column: 'source_url'
+    schema: 'popolo_membership'
+    source: 'officer'
+    target: 'npo'
+    columns:
+      - column: 'role'
+        property: 'role'

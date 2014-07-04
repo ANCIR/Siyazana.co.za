@@ -10,4 +10,6 @@ connectedafrica/static/style.css
 connectedafrica/static/app.js
 connectedafrica/static/.webassets-cache/*
 
-data/npo.db
+data/.cache/*
+data/npo_officers.csv
+data/npo_organisations.csv
