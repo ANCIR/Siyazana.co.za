@@ -9,7 +9,7 @@ blueprint = Blueprint('browser', __name__)
 
 @blueprint.route('/browse')
 def view():
-    limit = 20
+    limit = 15
     params = {
         'q': request.args.get('q', ''),
         'limit': limit,

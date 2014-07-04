@@ -1,15 +1,22 @@
 {% macro paginate(paginator) %}
   {% if paginator.pages > 1 %}
-    <div class="text-left">
-      <ul class="pagination">
-        {% for page, url in paginator.links %}
-          {% if page == paginator.page %}
-            <li class="active"><a>{{page}}</a></li>
-          {% else %}
-            <li><a href="{{url}}">{{page}}</a></li>
-          {% endif %}
-        {% endfor %}
-      </ul>
+    <div class="row">
+      <div class="col-md-6 text-left">
+        <ul class="pagination">
+          {% for page, url in paginator.links %}
+            {% if page == paginator.page %}
+              <li class="active"><a>{{page}}</a></li>
+            {% else %}
+              <li><a href="{{url}}">{{page}}</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-md-6 text-right">
+        <p>
+          Showing {{paginator.results.offset+1}} to {{paginator.results.offset+paginator.results.limit}} of {{paginator.results.total}}.
+        </p>
+      </div>
     </div>
   {% endif %}
 {% endmacro %}
