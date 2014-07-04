@@ -6,54 +6,70 @@
 # (their Auditors, Sponsors etc.); and contact persons for some of them.
 #
 
+from pprint import pprint
 import logging
 import json
 
 from thready import threaded
 import requests
 
-from connectedafrica.scrapers.util import write_json, read_json
+from connectedafrica.scrapers.util import MultiCSV
 
 
-log = logging.getLogger(__name__)
+log = logging.getLogger('jse')
 
 INDEX = 'https://www.jse.co.za/_vti_bin/JSE/CustomerRoleService.svc/GetAllIssuers'
 ISSUER = 'https://www.jse.co.za/_vti_bin/JSE/CustomerRoleService.svc/GetIssuer'
 BUSINESS = 'https://www.jse.co.za/_vti_bin/JSE/CustomerRoleService.svc/GetIssuerNatureOfBusiness'
 ASSOCIATED = 'https://www.jse.co.za/_vti_bin/JSE/CustomerRoleService.svc/GetIssuerAssociatedRoles'
-SENS = 'https://www.jse.co.za/_vti_bin/JSE/SENSService.svc/GetSensAnnouncementsByIssuerMasterId'
 SOURCE_URL = 'https://www.jse.co.za/current-companies/listed-companies/issuer-profile?issuermasterid=%s'
 
 
-def scrape_record(records, i):
-    """ Scrape data regarding a single listed company. """
-    req = {
-        'data': json.dumps({'issuerMasterId': i}),
-        'headers': {'Content-Type': 'application/json'}
-    }
-    res = requests.post(ISSUER, **req)
-    if res.status_code != 200 or res.json().get('GetIssuerResult') is None:
-        return
+def http_get(url, master_id):
+    try:
+        req = {
+            'data': json.dumps({'issuerMasterId': master_id}),
+            'headers': {'Content-Type': 'application/json'}
+        }
+        res = requests.post(url, **req)
+        return res.json()
+    except Exception:
+        log.error("Failed to load: %s", SOURCE_URL % master_id)
+        return {}
 
-    record = res.json().get('GetIssuerResult')
+
+def scrape_record(csv, i):
+    """ Scrape data regarding a single listed company. """
+    record = http_get(ISSUER, i).get('GetIssuerResult')
+    if not record.get('LongName'):
+        return
     log.info('Scraping: %s', record.get('LongName'))
 
-    try:
-        res = requests.post(BUSINESS, **req)
-        res = res.json()
-        record['NatureOfBusiness'] = res.get('GetIssuerNatureOfBusinessResult')
-    except Exception, e:
-        log.exception(e)
+    nob = http_get(BUSINESS, i).get('GetIssuerNatureOfBusinessResult')
+    record['NatureOfBusiness'] = nob
 
-    res = requests.post(ASSOCIATED, **req)
-    res = res.json()
-    record['AssociatedRoles'] = res.get('GetIssuerAssociatedRolesResult')
+    res = http_get(ASSOCIATED, i)
+    assocs = res.get('GetIssuerAssociatedRolesResult', [])
 
     record['source_url'] = SOURCE_URL % i
-    records[i] = record
+    record.pop('Contacts', None)
+    csv.write('jse_entities.csv', record)
+
+    for assoc in assocs:
+        assoc.pop('Contacts', None)
+        assoc['source_url'] = record['source_url']
+        csv.write('jse_entities.csv', assoc)
+
+        link = {
+            'SourceName': assoc.get('LongName'),
+            'TargetName': record.get('LongName'),
+            'Role': assoc.get('RoleDescription'),
+            'source_url': record['source_url']
+        }
+        csv.write('jse_links.csv', link)
 
 
-def scrape_index(records):
+def scrape_index():
     """ Get a list of listed companies. """
     req = {
         'data': json.dumps({}),
@@ -61,17 +77,14 @@ def scrape_index(records):
     }
     res = requests.post(INDEX, **req)
     for row in res.json():
-        master_id = str(row.get('MasterID'))
-        if master_id not in records:
-            yield master_id
+        yield str(row.get('MasterID'))
 
 
 def scrape():
-    records = read_json('jse.json') or {}
-    threaded(scrape_index(records),
-             lambda i: scrape_record(records, i),
+    csv = MultiCSV()
+    threaded(scrape_index(), lambda i: scrape_record(csv, i),
              num_threads=30)
-    write_json('jse.json', records)
+    csv.close()
 
 
 if __name__ == '__main__':

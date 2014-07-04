@@ -1,0 +1,31 @@
+
+entities:
+  company:
+    schemata: ['details', 'jse_company']
+    source_url_column: 'source_url'
+    columns:
+      - column: 'LongName'
+        property: 'name'
+      - column: 'AlphaCode'
+        property: 'jse_code'
+      - column: 'Status'
+        property: 'jse_status'
+      - column: 'RoleDescription'
+        property: 'jse_role'
+      - column: 'RegistrationNumber'
+        property: 'jse_registration_number'
+      - column: 'NatureOfBusiness'
+        property: 'jse_nature_business'
+        skip_empty: true
+      - column: 'Website'
+        property: 'website'
+      - column: 'EmailAddress'
+        property: 'email'
+      - column: 'TelephoneNumber'
+        property: 'telephone_number'
+      - column: 'FaxNumber'
+        property: 'fax_number'
+      - column: 'PostalAddress'
+        property: 'postal_address'
+      - column: 'PhysicalAddress'
+        property: 'physical_address'

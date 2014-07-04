@@ -1,6 +1,8 @@
 import os
 import re
 import json
+from threading import RLock
+from unicodecsv import DictWriter
 
 from connectedafrica.core import app
 
@@ -40,3 +42,25 @@ def write_json(file_name, data):
 
 class ScraperException(Exception):
     pass
+
+
+class MultiCSV(object):
+
+    def __init__(self):
+        self.fhs = {}
+        self.writers = {}
+        self.lock = RLock()
+
+    def write(self, file_name, row):
+        with self.lock:
+            if file_name not in self.fhs:
+                self.fhs[file_name] = open(make_path(file_name), 'wb')
+                dw = DictWriter(self.fhs[file_name], row.keys())
+                self.writers[file_name] = dw
+                dw.writeheader()
+
+            self.writers[file_name].writerow(row)
+
+    def close(self):
+        for fh in self.fhs.values():
+            fh.close()
