@@ -1,0 +1,14 @@
+
+entities:
+  party:
+    schemata: ['popolo_entity', 'popolo_organization', 'political_party']
+    source_url_column: 'source_url'
+    columns:
+     - column: 'name'
+       property: 'name'
+     - column: 'popit_id'
+       property: 'popit_id'
+     - column: 'pa_url'
+       property: 'pa_url'
+     - column: 'org_category'
+       property: 'org_classification'
