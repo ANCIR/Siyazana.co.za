@@ -50,7 +50,7 @@ def load_interests(csv, person, register):
 
 
 def load_persons(api_meta, csv, orgs):
-    api_url = api_meta.get('persons_api_url') + '?per_page=200'
+    api_url = api_meta.get('persons_api_url') + '?per_page=50'
     for person in crawl_pages(api_url):
         log.info("Loading person: %s", person.get('name'))
         data = {
@@ -100,7 +100,7 @@ def load_persons(api_meta, csv, orgs):
 
 def load_organizations(api_meta, csv):
     orgs = {}
-    api_url = api_meta.get('organizations_api_url') + '?per_page=200'
+    api_url = api_meta.get('organizations_api_url') + '?per_page=50'
 
     for org in crawl_pages(api_url):
         log.info("Loading organisation: %s", org.get('name'))

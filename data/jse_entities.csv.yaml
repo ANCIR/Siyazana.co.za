@@ -14,18 +14,25 @@ entities:
         property: 'jse_role'
       - column: 'RegistrationNumber'
         property: 'jse_registration_number'
+        skip_empty: true
       - column: 'NatureOfBusiness'
         property: 'jse_nature_business'
         skip_empty: true
       - column: 'Website'
         property: 'website'
+        skip_empty: true
       - column: 'EmailAddress'
         property: 'email'
+        skip_empty: true
       - column: 'TelephoneNumber'
         property: 'telephone_number'
+        skip_empty: true
       - column: 'FaxNumber'
         property: 'fax_number'
+        skip_empty: true
       - column: 'PostalAddress'
         property: 'postal_address'
+        skip_empty: true
       - column: 'PhysicalAddress'
         property: 'physical_address'
+        skip_empty: true

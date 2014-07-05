@@ -16,6 +16,7 @@ setup(
     zip_safe=False,
     install_requires=[
         "grano-client>=0.3",
+        "granoloader>=0.1",
         "Flask==0.10.1",
         "Flask-Assets==0.10",
         "Flask-Script==2.0.5",
