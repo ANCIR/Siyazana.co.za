@@ -10,8 +10,6 @@ entities:
        property: 'popit_id'
      - column: 'pa_url'
        property: 'pa_url'
-     - column: 'popit_api_url'
-       property: 'source_url'
      - column: 'given_name'
        property: 'given_name'
        skip_empty: true

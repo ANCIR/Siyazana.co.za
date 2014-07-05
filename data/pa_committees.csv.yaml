@@ -10,6 +10,10 @@ entities:
        property: 'popit_id'
      - column: 'pa_url'
        property: 'pa_url'
-     - column: 'org_category'
+     - column: 'org_classification'
        property: 'org_classification'
+       skip_empty: true
+     - column: 'org_category'
+       property: 'org_category'
+       skip_empty: true
 

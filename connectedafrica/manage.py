@@ -11,13 +11,6 @@ manager.add_command("assets", ManageAssets(assets))
 
 
 @manager.command
-def loadschemata():
-    """ Load the pre-defined schemata for this project. """
-    fn = os.path.join(os.path.dirname(__file__), 'schema.yaml')
-    grano.schemata.upsert_from_file(fn)
-
-
-@manager.command
 def truncateproject():
     """ Delete the project's entities, relations and schemata (dev only) """
     from connectedafrica.core import client as grano_instance, grano as project
