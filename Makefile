@@ -7,12 +7,6 @@ data/directorships.csv:
 data/litigation.csv:
 	wget -O data/litigation.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1973809171"
 
-data/jse.json:
-	python connectedafrica/scrapers/jse.py
-
-data/npo.db:
-	python connectedafrica/scrapers/npo.py
-
 clean:
 	rm data/*.csv
 
@@ -31,6 +25,8 @@ loadpa:
 	granoloader csv -t 5 data/pa_parties.csv.yaml data/pa_parties.csv
 	granoloader csv -t 5 data/pa_committees.csv.yaml data/pa_committees.csv
 	granoloader csv -t 5 data/pa_memberships.csv.yaml data/pa_memberships.csv
+	granoloader csv -t 5 data/pa_directorships.csv.yaml data/pa_directorships.csv
+	granoloader csv -t 5 data/pa_financial.csv.yaml data/pa_financial.csv
 
 web:
 	python connectedafrica/manage.py runserver -p 5001

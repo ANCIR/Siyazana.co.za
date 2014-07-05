@@ -28,20 +28,26 @@ def load_interests(csv, person, register):
         for section, items in sections.items():
             for item in items:
                 if 'DIRECTORSHIP' in section:
+                    company = item.get('Directorship/Partnership')
+                    if company is None or not len(company.strip()):
+                        continue
                     data = {
                         'person_name': person['name'],
                         'source_url': person['source_url'],
                         'report': report,
-                        'company_name': item.get('Directorship/Partnership'),
+                        'company_name': company.strip(),
                         'company_type': item.get('Type of Business')
                         }
                     csv.write('pa_directorships.csv', data)
                 if 'FINANCIAL INTERESTS' in section:
+                    company = item.get('Name of Company')
+                    if company is None or not len(company.strip()):
+                        continue
                     data = {
                         'person_name': person['name'],
                         'source_url': person['source_url'],
                         'report': report,
-                        'company_name': item.get('Name of Company'),
+                        'company_name': company.strip(),
                         'nature': item.get('Nature'),
                         'number': item.get('No'),
                         'nominal_value': item.get('Nominal Value')
@@ -52,9 +58,15 @@ def load_interests(csv, person, register):
 def load_persons(api_meta, csv, orgs):
     api_url = api_meta.get('persons_api_url') + '?per_page=50'
     for person in crawl_pages(api_url):
-        log.info("Loading person: %s", person.get('name'))
+        name = person.get('name').strip()
+        if name is None:
+            continue
+        name = name.strip()
+        if not len(name):
+            continue
+        log.info("Loading person: %s", name)
         data = {
-            'name': person.get('name'),
+            'name': name,
             'popit_id': person.get('id'),
             'source_url': person.get('url'),
             'pa_url': person.get('pa_url'),
