@@ -28,5 +28,10 @@ loadpa:
 	granoloader csv -t 5 data/pa_directorships.csv.yaml data/pa_directorships.csv
 	granoloader csv -t 5 data/pa_financial.csv.yaml data/pa_financial.csv
 
+loadnpo:
+	granoloader csv -t 5 data/npo_organisations.csv.yaml data/npo_organisations.csv
+	granoloader csv -t 5 data/npo_officers.csv.yaml data/npo_officers.csv
+
+
 web:
 	python connectedafrica/manage.py runserver -p 5001

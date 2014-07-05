@@ -18,6 +18,7 @@ entities:
       #  property: 'org_classification'
       - column: 'Website'
         property: 'website'
+        skip_empty: true
       - column: 'email'
         property: 'email'
         skip_empty: true
