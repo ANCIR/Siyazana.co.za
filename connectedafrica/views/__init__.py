@@ -1,10 +1,12 @@
 from connectedafrica.core import app
 from connectedafrica.views.base import blueprint as base_blueprint
 from connectedafrica.views.browser import blueprint as browser_blueprint
+from connectedafrica.views.profile import blueprint as profile_blueprint
 from connectedafrica.views import helpers
 
 app.register_blueprint(base_blueprint)
 app.register_blueprint(browser_blueprint)
+app.register_blueprint(profile_blueprint)
 
 
 @app.context_processor

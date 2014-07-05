@@ -15,8 +15,8 @@ setup(
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     zip_safe=False,
     install_requires=[
-        "grano-client>=0.3",
         "granoloader>=0.1",
+        "grano-client>=0.2.4",
         "Flask==0.10.1",
         "Flask-Assets==0.10",
         "Flask-Script==2.0.5",
@@ -25,7 +25,8 @@ setup(
         "PyYAML==3.10",
         "thready>=0.1.4",
         "unicodecsv==0.9.4",
-        "cssmin==0.2.0"
+        "cssmin==0.2.0",
+        "networkx==1.9"
     ],
     tests_require=[],
     entry_points=""" """,
