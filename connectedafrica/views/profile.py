@@ -13,21 +13,27 @@ from connectedafrica.views.paginator import Paginator
 blueprint = Blueprint('profile', __name__)
 
 
-def display_name(person):
+def display_name(entity=None, data_dict=None):
     '''
     Return the most appropriate name for display, depending
     on which properties have been set.
     '''
-    if 'name_short' in person.properties:
-        return person.properties['name_short']['value']
-    elif 'name_full' in person.properties:
-        return person.properties['name_full']['value']
-    elif 'given_name' in person.properties and \
-            'family_name' in person.properties:
-        return '%s %s' % (person.properties['given_name']['value'],
-                          person.properties['family_name']['value'])
+    if entity is None and data_dict is None:
+        raise TypeError("One of 'entity' or 'data_dict' is required")
+    if entity:
+        properties = entity.properties
     else:
-        return person.properties['name']['value'].title()
+        properties = data_dict
+    if 'name_short' in properties:
+        return properties['name_short']['value']
+    elif 'name_full' in properties:
+        return properties['name_full']['value']
+    elif 'given_name' in properties and \
+            'family_name' in properties:
+        return '%s %s' % (properties['given_name']['value'],
+                          properties['family_name']['value'])
+    else:
+        return properties['name']['value'].title()
 
 
 def source_map(entity):
@@ -51,38 +57,52 @@ def schemata_map(entity):
     ))
 
 
+def split_relations(entity):
+    temporal = []
+    non_temporal = []
+    for relations in (entity.inbound, entity.outbound):
+        for rel in relations:
+            if rel.properties.get('start_date', None):
+                temporal.append(rel)
+            else:
+                non_temporal.append(rel)
+    return sorted(temporal, key=lambda x: x.properties['start_date']), \
+           sorted(non_temporal,
+                  key=lambda x: display_name(data_dict=x.target['properties']))
+
+
 @blueprint.route('/profile/<id>/<slug>')
 def view(id, slug):
     try:
         entity = grano.entities.by_id(id)
         assert slugify(entity.properties['name']['value']) == slug
         schemata = schemata_map(entity)
+        temporal_rels, non_temporal_rels = split_relations(entity)
+        context = {
+            'entity': entity,
+            'display_name': display_name(entity),
+            'source_map': source_map(entity),
+            'schemata_map': schemata,
+            'relations': {'temporal': temporal_rels,
+                          'non_temporal': non_temporal_rels}
+        }
         if 'popolo_person' in schemata:
-            return person_profile(entity, schemata)
+            return person_profile(entity, context)
         elif 'popolo_organization' in schemata:
-            return organization_profile(entity, schemata)
+            return organization_profile(entity, context)
         else:
             return render_template('profile_base.html',
-                                   entity=entity,
-                                   display_name=display_name(entity),
-                                   source_map=source_map(entity),
-                                   schemata_map=schemata)
+                                   **context)
     except (AssertionError, NotFound):
         pass
     abort(404)
 
 
-def person_profile(person, schemata):
+def person_profile(person, context):
     return render_template('person_profile.html',
-                           entity=person,
-                           display_name=display_name(person),
-                           source_map=source_map(person),
-                           schemata_map=schemata)
+                           **context)
 
 
-def organization_profile(organization, schemata):
+def organization_profile(organization, context):
     return render_template('organization_profile.html',
-                           entity=organization,
-                           display_name=display_name(organization),
-                           source_map=source_map(organization),
-                           schemata_map=schemata)
+                           **context)

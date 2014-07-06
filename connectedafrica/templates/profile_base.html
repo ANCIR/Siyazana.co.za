@@ -53,6 +53,14 @@
     {% block centerpanel %}
     <h2>Timeline</h2>
     {% block timeline %}
+    <ul>
+    {% for group in relations.temporal|groupby('properties.start_date.value') %}
+      <li class="text-center"><h3><span class="label label-info">{{ group.grouper }}</span></h3></li>
+      {% for rel in group.list %}
+        <li class="person family"><a href="#">{{ rel.target.properties|display_name }}</a><ul><li><a href="#">{{ rel.properties.role.value }} ({{ rel.properties.start_date.value }} - {{ rel.properties.end_date.value }})</a></li></ul></li>
+      {% endfor %}
+    {% endfor %}
+    </ul>
     {% endblock %}
     {% endblock %}
   </div>
