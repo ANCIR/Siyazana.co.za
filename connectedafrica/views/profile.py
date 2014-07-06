@@ -13,7 +13,7 @@ from connectedafrica.views.paginator import Paginator
 blueprint = Blueprint('profile', __name__)
 
 
-def person_display_name(person):
+def display_name(person):
     '''
     Return the most appropriate name for display, depending
     on which properties have been set.
@@ -45,7 +45,8 @@ def schemata_map(entity):
     in alphabetical order.
     '''
     return OrderedDict(sorted(
-        [(s['name'], s['label']) for s in entity.schemata],
+        [(s['name'], s['label']) for s in entity.schemata
+         if not s['hidden']],
         key=itemgetter(0)
     ))
 
@@ -60,6 +61,12 @@ def view(id, slug):
             return person_profile(entity, schemata)
         elif 'popolo_organization' in schemata:
             return organization_profile(entity, schemata)
+        else:
+            return render_template('profile_base.html',
+                                   entity=entity,
+                                   display_name=display_name(entity),
+                                   source_map=source_map(entity),
+                                   schemata_map=schemata)
     except (AssertionError, NotFound):
         pass
     abort(404)
@@ -67,15 +74,15 @@ def view(id, slug):
 
 def person_profile(person, schemata):
     return render_template('person_profile.html',
-                           person=person,
-                           display_name=person_display_name(person),
+                           entity=person,
+                           display_name=display_name(person),
                            source_map=source_map(person),
                            schemata_map=schemata)
 
 
 def organization_profile(organization, schemata):
     return render_template('organization_profile.html',
-                           organization=organization,
-                           display_name=person_display_name(organization),
+                           entity=organization,
+                           display_name=display_name(organization),
                            source_map=source_map(organization),
                            schemata_map=schemata)
