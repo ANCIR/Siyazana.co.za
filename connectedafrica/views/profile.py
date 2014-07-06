@@ -1,10 +1,12 @@
 from collections import OrderedDict
+from operator import itemgetter
 
 from flask import Blueprint, render_template, request, abort
 
 from granoclient import NotFound
 
 from connectedafrica.core import grano
+from connectedafrica.util import slugify
 from connectedafrica.views.paginator import Paginator
 
 
@@ -37,16 +39,44 @@ def source_map(entity):
     return OrderedDict((s, i + 1) for i, s in enumerate(sorted(sources)))
 
 
-@blueprint.route('/person/<name>')
-def person_profile(name):
+def schemata_map(entity):
+    '''
+    Returns and OrderedDict that maps schemata to their label
+    in alphabetical order.
+    '''
+    return OrderedDict(sorted(
+        [(s['name'], s['label']) for s in entity.schemata],
+        key=itemgetter(0)
+    ))
+
+
+@blueprint.route('/person/<id>/<slug>')
+def person_profile(id, slug):
     try:
-        entity = list(grano.entities.query(params={'limit': 1}) \
-                                    .filter('schema', 'popolo_person') \
-                                    .filter('q', name) \
-                                    .results)[0]
+        entity = grano.entities.by_id(id)
+        assert slugify(entity.properties['name']['value']) == slug
+        schemata = schemata_map(entity)
+        assert 'popolo_person' in schemata
         return render_template('person_profile.html',
                                person=entity,
                                display_name=person_display_name(entity),
-                               source_map=source_map(entity))
-    except NotFound:
+                               source_map=source_map(entity),
+                               schemata_map=schemata)
+    except (AssertionError, NotFound):
+        abort(404)
+
+
+@blueprint.route('/organization/<id>/<slug>')
+def organization_profile(id, slug):
+    try:
+        entity = grano.entities.by_id(id)
+        assert slugify(entity.properties['name']['value']) == slug
+        schemata = schemata_map(entity)
+        assert 'popolo_organization' in schemata
+        return render_template('organization_profile.html',
+                               organization=entity,
+                               display_name=person_display_name(entity),
+                               source_map=source_map(entity),
+                               schemata_map=schemata)
+    except (AssertionError, NotFound):
         abort(404)
