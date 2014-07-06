@@ -1,0 +1,24 @@
+
+entities:
+  person:
+    schemata: ['popolo_entity', 'popolo_person', 'details']
+    source_url_column: 'source_url'
+    columns:
+     - column: 'person_name'
+       property: 'name'
+  company:
+    schemata: ['popolo_entity', 'popolo_organization']
+    source_url_column: 'source_url'
+    columns:
+     - column: 'company_name'
+       property: 'name'
+relations:
+  membership:
+    schema: 'pa_directorship'
+    source_url_column: 'source_url'
+    source: 'person'
+    target: 'company'
+    columns:
+     - column: 'report'
+       property: 'report'
+

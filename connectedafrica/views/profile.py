@@ -50,33 +50,32 @@ def schemata_map(entity):
     ))
 
 
-@blueprint.route('/person/<id>/<slug>')
-def person_profile(id, slug):
+@blueprint.route('/profile/<id>/<slug>')
+def view(id, slug):
     try:
         entity = grano.entities.by_id(id)
         assert slugify(entity.properties['name']['value']) == slug
         schemata = schemata_map(entity)
-        assert 'popolo_person' in schemata
-        return render_template('person_profile.html',
-                               person=entity,
-                               display_name=person_display_name(entity),
-                               source_map=source_map(entity),
-                               schemata_map=schemata)
+        if 'popolo_person' in schemata:
+            return person_profile(entity, schemata)
+        elif 'popolo_organization' in schemata:
+            return organization_profile(entity, schemata)
     except (AssertionError, NotFound):
-        abort(404)
+        pass
+    abort(404)
 
 
-@blueprint.route('/organization/<id>/<slug>')
-def organization_profile(id, slug):
-    try:
-        entity = grano.entities.by_id(id)
-        assert slugify(entity.properties['name']['value']) == slug
-        schemata = schemata_map(entity)
-        assert 'popolo_organization' in schemata
-        return render_template('organization_profile.html',
-                               organization=entity,
-                               display_name=person_display_name(entity),
-                               source_map=source_map(entity),
-                               schemata_map=schemata)
-    except (AssertionError, NotFound):
-        abort(404)
+def person_profile(person, schemata):
+    return render_template('person_profile.html',
+                           person=person,
+                           display_name=person_display_name(person),
+                           source_map=source_map(person),
+                           schemata_map=schemata)
+
+
+def organization_profile(organization, schemata):
+    return render_template('organization_profile.html',
+                           organization=organization,
+                           display_name=person_display_name(organization),
+                           source_map=source_map(organization),
+                           schemata_map=schemata)

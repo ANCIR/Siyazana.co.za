@@ -1,7 +1,13 @@
+import re
 from flask import request
 from urllib import urlencode
+from unicodedata import normalize
+
 
 from connectedafrica.core import url_for
+
+
+_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
 
 
 def _enc(arg):
@@ -21,3 +27,16 @@ def query_remove(arg, val):
     args = request.args.items()
     args = [(a, b) for (a, b) in args if a != arg or b != val]
     return _enc(args)
+
+
+def slugify(text, delim=u'-'):
+    """
+    Generates an ASCII-only slug.
+    Source: http://flask.pocoo.org/snippets/5/
+    """
+    result = []
+    for word in _punct_re.split(text.lower()):
+        word = normalize('NFKD', word).encode('ascii', 'ignore')
+        if word:
+            result.append(word)
+    return unicode(delim.join(result))

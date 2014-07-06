@@ -16,3 +16,10 @@ def inject_globals():
         'query_add': helpers.query_add,
         'query_remove': helpers.query_remove
     }
+
+
+@app.template_filter('slugify')
+def slugify_filter(string):
+    if not string:
+        return ''
+    return helpers.slugify(string)

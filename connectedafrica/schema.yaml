@@ -166,3 +166,25 @@
       label: Level
     - name: honorary
       label: Honorary
+
+# Directorship and financial interests in PA
+
+- name: pa_directorship
+  label: Directorship
+  obj: relation
+  attributes:
+   - name: report
+     label: Source report
+
+- name: pa_financial_interest
+  label: Financial Interest
+  obj: relation
+  attributes:
+   - name: report
+     label: Source report
+   - name: nature
+     label: Nature of the interest
+   - name: number
+     label: Number of shares
+   - name: nominal_value
+     label: Nominal value
