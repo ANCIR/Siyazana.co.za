@@ -26,7 +26,7 @@
         {% for result in paginator.results.results %}
           <tr>
              <td>
-                <a href="/entities/{{result.id}}.html">{{result.properties.name.value}}</a>
+               <a href="{{url_for('profile.view', name=result.properties.name.value)}}">{{result.properties.name.value}}</a>
              </td>
              <td>
                 <a href="{{result.api_url}}">api url</a>

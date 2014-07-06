@@ -38,11 +38,11 @@ def source_map(entity):
 
 
 @blueprint.route('/person/<name>')
-def person_profile(name):
+def view(name):
     try:
         entity = list(grano.entities.query(params={'limit': 1}) \
                                     .filter('schema', 'popolo_person') \
-                                    .filter('q', name) \
+                                    .filter('property-name', name) \
                                     .results)[0]
         return render_template('person_profile.html',
                                person=entity,
