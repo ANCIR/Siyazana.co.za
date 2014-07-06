@@ -1,9 +1,11 @@
 import re, sys
 from datetime import datetime
+import threading
 import urlparse
 
 from lxml import html
 import requests
+from thready import threaded
 
 from connectedafrica.scrapers.util import ScraperException
 
@@ -14,13 +16,6 @@ R_YEAR_RANGE = re.compile(
     r'(?P<start_m>[a-zA-Z]+)?(\s+)?(?P<start>\d{4})(\s+-\s+' \
     '((?P<current>present)|((?P<end_m>[a-zA-Z]+)?(\s+)?(?P<end>\d{4}))))?$'
 )
-
-
-# TODO: thread scraping
-
-
-class ScraperException(Exception):
-    pass
 
 
 class ProfileNotFound(ScraperException):
@@ -40,27 +35,8 @@ def lookup(search_term):
     return url
 
 
-def scrape(url, degrees=0, scraped_urls=None):
-    sys.stderr.write('Scraping %s\n' % url)
-
-    if scraped_urls is None:
-        scraped_urls = set()
-
+def get_data(url):
     abs_url = get_absolute_url(url)
-    if abs_url in scraped_urls:
-        return
-    data = get_data(abs_url)
-    scraped_urls.add(abs_url)
-    yield data
-
-    if degrees > 0:
-        for related_profile in data['related_profiles']:
-            for data in scrape(related_profile['url'],
-                               degrees - 1, scraped_urls):
-                yield data
-
-
-def get_data(abs_url):
     response = requests.get(abs_url)
     response.raise_for_status()
     data = parse_content(response.text)
@@ -137,7 +113,8 @@ def parse_content(content):
                     current = True
                 else:
                     current = False
-            elif el.tag == 'div' and current is not None:
+            elif el.tag == 'div' and current is not None and \
+                    not el.get('class', ''):
                 role_parts = [s.strip() for s in 
                               el.xpath('h6/br/preceding-sibling::text()[1]')[0]
                                 .split('|')
@@ -212,7 +189,12 @@ def parse_content(content):
                     org_name = el.xpath('h6[1]/text()')
                     if org_name:
                         edu_data['organization_name'] = org_name[0]
-                date_parts = el.xpath('p[1]/text()')[0].split('|')[-1].strip()
+                try:
+                    date_parts = el.xpath('p[1]/text()')[0] \
+                                   .split('|')[-1] \
+                                   .strip()
+                except IndexError:
+                    continue
                 if date_parts.startswith('Awarded in ') or \
                         date_parts.startswith('Completed '):
                     edu_data['year_awarded'] = int(date_parts[-4:])
@@ -279,21 +261,57 @@ def parse_content(content):
     return data
 
 
+def scrape_person(search_term, degrees=0, out=sys.stdout):
+    import networkx as nx
+
+    start_url = lookup(search_term)
+    url_graph = nx.DiGraph()
+    url_graph.add_node(start_url)
+    url_scraped = set()
+    url_to_scrape = set([start_url])
+
+    thread_count = 5
+    shared_state = {'processed_urls': 0}
+    lock = threading.Condition()
+    out_lock = threading.Lock()
+
+    def produce_urls(source_url, new_urls):
+        with lock:
+            url_graph.add_edges_from([(source_url, u) for u in new_urls])
+            for url in new_urls:
+                if (url not in url_scraped and
+                        url not in url_to_scrape and
+                        len(nx.shortest_path(url_graph, start_url, url))
+                        <= degrees + 1):
+                    url_to_scrape.add(url)
+            shared_state['processed_urls'] += 1
+            lock.notify()
+
+    def consume_urls():
+        generated_urls = 0
+        while True:
+            with lock:
+                if len(url_to_scrape) == 0:
+                    lock.wait()
+                if len(url_to_scrape) == 0:
+                    if generated_urls == shared_state['processed_urls']:
+                        raise StopIteration
+                else:
+                    url = url_to_scrape.pop()
+                    url_scraped.add(url)
+                    generated_urls += 1
+                    yield url
+
+    def thread_func(url):
+        with out_lock:
+            sys.stderr.write('Scraping %s\n' % url)
+        data = get_data(url)
+        produce_urls(url, [d['url'] for d in data['related_profiles']])
+        with out_lock:
+            out.write('%r\n' % data)
+
+    threaded(consume_urls(), thread_func, num_threads=thread_count)
+
+
 if __name__ == '__main__':
-    import json
-
-    class DatetimeEncoder(json.JSONEncoder):
-        def default(self, obj):
-            if isinstance(obj, datetime):
-                return obj.strftime(DATE_FORMAT)
-            return json.JSONEncoder.default(self, obj)
-
-    url = lookup('Jacob Zuma')
-    sys.stdout.write('[\n')
-    generator = scrape(url, 1)
-    data = next(generator)
-    sys.stdout.write(json.dumps(data, indent=4, cls=DatetimeEncoder))
-    for data in generator:
-        sys.stdout.write(',\n')
-        sys.stdout.write(json.dumps(data, indent=4, cls=DatetimeEncoder))
-    sys.stdout.write('\n]')
+    scrape_person(sys.argv[1], int(sys.argv[2]))
