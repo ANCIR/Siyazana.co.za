@@ -113,7 +113,8 @@ def parse_content(content):
                     current = True
                 else:
                     current = False
-            elif el.tag == 'div' and current is not None:
+            elif el.tag == 'div' and current is not None and \
+                    not el.get('class', ''):
                 role_parts = [s.strip() for s in 
                               el.xpath('h6/br/preceding-sibling::text()[1]')[0]
                                 .split('|')
@@ -188,7 +189,12 @@ def parse_content(content):
                     org_name = el.xpath('h6[1]/text()')
                     if org_name:
                         edu_data['organization_name'] = org_name[0]
-                date_parts = el.xpath('p[1]/text()')[0].split('|')[-1].strip()
+                try:
+                    date_parts = el.xpath('p[1]/text()')[0] \
+                                   .split('|')[-1] \
+                                   .strip()
+                except IndexError:
+                    continue
                 if date_parts.startswith('Awarded in ') or \
                         date_parts.startswith('Completed '):
                     edu_data['year_awarded'] = int(date_parts[-4:])
@@ -255,7 +261,7 @@ def parse_content(content):
     return data
 
 
-def scrape_person(search_term, degrees=0):
+def scrape_person(search_term, degrees=0, out=sys.stdout):
     import networkx as nx
 
     start_url = lookup(search_term)
@@ -264,47 +270,48 @@ def scrape_person(search_term, degrees=0):
     url_scraped = set()
     url_to_scrape = set([start_url])
 
-    thread_count = 10
-    lock = threading.Lock()
-    out_lock = threading.RLock()
-    producers = threading.Semaphore(thread_count)
+    thread_count = 5
+    shared_state = {'processed_urls': 0}
+    lock = threading.Condition()
+    out_lock = threading.Lock()
 
     def produce_urls(source_url, new_urls):
         with lock:
             url_graph.add_edges_from([(source_url, u) for u in new_urls])
             for url in new_urls:
                 if (url not in url_scraped and
-                    url not in url_to_scrape and
-                    len(nx.shortest_path(url_graph, start_url, url)) <= degrees + 1):
+                        url not in url_to_scrape and
+                        len(nx.shortest_path(url_graph, start_url, url))
+                        <= degrees + 1):
                     url_to_scrape.add(url)
+            shared_state['processed_urls'] += 1
+            lock.notify()
 
     def consume_urls():
-        import time
+        generated_urls = 0
         while True:
-            # can do this because there is only one consumer
-            # thread: the thread iterating over the generator
-            if producers._Semaphore__value == thread_count:
-                time.sleep(0.1)
-            while len(url_to_scrape) == 0  and producers._Semaphore__value < thread_count:
-                pass
-            if len(url_to_scrape) == 0:
-                raise StopIteration
             with lock:
-                url = url_to_scrape.pop()
-                url_scraped.add(url)
-            yield url
+                if len(url_to_scrape) == 0:
+                    lock.wait()
+                if len(url_to_scrape) == 0:
+                    if generated_urls == shared_state['processed_urls']:
+                        raise StopIteration
+                else:
+                    url = url_to_scrape.pop()
+                    url_scraped.add(url)
+                    generated_urls += 1
+                    yield url
 
     def thread_func(url):
-        with producers:
-            with out_lock:
-                sys.stderr.write('Scraping %s\n' % url)
-            data = get_data(url)
-            produce_urls(url, [d['url'] for d in data['related_profiles']])
-            with out_lock:
-                sys.stdout.write('%r\n' % data)
+        with out_lock:
+            sys.stderr.write('Scraping %s\n' % url)
+        data = get_data(url)
+        produce_urls(url, [d['url'] for d in data['related_profiles']])
+        with out_lock:
+            out.write('%r\n' % data)
 
     threaded(consume_urls(), thread_func, num_threads=thread_count)
 
 
 if __name__ == '__main__':
-    scrape_person('Jacob Zuma', 1)
+    scrape_person(sys.argv[1], int(sys.argv[2]))
