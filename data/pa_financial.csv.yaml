@@ -13,21 +13,21 @@ entities:
        property: 'name'
 relations:
   membership:  # TODO: review this relation
-    schema: 'pa_financial_interest'
+    schema: 'FinancialInterest'
     source_url_column: 'source_url'
     source: 'person'
     target: 'company'
     columns:
-     - column: 'report'
-       property: 'report'
      - column: 'nature'
        property: 'nature'
        skip_empty: true
+       unique: true
      - column: 'number'
        property: 'number'
        skip_empty: true
      - column: 'nominal_value'
        property: 'nominal_value'
        skip_empty: true
+       unique: true
 
 

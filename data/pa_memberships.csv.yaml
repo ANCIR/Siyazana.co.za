@@ -22,6 +22,7 @@ relations:
      - column: 'role'
        property: 'role'
        skip_empty: true
+       unique: true
      - column: 'start_date'
        property: 'date_start'
        skip_empty: true

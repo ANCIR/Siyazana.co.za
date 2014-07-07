@@ -29,6 +29,7 @@ relations:
      - column: 'Role description'
        property: 'role'
        skip_empty: true
+       unique: true
      - column: 'Director since'
        property: 'date_start'
        type: datetime

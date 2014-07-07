@@ -141,6 +141,8 @@
     # register.
     - name: registration_number
       label: 'Registration number'
+    - name: registration_status
+      label: 'Registration status'
     - name: classification
       label: 'Classification'
     - name: date_founding
@@ -149,6 +151,8 @@
     - name: date_dissolution
       label: 'Date of dissolution'
       datatype: datetime
+    - name: legal_form
+      label: 'Legal form'
 
 
 #####################################################################
@@ -262,3 +266,47 @@
       datatype: datetime
     - name: extent
       label: 'Extent'
+
+
+#####################################################################
+# Relation: Directorship
+#####################################################################
+# TODO: Can't we just use 'Membership'?
+- name: 'Directorship'
+  label: 'Director'
+  description: 'An entity is a director or member of board of another'
+  hidden: false
+  obj: relation
+  attributes:
+    - name: date_start
+      label: 'Start date'
+      datatype: datetime
+    - name: date_end
+      label: 'End date'
+      datatype: datetime
+    - name: role
+      label: 'Role'
+
+
+#####################################################################
+# Relation: FinancialInterest
+#####################################################################
+- name: 'FinancialInterest'
+  label: 'Financial interest'
+  description: 'An entity has a financial interest (e.g. shares) in another'
+  hidden: false
+  obj: relation
+  attributes:
+    - name: date_start
+      label: 'Start date'
+      datatype: datetime
+    - name: date_end
+      label: 'End date'
+      datatype: datetime
+    - name: nature
+      label: 'Nature of the interest'
+    - name: shares_number
+      label: 'Number of shares'
+    - name: nominal_value
+      label: 'Nominal value'
+
