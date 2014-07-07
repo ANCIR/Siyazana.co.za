@@ -6,16 +6,17 @@ entities:
     columns:
       - column: 'name'
         property: 'name'
-      #- column: 'status'  # TODO
-      #  property: 'jse_status'
-      #- column: 'category'  # TODO
-      #  property: 'org_category'
+      - column: 'status'
+        property: 'registration_status'
+      - column: 'category'  # TODO argh?
+        property: 'tagline'
       - column: 'reg_no'
         property: 'registration_number'
-      #- column: 'reg_date'  # TODO
-      #  property: ''
-      #- column: 'legal_form'  # TODO
-      #  property: 'org_classification'
+      - column: 'reg_date'
+        property: 'date_founding'
+        type: 'datetime'
+      - column: 'legal_form'
+        property: 'legal_form'
       - column: 'Website'
         property: 'contact_url'
         skip_empty: true

@@ -13,14 +13,12 @@ entities:
         property: 'ticker_symbol'
       - column: 'Status'
         property: 'listing_status'
-#      - column: 'RoleDescription'  # TODO
-#        property: 'jse_role'
       - column: 'RegistrationNumber'
         property: 'registration_number'
         skip_empty: true
-#      - column: 'NatureOfBusiness'  # TODO
-#        property: 'jse_nature_business'
-#        skip_empty: true
+      - column: 'NatureOfBusiness'
+        property: 'summary'
+        skip_empty: true
       - column: 'Website'
         property: 'contact_url'
         skip_empty: true

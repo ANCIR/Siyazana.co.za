@@ -1,103 +1,4 @@
 
-# Generic schemata
-
-- name: details
-  label: Generic Entity Details
-  obj: entity
-  hidden: true
-  attributes:
-    - name: website
-      label: Website
-    - name: email
-      label: Email Address
-    - name: telephone_number
-      label: Telephone
-    - name: fax_number
-      label: Fax Number
-    - name: postal_address
-      label: Postal Address
-    - name: physical_address
-      label: Physical Address
-    - name: summary
-      label: Summary
-
-- name: political_committee
-  label: Committee
-  obj: entity
-  attributes: []
-
-- name: political_party
-  label: Party
-  obj: entity
-  attributes: []
-
-- name: legal_case
-  label: Legal case
-  obj: entity
-  attributes:
-    - name: title
-      label: Offical case title
-    - name: start_date
-      label: Hearing start date
-      datatype: datetime
-    - name: end_date
-      label: Hearing end date
-      datatype: datetime
-    - name: date_decided
-      label: Date decided
-      datatype: datetime
-    - name: citation
-      label: Case citation
-
-# Popolo, PA Edition
-
-- name: popolo_entity
-  label: Popolo Entity
-  hidden: true
-  obj: entity
-  attributes:
-    - name: popit_id
-      label: Foreign system identifiers
-      hidden: true
-    - name: pa_url
-      label: People's Assembly URL
-
-- name: popolo_person
-  label: Person
-  obj: entity
-  attributes:
-    - name: given_name
-      label: Given name
-    - name: family_name
-      label: Family name
-    - name: gender
-      label: Gender
-    - name: honorific_prefix
-      label: Honorific Prefix
-    - name: popit_api_url
-      label: PopIt API URL
-      hidden: true
-    - name: date_of_birth
-      label: Date of birth
-    - name: birth_town
-      label: Birth town
-    - name: birth_country
-      label: Country of origin
-    - name: display_name
-      label: Name used for display
-    - name: full_name
-      label: Full name
-
-- name: popolo_organization
-  label: Popolo Organization
-  obj: entity
-  attributes:
-    - name: org_category
-      label: Category
-    - name: org_classification
-      label: Classification
-    - name: org_identifier
-      label: Identifier
 
 - name: popolo_membership
   label: Membership
@@ -121,20 +22,6 @@
 
 # Johannesburg Stock Exchange
 
-- name: jse_company
-  label: Listed Company
-  obj: entity
-  attributes:
-    - name: jse_status
-      label: Status at JSE
-    - name: jse_registration_number
-      label: Registration Number
-    - name: jse_code
-      label: Alphabetic Code
-    - name: jse_role
-      label: Role at JSE
-    - name: jse_nature_business
-      label: Nature of business
 
 - name: jse_role
   label: Role at JSE
@@ -144,15 +31,6 @@
       label: Role Description
 
 # Who's Who
-
-- name: whoswho_entity
-  label: Who's Who Entity
-  obj: entity
-  attributes:
-    - name: blurb
-      label: Blurb on Who's Who
-    - name: whoswho_url
-      label: Who's Who profile URL
 
 # Education
 

@@ -22,3 +22,4 @@ relations:
     columns:
       - column: 'role'
         property: 'role'
+        unique: true
