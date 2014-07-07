@@ -1,27 +1,27 @@
 
 entities:
   person:
-    schemata: ['popolo_entity', 'popolo_person', 'details']
+    schemata: ['Person']
     source_url_column: 'Source URL for information'
     columns:
      - column: 'Person Name'
        property: 'name'
   org:
-    schemata: ['popolo_entity', 'popolo_organization']
+    schemata: ['Organization']
     source_url_column: 'Source URL for information'
     columns:
      - column: 'Organisation Name'
        property: 'name'
      - column: 'Org Type'
-       property: 'org_classification'
+       property: 'classification'
        skip_empty: true
      - column: 'Address'
-       property: 'physical_address'
+       property: 'contact_address_physical'
      - column: 'Registration number'
-       property: 'identifier'
+       property: 'registration_number'
 relations:
   membership:
-    schema: 'popolo_membership'
+    schema: 'Membership'
     source_url_column: 'Source URL for information'
     source: 'person'
     target: 'org'
@@ -30,12 +30,12 @@ relations:
        property: 'role'
        skip_empty: true
      - column: 'Director since'
-       property: 'start_date'
+       property: 'date_start'
        type: datetime
        format: '%m/%d/%Y'
        skip_empty: true
      - column: 'Director until'
-       property: 'end_date'
+       property: 'date_end'
        type: datetime
        format: '%m/%d/%Y'
        skip_empty: true

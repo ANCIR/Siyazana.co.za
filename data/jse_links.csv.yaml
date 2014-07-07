@@ -1,20 +1,20 @@
 
 entities:
   company:
-    schemata: ['details', 'jse_company']
+    schemata: ['PublicCompany', 'Organization']
     source_url_column: 'source_url'
     columns:
       - column: 'TargetName'
         property: 'name'
   assoc:
-    schemata: ['details', 'jse_company']
+    schemata: ['PublicCompany', 'Organization']
     source_url_column: 'source_url'
     columns:
       - column: 'SourceName'
         property: 'name'
 relations:
   relation:
-    schema: 'jse_role'
+    schema: 'Partnership'
     source: 'assoc'
     target: 'company'
     source_url_column: 'source_url'

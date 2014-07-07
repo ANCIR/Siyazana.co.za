@@ -1,38 +1,41 @@
 
 entities:
   company:
-    schemata: ['details', 'jse_company']
+    schemata: ['PublicCompany', 'Organization']
     source_url_column: 'source_url'
     columns:
       - column: 'LongName'
         property: 'name'
+      - column: 'Exchange'
+        property: 'listing_exchange'
+        default: 'JSE Limited'
       - column: 'AlphaCode'
-        property: 'jse_code'
+        property: 'ticker_symbol'
       - column: 'Status'
-        property: 'jse_status'
-      - column: 'RoleDescription'
-        property: 'jse_role'
+        property: 'listing_status'
+#      - column: 'RoleDescription'  # TODO
+#        property: 'jse_role'
       - column: 'RegistrationNumber'
-        property: 'jse_registration_number'
+        property: 'registration_number'
         skip_empty: true
-      - column: 'NatureOfBusiness'
-        property: 'jse_nature_business'
-        skip_empty: true
+#      - column: 'NatureOfBusiness'  # TODO
+#        property: 'jse_nature_business'
+#        skip_empty: true
       - column: 'Website'
-        property: 'website'
+        property: 'contact_url'
         skip_empty: true
       - column: 'EmailAddress'
-        property: 'email'
+        property: 'contact_email'
         skip_empty: true
       - column: 'TelephoneNumber'
-        property: 'telephone_number'
+        property: 'contact_phone'
         skip_empty: true
       - column: 'FaxNumber'
-        property: 'fax_number'
+        property: 'contact_fax'
         skip_empty: true
       - column: 'PostalAddress'
-        property: 'postal_address'
+        property: 'contact_address_postal'
         skip_empty: true
       - column: 'PhysicalAddress'
-        property: 'physical_address'
+        property: 'contact_address_physical'
         skip_empty: true

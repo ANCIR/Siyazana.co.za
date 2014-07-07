@@ -1,20 +1,11 @@
-all: data/directorships.csv data/litigation.csv
-
-data/directorships.csv:
-	wget -O data/directorships.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=465508635"
-	sed -i '/,,,,,,,,/d' data/directorships.csv  # remove blank lines
-
-data/litigation.csv:
-	wget -O data/litigation.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1973809171"
-
-clean:
-	rm data/litigation.csv data/directorships.csv
-
 install:
 	bower install
 
+web:
+	python connectedafrica/manage.py runserver -p 5001
+
 loadschema:
-	granoloader schema connectedafrica/schema.yaml
+	granoloader schema data/schema.yaml
 
 loadjse:
 	granoloader csv -t 5 data/jse_entities.csv.yaml data/jse_entities.csv
@@ -32,6 +23,18 @@ loadnpo:
 	granoloader csv -t 5 data/npo_organisations.csv.yaml data/npo_organisations.csv
 	granoloader csv -t 5 data/npo_officers.csv.yaml data/npo_officers.csv
 
+# Google docs
+loadgdocs: gdocs
+	granoloader csv -t 5 data/directorships.csv.yaml data/directorships.csv
 
-web:
-	python connectedafrica/manage.py runserver -p 5001
+gdocs: data/directorships.csv data/litigation.csv
+
+data/directorships.csv:
+	wget -O data/directorships.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=465508635"
+	sed -i '/,,,,,,,,/d' data/directorships.csv  # remove blank lines
+
+data/litigation.csv:
+	wget -O data/litigation.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1973809171"
+
+cleangdocs:
+	rm data/litigation.csv data/directorships.csv

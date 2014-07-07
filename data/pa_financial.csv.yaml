@@ -1,18 +1,18 @@
 entities:
   person:
-    schemata: ['popolo_entity', 'popolo_person', 'details']
+    schemata: ['Person']
     source_url_column: 'source_url'
     columns:
      - column: 'person_name'
        property: 'name'
   company:
-    schemata: ['popolo_entity', 'popolo_organization']
+    schemata: ['Organization']
     source_url_column: 'source_url'
     columns:
      - column: 'company_name'
        property: 'name'
 relations:
-  membership:
+  membership:  # TODO: review this relation
     schema: 'pa_financial_interest'
     source_url_column: 'source_url'
     source: 'person'

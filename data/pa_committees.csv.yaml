@@ -1,4 +1,4 @@
-
+# TODO: Are these committees organizations in their own right?
 entities:
   committee:
     schemata: ['popolo_entity', 'popolo_organization', 'political_committee']

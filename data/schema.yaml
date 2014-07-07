@@ -54,7 +54,7 @@
 
     # Country of origin
     # - For individuals, their nationality at birth
-    # - For companues, the jurisdiction in which they are registered
+    # - For companies, the jurisdiction in which they are registered
     - name: origin_country
       label: 'Country'
 

@@ -1,20 +1,20 @@
 
 entities:
   person:
-    schemata: ['popolo_entity', 'popolo_person', 'details']
+    schemata: ['Person']
     source_url_column: 'source_url'
     columns:
      - column: 'person_name'
        property: 'name'
   org:
-    schemata: ['popolo_entity', 'popolo_organization']
+    schemata: ['Organization']
     source_url_column: 'source_url'
     columns:
      - column: 'organization_name'
        property: 'name'
 relations:
   membership:
-    schema: 'popolo_membership'
+    schema: 'Membership'
     source_url_column: 'source_url'
     source: 'person'
     target: 'org'
@@ -23,9 +23,9 @@ relations:
        property: 'role'
        skip_empty: true
      - column: 'start_date'
-       property: 'start_date'
+       property: 'date_start'
        skip_empty: true
      - column: 'end_date'
-       property: 'end_date'
+       property: 'date_end'
        skip_empty: true
 
