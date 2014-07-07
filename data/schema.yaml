@@ -77,6 +77,7 @@
 
     # Profile images
     # TODO: revamp when grano has proper image support.
+    # https://github.com/granoproject/grano/issues/55
     - name: image_full_url
       label: 'Full-size image URL'
       hidden: true
@@ -98,6 +99,7 @@
   label: 'Person'
   description: 'A natural person'
   hidden: false
+  obj: entity
   see_also: 'http://popoloproject.com/specs/person.html'
   attributes:
     - name: given_name
@@ -107,10 +109,11 @@
     - name: gender
       label: 'Gender'
       # TODO: we need enums
+      # https://github.com/granoproject/grano/issues/47
       values: ['male', 'female', 'other']
     - name: honorific_prefix
       label: 'Honorific prefix'
-    - name: date_of_birth
+    - name: date_birth
       label: 'Date of birth'
       datatype: datetime
     - name: birth_town
@@ -131,6 +134,7 @@
   label: 'Organization'
   description: 'A legal entity or state institution'
   hidden: false
+  obj: 'entity'
   see_also: 'http://popoloproject.com/specs/organization.html'
   attributes:
     # A registration number, e.g. with a company register or non-profit
@@ -139,10 +143,10 @@
       label: 'Registration number'
     - name: classification
       label: 'Classification'
-    - name: date_of_founding
+    - name: date_founding
       label: 'Date of founding'
       datatype: datetime
-    - name: date_of_dissolution
+    - name: date_dissolution
       label: 'Date of dissolution'
       datatype: datetime
 
@@ -154,6 +158,7 @@
   label: 'Publicly-traded company'
   description: 'A company traded on a public stock market'
   hidden: false
+  obj: 'entity'
   attributes:
     - name: ticker_symbol
       label: 'Ticker symbol'
@@ -170,6 +175,7 @@
   label: 'Committee'
   description: 'A committee of an organization or institution'
   hidden: false
+  obj: 'entity'
   attributes: []
 
 
@@ -180,6 +186,7 @@
   label: 'Not for Profit'
   description: 'A charitable or non-profit organization'
   hidden: false
+  obj: 'entity'
   attributes: []
 
 
@@ -190,6 +197,7 @@
   label: 'Political party'
   description: 'A political party'
   hidden: false
+  obj: 'entity'
   attributes: []
 
 
@@ -200,18 +208,57 @@
   label: 'Legal case'
   description: 'A case heard before court or settled otherwise'
   hidden: false
+  obj: 'entity'
   attributes:
     - name: case_title
       label: 'Offical case title'
-    - name: date_of_start_hearing
+    - name: date_start_hearing
       label: 'Hearing start date'
       datatype: datetime
-    - name: date_of_end_hearing
+    - name: date_end_hearing
       label: 'Hearing end date'
       datatype: datetime
-    - name: date_of_decision
+    - name: date_decision
       label: 'Date decided'
       datatype: datetime
     - name: citation
       label: 'Case citation'
 
+
+#####################################################################
+# Relation: Membership
+#####################################################################
+- name: 'Membership'
+  label: 'Member'
+  description: 'An entity is a member of an organization'
+  hidden: false
+  obj: relation
+  see_also: 'http://popoloproject.com/specs/membership.html'
+  attributes:
+    - name: date_start
+      label: 'Start date'
+      datatype: datetime
+    - name: date_end
+      label: 'End date'
+      datatype: datetime
+    - name: role
+      label: 'Role'
+
+
+#####################################################################
+# Relation: Partnership
+#####################################################################
+- name: 'Partnership'
+  label: 'Partner'
+  description: 'Two entities are associated by some type of agreement'
+  hidden: false
+  obj: relation
+  attributes:
+    - name: date_start
+      label: 'Start date'
+      datatype: datetime
+    - name: date_end
+      label: 'End date'
+      datatype: datetime
+    - name: extent
+      label: 'Extent'
