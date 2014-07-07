@@ -56,7 +56,7 @@
     # - For individuals, their nationality at birth
     # - For companues, the jurisdiction in which they are registered
     - name: origin_country
-      label: Country
+      label: 'Country'
 
     # Built-in external identifiers
     - name: xid_popolo
@@ -74,3 +74,74 @@
       service_label: "Who's Who SA"
       label: "Who's Who URL"
       hidden: true
+
+    # Profile images
+    # TODO: revamp when grano has proper image support.
+    - name: image_full_url
+      label: 'Full-size image URL'
+      hidden: true
+    - name: image_full_credit
+      label: 'Full-size image credit'
+      hidden: true
+    - name: image_thumb_url
+      label: 'Thumbnail image URL'
+      hidden: true
+    - name: image_thumb_credit
+      label: 'Thumbnail image credit'
+      hidden: true
+
+
+#####################################################################
+# Entity: Person
+#####################################################################
+- name: 'Person'
+  label: 'Person'
+  description: 'A natural person'
+  hidden: false
+  see_also: 'http://popoloproject.com/specs/person.html'
+  attributes:
+    - name: given_name
+      label: 'Given name'
+    - name: family_name
+      label: 'Family name'
+    - name: gender
+      label: 'Gender'
+      # TODO: we need enums
+      values: ['male', 'female', 'other']
+    - name: honorific_prefix
+      label: 'Honorific prefix'
+    - name: date_of_birth
+      label: 'Date of birth'
+      datatype: datetime
+    - name: birth_town
+      label: 'Birth town'
+    # TODO: do we really want these?
+    - name: name_short
+      label: 'Name (short)'
+      hidden: true
+    - name: name_full
+      label: 'Name (full)'
+      hidden: true
+
+
+#####################################################################
+# Entity: Organization
+#####################################################################
+- name: 'Organization'
+  label: 'Organization'
+  description: 'A legal entity or state institution'
+  hidden: false
+  see_also: 'http://popoloproject.com/specs/organization.html'
+  attributes:
+    # A registration number, e.g. with a company register or non-profit
+    # register.
+    - name: registration_number
+      label: 'Registration number'
+    - name: classification
+      label: 'Classification'
+    - name: date_of_founding
+      label: 'Date of founding'
+      datatype: datetime
+    - name: date_of_dissolution
+      label: 'Date of dissolution'
+      datatype: datetime
