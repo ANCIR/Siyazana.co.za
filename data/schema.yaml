@@ -13,7 +13,7 @@
 
 # Overwrite the base model to add some common properties.
 - name: 'base'
-  label: 'Common'
+  label: 'Common base schema'
   obj: 'entity'
   hidden: true
   attributes:
@@ -26,29 +26,30 @@
     # WARNING: as slugification is a lossy process, this may no longer be
     # unique, even if the name is.
     - name: slug
-      label: URL Slug
+      label: 'URL Slug'
+      hidden: true
 
     # A short one-line summary of the entity.
     - name: tagline
-      label: Tagline
+      label: 'Tagline'
 
     # A longer, one paragraph summary of the entity.
     - name: summary
-      label: Summary
+      label: 'Summary'
 
     # Contact information
-    - name: contact_website
-      label: Web site
+    - name: contact_url
+      label: 'Web site'
     - name: contact_email
-      label: E-Mail
+      label: 'E-Mail'
     - name: contact_phone
-      label: Telephone number
+      label: 'Telephone number'
     - name: contact_fax
-      label: Fax number
+      label: 'Fax number'
     - name: contact_address_physical
-      label: Physical address
+      label: 'Physical address'
     - name: contact_address_postal
-      label: Postal address
+      label: 'Postal address'
     # TODO: do we want to unwind addresses into several fields?
 
     # Country of origin
@@ -57,3 +58,19 @@
     - name: origin_country
       label: Country
 
+    # Built-in external identifiers
+    - name: xid_popolo
+      service_url: 'http://za-new-import.popit.mysociety.org/'
+      service_label: 'PopIt for South Africa'
+      label: 'Popolo ID'
+      hidden: true
+    - name: xurl_peoples_assembly
+      service_url: 'http://www.pa.org.za/'
+      service_label: "People's Assembly in South Africa"
+      label: "People's Assembly URL"
+      hidden: true
+    - name: xurl_whos_who
+      service_url: 'http://whoswho.co.za/'
+      service_label: "Who's Who SA"
+      label: "Who's Who URL"
+      hidden: true
