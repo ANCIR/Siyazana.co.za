@@ -145,3 +145,73 @@
     - name: date_of_dissolution
       label: 'Date of dissolution'
       datatype: datetime
+
+
+#####################################################################
+# Entity: PublicCompany
+#####################################################################
+- name: 'PublicCompany'
+  label: 'Publicly-traded company'
+  description: 'A company traded on a public stock market'
+  hidden: false
+  attributes:
+    - name: ticker_symbol
+      label: 'Ticker symbol'
+    - name: listing_status
+      label: 'Status of stock listing'
+    - name: listing_exchange
+      label: 'Stock exchange'
+
+
+#####################################################################
+# Entity: Committee
+#####################################################################
+- name: 'Committee'
+  label: 'Committee'
+  description: 'A committee of an organization or institution'
+  hidden: false
+  attributes: []
+
+
+#####################################################################
+# Entity: NonProfit
+#####################################################################
+- name: 'NonProfit'
+  label: 'Not for Profit'
+  description: 'A charitable or non-profit organization'
+  hidden: false
+  attributes: []
+
+
+#####################################################################
+# Entity: PoliticalParty
+#####################################################################
+- name: 'PoliticalParty'
+  label: 'Political party'
+  description: 'A political party'
+  hidden: false
+  attributes: []
+
+
+#####################################################################
+# Entity: LegalCase
+#####################################################################
+- name: 'LegalCase'
+  label: 'Legal case'
+  description: 'A case heard before court or settled otherwise'
+  hidden: false
+  attributes:
+    - name: case_title
+      label: 'Offical case title'
+    - name: date_of_start_hearing
+      label: 'Hearing start date'
+      datatype: datetime
+    - name: date_of_end_hearing
+      label: 'Hearing end date'
+      datatype: datetime
+    - name: date_of_decision
+      label: 'Date decided'
+      datatype: datetime
+    - name: citation
+      label: 'Case citation'
+
