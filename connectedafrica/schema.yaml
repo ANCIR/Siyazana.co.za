@@ -83,10 +83,10 @@
       label: Birth town
     - name: birth_country
       label: Country of origin
-    - name: name_short
-      label: Name (short)
-    - name: name_full
-      label: Name (full)
+    - name: display_name
+      label: Name used for display
+    - name: full_name
+      label: Full name
 
 - name: popolo_organization
   label: Popolo Organization

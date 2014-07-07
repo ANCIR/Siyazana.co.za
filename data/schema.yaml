@@ -119,11 +119,11 @@
     - name: birth_town
       label: 'Birth town'
     # TODO: do we really want these?
-    - name: name_short
-      label: 'Name (short)'
+    - name: display_name
+      label: 'Name used for display'
       hidden: true
-    - name: name_full
-      label: 'Name (full)'
+    - name: full_name
+      label: 'Full name'
       hidden: true
 
 

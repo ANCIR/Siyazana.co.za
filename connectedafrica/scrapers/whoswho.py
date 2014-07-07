@@ -70,13 +70,13 @@ def parse_content(content):
     if len(basic_el) == 0:
         raise ScraperException("Content doesn't appear to be a person's profile")
     basic_el = basic_el[0]
-    name_short = basic_el.xpath("*[@itemprop='name'][1]/text()")[0].strip()
-    name_full = basic_el.xpath("*[@itemprop='name']/following-sibling::p[1]/em/text()")[0].strip()
+    display_name = basic_el.xpath("*[@itemprop='name'][1]/text()")[0].strip()
+    full_name = basic_el.xpath("*[@itemprop='name']/following-sibling::p[1]/em/text()")[0].strip()
     job_title = basic_el.xpath("*[@itemprop='jobTitle'][1]/text()")[0].strip()
     bio = basic_el.xpath("*[@id='contact_info']/preceding-sibling::p[1]/text()")[0].strip()
     data['basic_info'] = {
-        'name_short': name_short,
-        'name_full': name_full,
+        'display_name': display_name,
+        'full_name': full_name,
         'job_title': job_title,
         'bio': bio
     }
