@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ display_name }}{% endblock %}
+
+{% block content %}
+
+<div class="col-md-2"></div>
+
+<div class="col-md-10">
+  <h1>
+    {% block displayname %}{{ display_name }}{% endblock %}
+  </h1>
+  <p class="subtitle">
+    {% block subtitle %}{% endblock %}
+  </p>
+</div>
+
+<div class="col-md-2 panel-body">
+  {% block leftpanel %}
+  <form>
+    <h4>Relationships</h4>
+    {% block filterinputs %}
+    <div>
+        <div class="form-control">
+          <input type="checkbox" checked>
+          <label>TODO</label>
+        </div>
+        <div class="form-control">
+          <input type="checkbox" checked>
+          <label>TODO<label>
+        </div>
+        <div class="form-control">
+          <input type="checkbox" checked>
+          <label>TODO</label>
+        </div>
+        <div class="form-control">
+          <input type="checkbox" checked>
+          <label>TODO</label>
+        </div>
+    </div>
+    <div>
+      <input type="text" class="form-control">
+      <input type="submit" class="form-control" value="Search">
+    </div>
+    {% endblock %}
+  </form>
+  {% endblock %}
+</div>
+
+<div class="col-md-10">
+
+  <div class="col-md-8">
+    {% block centerpanel %}
+    <h2>Timeline</h2>
+    {% block timeline %}
+    <ul>
+    {% for group in relations.temporal|groupby('properties.start_date.value') %}
+      <li class="text-center"><h3><span class="label label-info">{{ group.grouper }}</span></h3></li>
+      {% for rel in group.list %}
+        <li class="person family"><a href="#">{{ rel.target.properties|display_name }}</a><ul><li><a href="#">{{ rel.properties.role.value }} ({{ rel.properties.start_date.value }} - {{ rel.properties.end_date.value }})</a></li></ul></li>
+      {% endfor %}
+    {% endfor %}
+    </ul>
+    {% endblock %}
+    {% endblock %}
+  </div>
+
+  <div class="col-md-4">
+    {% block rightpanel %}
+    {% block bio %}
+    <div id="bio" class="panel panel-default panel-body">
+      {% if entity.properties.image_url %}
+        <img src="{{ entity.properties.image_url.value }}" alt="{{ display_name }}">
+      {% else %}
+        <img src="{% block defaultimageurl %}{% endblock %}" alt="generic profile image">
+      {% endif %}
+      <p>{% block biotext %}{% endblock %}</p>
+      <p>
+        {% block basicinfo %}
+        <strong>Types: </strong>{{ schemata_map.values()|join(', ') }}<br/>
+        {% for k, v in entity.properties.iteritems() %}
+          <strong>{{ k|capitalize }}: </strong>{{ v.value }}<br/>
+        {% endfor %}
+        {% endblock %}
+      </p>
+      <div id="related-entities" class="text-center">
+        {% block relatedentities %}{% endblock %}
+      </div>
+    </div>
+    {% endblock %}
+
+    {% block sources %}
+    <div id="sources" class="panel panel-default panel-body">
+      <h3>Sources</h3>
+      <ul>
+      	{% for source, n in source_map.iteritems() %}
+      		<li id="source-{{ n }}">[{{ n }}] <a href="{{ source }}">{{ source }}</a></li>
+      	{% endfor %}
+      </ul>
+    </div>
+    {% endblock %}
+
+    <div>
+	  	Icon made by Elegant Themes from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>
+	  </div>
+    {% endblock %}
+  </div>
+
+</div>
+
+{% endblock %}
