@@ -1,0 +1,59 @@
+#
+# connectedAfrica data model, v. 0.1
+#
+# This is the data model for the South African version of connectedAfrica, and
+# it will eventually be extended to be generic enough to cover other instances
+# as well.
+#
+# Conventions:
+# * 'xid_*': an external identifier (e.g. numeric, GUID)
+# * 'xurl_*': an external identifier URL
+#
+
+
+# Overwrite the base model to add some common properties.
+- name: 'base'
+  label: 'Common'
+  obj: 'entity'
+  hidden: true
+  attributes:
+
+    # Core identifier.
+    - name: name
+      label: Name
+
+    # URL-ready form of the name
+    # WARNING: as slugification is a lossy process, this may no longer be
+    # unique, even if the name is.
+    - name: slug
+      label: URL Slug
+
+    # A short one-line summary of the entity.
+    - name: tagline
+      label: Tagline
+
+    # A longer, one paragraph summary of the entity.
+    - name: summary
+      label: Summary
+
+    # Contact information
+    - name: contact_website
+      label: Web site
+    - name: contact_email
+      label: E-Mail
+    - name: contact_phone
+      label: Telephone number
+    - name: contact_fax
+      label: Fax number
+    - name: contact_address_physical
+      label: Physical address
+    - name: contact_address_postal
+      label: Postal address
+    # TODO: do we want to unwind addresses into several fields?
+
+    # Country of origin
+    # - For individuals, their nationality at birth
+    # - For companues, the jurisdiction in which they are registered
+    - name: origin_country
+      label: Country
+
