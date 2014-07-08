@@ -1,0 +1,45 @@
+
+entities:
+  entity:
+    schemata: []
+    source_url_column: 'Source URL'
+    columns:
+     - column: 'Entity'
+       property: 'name'
+  case:
+    schemata: ['LegalCase']
+    source_url_column: 'Source URL'
+    columns:
+     - column: 'Case No.'
+       property: 'name'
+     - column: 'Title'
+       property: 'case_title'
+       skip_empty: true
+     - column: 'Date of hearing start'
+       property: 'date_start_hearing'
+       type: datetime
+       format: '%m/%d/%Y'
+       skip_empty: true
+     - column: 'Date of hearing end'
+       property: 'date_end_hearing'
+       type: datetime
+       format: '%m/%d/%Y'
+       skip_empty: true
+     - column: 'Date decided'
+       property: 'date_decision'
+       type: datetime
+       format: '%m/%d/%Y'
+       skip_empty: true
+     - column: 'Citation'
+       property: 'citation'
+       skip_empty: true
+relations:
+  membership:
+    schema: 'Membership'
+    source_url_column: 'Source URL'
+    source: 'entity'
+    target: 'case'
+    columns:
+     - column: 'Role'
+       property: 'role'
+       skip_empty: true

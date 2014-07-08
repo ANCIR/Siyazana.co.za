@@ -26,6 +26,7 @@ loadnpo:
 # Google docs
 loadgdocs: gdocs
 	granoloader csv -t 5 data/directorships.csv.yaml data/directorships.csv
+	granoloader csv -t 5 data/litigation.csv.yaml data/litigation.csv
 
 gdocs: data/directorships.csv data/litigation.csv
 

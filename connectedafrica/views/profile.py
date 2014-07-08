@@ -24,10 +24,10 @@ def display_name(entity=None, data_dict=None):
         properties = entity.properties
     else:
         properties = data_dict
-    if 'name_short' in properties:
-        return properties['name_short']['value']
-    elif 'name_full' in properties:
-        return properties['name_full']['value']
+    if 'display_name' in properties:
+        return properties['display_name']['value']
+    elif 'full_name' in properties:
+        return properties['full_name']['value']
     elif 'given_name' in properties and \
             'family_name' in properties:
         return '%s %s' % (properties['given_name']['value'],
