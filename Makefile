@@ -28,7 +28,7 @@ loadgdocs: gdocs
 	granoloader csv -t 5 data/directorships.csv.yaml data/directorships.csv
 	granoloader csv -t 5 data/litigation.csv.yaml data/litigation.csv
 
-gdocs: data/directorships.csv data/litigation.csv
+gdocs: data/directorships.csv data/litigation.csv data/persons.csv
 
 data/directorships.csv:
 	wget -O data/directorships.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=465508635"
@@ -36,6 +36,9 @@ data/directorships.csv:
 
 data/litigation.csv:
 	wget -O data/litigation.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1973809171"
+
+data/persons.csv:
+	wget -O data/persons.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1657155089"
 
 cleangdocs:
 	rm data/litigation.csv data/directorships.csv

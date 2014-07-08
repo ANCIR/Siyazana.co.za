@@ -40,6 +40,21 @@ def write_json(file_name, data):
         return json.dump(data.copy(), fh)
 
 
+def set_to_empty(data, empty_keys=(), empty_values=('', ), empty_value=None):
+    '''
+    Adds empty_keys to data with value empty_value if the key is not in data.
+    Also sets all values in empty_values to empty_value, e.g. for normalizing
+    empty strings to None.
+    '''
+    empty_values = set(empty_values)
+    for k, v in data.iteritems():
+        if v in empty_values:
+            data[k] = empty_value
+    for k in empty_keys:
+        if k not in data:
+            data[k] = empty_value
+
+
 class ScraperException(Exception):
     pass
 

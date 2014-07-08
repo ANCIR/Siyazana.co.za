@@ -1,13 +1,16 @@
-import re, sys
+import os, re, sys
 from datetime import datetime
 import threading
 import urlparse
 
 from lxml import html
+import networkx as nx
 import requests
 from thready import threaded
+import unicodecsv as csv
 
-from connectedafrica.scrapers.util import ScraperException
+from connectedafrica.scrapers.util import (ScraperException, MultiCSV, DATA_PATH,
+                                           set_to_empty)
 
 
 ENDPOINT_URL = 'http://whoswho.co.za/'
@@ -211,10 +214,10 @@ def parse_content(content):
                             edu_data['qualification'] = qualification[0]
                         edu_data['start_year'] = int(date_parts.group('start'))
                         if date_parts.group('current'):
-                            role_data['status'] = 'in progress'
+                            edu_data['status'] = 'in progress'
                         elif date_parts.group('end'):
-                            role_data['status'] = 'complete'
-                            role_data['year_awarded'] = int(date_parts.group('end'))
+                            edu_data['status'] = 'complete'
+                            edu_data['year_awarded'] = int(date_parts.group('end'))
                     else:
                         edu_data['qualification'] = date_parts
             data['education'].append(edu_data)
@@ -261,57 +264,123 @@ def parse_content(content):
     return data
 
 
-def scrape_person(search_term, degrees=0, out=sys.stdout):
-    import networkx as nx
+def write_to_csv(csv, data):
+    # Person
+    out_data = data['basic_info'].copy()
+    out_data['source_url'] = data['url']
+    set_to_empty(out_data, ('birth_date', 'birth_town', 'country'))
+    csv.write('whoswho_person.csv', out_data)
+    # Memberships (professional)
+    for details in data['professional_details']:
+        out_data = details.copy()
+        out_data['source_url'] = data['url']
+        set_to_empty(out_data, ('role_start_year', 'role_end_year',
+                                'organization_name', 'organization_url'))
+        csv.write('whoswho_memberships.csv', out_data)
+    # Memberships (other)
+    for details in data['activities']:
+        out_data = details.copy()
+        out_data['source_url'] = data['url']
+        set_to_empty(out_data, ('role_start_year', 'role_end_year',
+                                'role_name', 'status'))
+        csv.write('whoswho_memberships.csv', out_data)
+    # Qualifications
+    for details in data['education']:
+        out_data = details.copy()
+        out_data['source_url'] = data['url']
+        set_to_empty(out_data, ('organization_name', 'place',
+                                'year_awarded', 'status',
+                                'start_year', 'qualification'))
+        csv.write('whoswho_qualifications.csv', out_data)
 
-    start_url = lookup(search_term)
-    url_graph = nx.DiGraph()
-    url_graph.add_node(start_url)
-    url_scraped = set()
-    url_to_scrape = set([start_url])
 
-    thread_count = 5
-    shared_state = {'processed_urls': 0}
-    lock = threading.Condition()
-    out_lock = threading.Lock()
+class NetworkScraper(object):
+    '''
+    This scraper scrapes related URLs and keeps track of their connectivity.
+    Multiple scrape calls won't re-scrape a URL.
+    '''
 
-    def produce_urls(source_url, new_urls):
-        with lock:
-            url_graph.add_edges_from([(source_url, u) for u in new_urls])
-            for url in new_urls:
-                if (url not in url_scraped and
-                        url not in url_to_scrape and
-                        len(nx.shortest_path(url_graph, start_url, url))
-                        <= degrees + 1):
+    def __init__(self, csv=None, out=sys.stdout, thread_count=5):
+        self.url_graph = nx.DiGraph()
+        self.url_scraped = set()
+        self.thread_count = thread_count
+        self.csv = csv
+        self.out = out
+        self.lock = threading.Condition()
+        self.out_lock = threading.Lock()
+
+    def scrape(self, search_term, degrees=0):
+        start_url = lookup(search_term)
+        shared_state = {'processed_urls': 0}
+
+        if start_url in self.url_scraped:
+            # we have scraped the current url, but we still need to
+            # scrape all its descendants with degree <= degrees
+            url_to_scrape = set()
+            nodes = [(start_url, 0)]
+            while len(nodes) > 0:
+                url, degree = nodes.pop(0)
+                if degree <= degrees and url not in self.url_scraped:
                     url_to_scrape.add(url)
-            shared_state['processed_urls'] += 1
-            lock.notify()
+                elif degree < degrees:
+                    child_urls = self.url_graph[url].keys()
+                    nodes.extend([(u, degree + 1) for u in child_urls])
+        else:
+            self.url_graph.add_node(start_url)
+            url_to_scrape = set([start_url])
 
-    def consume_urls():
-        generated_urls = 0
-        while True:
-            with lock:
-                if len(url_to_scrape) == 0:
-                    lock.wait()
-                if len(url_to_scrape) == 0:
-                    if generated_urls == shared_state['processed_urls']:
-                        raise StopIteration
-                else:
-                    url = url_to_scrape.pop()
-                    url_scraped.add(url)
-                    generated_urls += 1
-                    yield url
+        def produce_urls(source_url, new_urls):
+            with self.lock:
+                self.url_graph.add_edges_from([(source_url, u) for u in new_urls])
+                for url in new_urls:
+                    if (url not in self.url_scraped and
+                            url not in url_to_scrape and
+                            len(nx.shortest_path(self.url_graph, start_url, url))
+                            <= degrees + 1):
+                        url_to_scrape.add(url)
+                shared_state['processed_urls'] += 1
+                self.lock.notify()
 
-    def thread_func(url):
-        with out_lock:
-            sys.stderr.write('Scraping %s\n' % url)
-        data = get_data(url)
-        produce_urls(url, [d['url'] for d in data['related_profiles']])
-        with out_lock:
-            out.write('%r\n' % data)
+        def consume_urls():
+            generated_urls = 0
+            if len(url_to_scrape) == 0:
+                return
+            while True:
+                with self.lock:
+                    if len(url_to_scrape) == 0:
+                        self.lock.wait()
+                    if len(url_to_scrape) == 0:
+                        if generated_urls == shared_state['processed_urls']:
+                            raise StopIteration
+                    else:
+                        url = url_to_scrape.pop()
+                        self.url_scraped.add(url)
+                        generated_urls += 1
+                        yield url
 
-    threaded(consume_urls(), thread_func, num_threads=thread_count)
+        def thread_func(url):
+            with self.out_lock:
+                sys.stderr.write('Scraping %s\n' % url)
+            data = get_data(url)
+            produce_urls(url, [d['url'] for d in data['related_profiles']])
+            if self.csv is not None:
+                write_to_csv(self.csv, data)
+            else:
+                with self.out_lock:
+                    self.out.write('%r\n' % data)
+
+        threaded(consume_urls(), thread_func, num_threads=self.thread_count)
 
 
 if __name__ == '__main__':
-    scrape_person(sys.argv[1], int(sys.argv[2]))
+    with open(os.path.join(DATA_PATH, 'persons.csv')) as f:
+        reader = csv.reader(f)
+        row = next(reader)
+        name_index = row.index('Full Name')
+        scraper = NetworkScraper(csv=MultiCSV(), thread_count=5)
+        for row in csv.reader(f):
+            name = row[name_index]
+            try:
+                scraper.scrape(name, degrees=1)
+            except ProfileNotFound as e:
+                sys.stderr.write("%s\n" % str(e))
