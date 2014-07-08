@@ -1,4 +1,3 @@
-import re
 from flask import request
 from urllib import urlencode
 from slugify import slugify as _slugify
