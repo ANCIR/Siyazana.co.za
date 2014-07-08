@@ -1,13 +1,12 @@
 from collections import OrderedDict
 from operator import itemgetter
 
-from flask import Blueprint, render_template, request, abort
+from flask import Blueprint, render_template, abort
 
 from granoclient import NotFound
 
 from connectedafrica.core import grano
-from connectedafrica.util import slugify
-from connectedafrica.views.paginator import Paginator
+from connectedafrica.views.util import slugify
 
 
 blueprint = Blueprint('profile', __name__)
