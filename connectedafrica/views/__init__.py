@@ -35,3 +35,21 @@ def display_name_filter(entity_or_data):
     elif isinstance(entity_or_data, dict):
         return display_name(data_dict=entity_or_data)
     return ''
+
+
+@app.template_filter('snippet')
+def make_snippet(entity):
+    if isinstance(entity, Entity):
+        properties = entity.properties
+    elif isinstance(entity, dict):
+        properties = entity.get('properties')
+    else:
+        properties = {}
+
+    snippet = ''
+    if 'tagline' in properties:
+        snippet = properties.get('tagline').get('value')
+    elif 'tagline' in properties:
+        snippet = properties.get('summary').get('value')
+
+    return snippet

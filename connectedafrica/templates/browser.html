@@ -27,9 +27,9 @@
           <tr>
              <td>
                <a href="{{url_for('profile.view', id=result.id, slug=result.properties.name.value|slugify)}}">{{result.properties.name.value}}</a>
-             </td>
-             <td>
-                <a href="{{result.api_url}}">api url</a>
+               <span class="help-text">
+                  {{ result | snippet | truncate(60) }}
+               </span>
              </td>
           </tr>
         {% endfor %}
