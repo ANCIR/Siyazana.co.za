@@ -125,6 +125,10 @@
     - name: full_name
       label: 'Full name'
       hidden: true
+    - name: national_id
+      label: National ID number
+    - name: passport_number
+      label: Passport number
 
 
 #####################################################################
