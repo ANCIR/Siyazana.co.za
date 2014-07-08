@@ -9,7 +9,8 @@ import requests
 from thready import threaded
 import unicodecsv as csv
 
-from connectedafrica.scrapers.util import ScraperException, MultiCSV, DATA_PATH
+from connectedafrica.scrapers.util import (ScraperException, MultiCSV, DATA_PATH,
+                                           set_to_empty)
 
 
 ENDPOINT_URL = 'http://whoswho.co.za/'
@@ -213,10 +214,10 @@ def parse_content(content):
                             edu_data['qualification'] = qualification[0]
                         edu_data['start_year'] = int(date_parts.group('start'))
                         if date_parts.group('current'):
-                            role_data['status'] = 'in progress'
+                            edu_data['status'] = 'in progress'
                         elif date_parts.group('end'):
-                            role_data['status'] = 'complete'
-                            role_data['year_awarded'] = int(date_parts.group('end'))
+                            edu_data['status'] = 'complete'
+                            edu_data['year_awarded'] = int(date_parts.group('end'))
                     else:
                         edu_data['qualification'] = date_parts
             data['education'].append(edu_data)
@@ -264,7 +265,33 @@ def parse_content(content):
 
 
 def write_to_csv(csv, data):
-    pass
+    # Person
+    out_data = data['basic_info'].copy()
+    out_data['source_url'] = data['url']
+    set_to_empty(out_data, ('birth_date', 'birth_town', 'country'))
+    csv.write('whoswho_person.csv', out_data)
+    # Memberships (professional)
+    for details in data['professional_details']:
+        out_data = details.copy()
+        out_data['source_url'] = data['url']
+        set_to_empty(out_data, ('role_start_year', 'role_end_year',
+                                'organization_name', 'organization_url'))
+        csv.write('whoswho_memberships.csv', out_data)
+    # Memberships (other)
+    for details in data['activities']:
+        out_data = details.copy()
+        out_data['source_url'] = data['url']
+        set_to_empty(out_data, ('role_start_year', 'role_end_year',
+                                'role_name', 'status'))
+        csv.write('whoswho_memberships.csv', out_data)
+    # Qualifications
+    for details in data['education']:
+        out_data = details.copy()
+        out_data['source_url'] = data['url']
+        set_to_empty(out_data, ('organization_name', 'place',
+                                'year_awarded', 'status',
+                                'start_year', 'qualification'))
+        csv.write('whoswho_qualifications.csv', out_data)
 
 
 class NetworkScraper(object):
@@ -350,7 +377,10 @@ if __name__ == '__main__':
         reader = csv.reader(f)
         row = next(reader)
         name_index = row.index('Full Name')
-        scraper = NetworkScraper(csv=MultiCSV())
+        scraper = NetworkScraper(csv=MultiCSV(), thread_count=5)
         for row in csv.reader(f):
             name = row[name_index]
-            scraper.scrape(name, degrees=1)
+            try:
+                scraper.scrape(name, degrees=1)
+            except ProfileNotFound as e:
+                sys.stderr.write("%s\n" % str(e))
