@@ -23,6 +23,11 @@ loadnpo:
 	granoloader csv -t 5 data/npo_organisations.csv.yaml data/npo_organisations.csv
 	granoloader csv -t 5 data/npo_officers.csv.yaml data/npo_officers.csv
 
+loadwhoswho:
+	granoloader csv -t 5 data/whoswho_persons.csv.yaml data/whoswho_persons.csv
+	granoloader csv -t 5 data/whoswho_memberships.csv.yaml data/whoswho_memberships.csv
+	granoloader csv -t 5 data/whoswho_qualifications.csv.yaml data/whoswho_qualifications.csv
+
 # Google docs
 loadgdocs: gdocs
 	granoloader csv -t 5 data/directorships.csv.yaml data/directorships.csv

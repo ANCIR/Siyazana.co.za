@@ -147,6 +147,11 @@ def parse_content(content):
                     org_el = org_el[0]
                     role_data['organization_name'] = org_el.text
                     role_data['organization_url'] = org_el.get('href', None)
+                    if role_data['organization_url']:
+                        role_data['organization_url'] = '%s%s' % (
+                            ENDPOINT_URL.rstrip('/'),
+                            role_data['organization_url']
+                        )
                 # the organization doesn't have a url
                 # use 2nd last piece of plain text
                 elif len(role_parts) > 2:
@@ -269,11 +274,13 @@ def write_to_csv(csv, data):
     out_data = data['basic_info'].copy()
     out_data['source_url'] = data['url']
     set_to_empty(out_data, ('birth_date', 'birth_town', 'country'))
-    csv.write('whoswho_person.csv', out_data)
+    csv.write('whoswho_persons.csv', out_data)
+    person_name = out_data['display_name']  # don't have a full name for everyone
     # Memberships (professional)
     for details in data['professional_details']:
         out_data = details.copy()
         out_data['source_url'] = data['url']
+        out_data['person_name'] = person_name
         set_to_empty(out_data, ('role_start_year', 'role_end_year',
                                 'organization_name', 'organization_url'))
         csv.write('whoswho_memberships.csv', out_data)
@@ -281,6 +288,7 @@ def write_to_csv(csv, data):
     for details in data['activities']:
         out_data = details.copy()
         out_data['source_url'] = data['url']
+        out_data['person_name'] = person_name
         set_to_empty(out_data, ('role_start_year', 'role_end_year',
                                 'role_name', 'status'))
         csv.write('whoswho_memberships.csv', out_data)
@@ -288,6 +296,7 @@ def write_to_csv(csv, data):
     for details in data['education']:
         out_data = details.copy()
         out_data['source_url'] = data['url']
+        out_data['person_name'] = person_name
         set_to_empty(out_data, ('organization_name', 'place',
                                 'year_awarded', 'status',
                                 'start_year', 'qualification'))

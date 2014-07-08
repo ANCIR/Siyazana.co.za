@@ -1,0 +1,31 @@
+
+entities:
+  person:
+    schemata: ['Person']
+    source_url_column: 'source_url'
+    columns:
+     - column: 'display_name'
+       property: 'name'
+     - column: 'full_name'
+       property: 'full_name'
+       skip_empty: true
+     - column: 'display_name'
+       property: 'display_name'
+     - column: 'country'
+       property: 'origin_country'
+       skip_empty: true
+     - column: 'bio'
+       property: 'summary'
+       skip_empty: true
+     - column: 'birth_date'
+       property: 'date_birth'
+       type: datetime
+       skip_empty: true
+     - column: 'birth_town'
+       property: 'birth_town'
+       skip_empty: true
+     - column: 'job_title'
+       property: 'tagline'
+       skip_empty: true
+     - column: 'source_url'
+       property: 'xurl_whos_who'

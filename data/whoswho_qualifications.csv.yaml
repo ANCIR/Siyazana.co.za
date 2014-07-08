@@ -1,0 +1,38 @@
+
+entities:
+  person:
+    schemata: ['Person']
+    source_url_column: 'source_url'
+    columns:
+     - column: 'person_name'
+       property: 'name'
+  org:
+    schemata: ['EducationalInstitution', 'Organization']
+    source_url_column: 'source_url'
+    columns:
+     - column: 'organization_name'
+       property: 'name'
+       skip_empty: true
+relations:
+  membership:
+    schema: 'Education'
+    source_url_column: 'source_url'
+    source: 'person'
+    target: 'org'
+    columns:
+     - column: 'qualification'
+       property: 'qualification_name'
+       skip_empty: true
+       unique: true
+     - column: 'level'
+       property: 'level'
+       skip_empty: true
+     - column: 'start_year'
+       property: 'year_start'
+       type: int
+       skip_empty: true
+     - column: 'year_awarded'
+       property: 'year_end'
+       type: int
+       skip_empty: true
+       unique: true

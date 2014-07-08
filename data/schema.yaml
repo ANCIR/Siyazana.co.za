@@ -210,6 +210,17 @@
 
 
 #####################################################################
+# Entity: EducationalInstitution
+#####################################################################
+- name: 'EducationalInstitution'
+  label: 'Educational institution'
+  description: 'An educational institution'
+  hidden: false
+  obj: 'entity'
+  attributes: []
+
+
+#####################################################################
 # Entity: LegalCase
 #####################################################################
 - name: 'LegalCase'
@@ -294,3 +305,23 @@
     - name: nominal_value
       label: 'Nominal value'
 
+
+#####################################################################
+# Relation: Education
+#####################################################################
+- name: 'Education'
+  label: 'Education'
+  description: 'An entity received an education from another'
+  hidden: false
+  obj: relation
+  attributes:
+    - name: year_start
+      label: 'Start year'
+      datatype: integer
+    - name: year_end
+      label: 'End year'
+      datatype: integer
+    - name: qualification_name
+      label: 'Name of qualification'
+    - name: level
+      label: 'Level of education'
