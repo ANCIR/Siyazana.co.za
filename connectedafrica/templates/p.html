@@ -1,0 +1,10 @@
+{% if key in entity.properties %}
+	{% with data=entity.properties.get(key) %}
+	<span>{{ data.value }}</span>
+	{% if render_source %}
+		{% with source_num=source_map.get(data.source_url) %}
+		<a href="#source-{{ source_num }}">[{{ source_num }}]</a>
+		{% endwith %}
+	{% endif %}
+	{% endwith %}
+{% endif %}

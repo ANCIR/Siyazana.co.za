@@ -11,7 +11,7 @@
     {% block displayname %}{{ display_name }}{% endblock %}
   </h1>
   <p class="subtitle">
-    {% block subtitle %}{% endblock %}
+    {% block subtitle %}{% with key="tagline", render_source=1 %}{% include "p.html" %}{% endwith %}{% endblock %}
   </p>
 </div>
 
