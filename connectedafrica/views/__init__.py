@@ -5,7 +5,7 @@ from connectedafrica.views.base import blueprint as base_blueprint
 from connectedafrica.views.browser import blueprint as browser_blueprint
 from connectedafrica.views.profile import (blueprint as profile_blueprint,
                                            display_name)
-from connectedafrica.views import helpers
+from connectedafrica.views import util
 
 app.register_blueprint(base_blueprint)
 app.register_blueprint(browser_blueprint)
@@ -16,8 +16,8 @@ app.register_blueprint(profile_blueprint)
 def inject_globals():
     return {
         'APP_NAME': app.config.get('APP_NAME'),
-        'query_add': helpers.query_add,
-        'query_remove': helpers.query_remove
+        'query_add': util.query_add,
+        'query_remove': util.query_remove
     }
 
 
@@ -25,7 +25,7 @@ def inject_globals():
 def slugify_filter(string):
     if not string:
         return ''
-    return helpers.slugify(string)
+    return util.slugify(string)
 
 
 @app.template_filter('display_name')
