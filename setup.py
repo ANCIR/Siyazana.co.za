@@ -26,7 +26,8 @@ setup(
         "thready>=0.1.4",
         "unicodecsv==0.9.4",
         "cssmin==0.2.0",
-        "networkx==1.9"
+        "networkx==1.9",
+        "python-slugify>=0.0.7"
     ],
     tests_require=[],
     entry_points=""" """,
