@@ -86,9 +86,9 @@ def view(id, slug):
             'relations': {'temporal': temporal_rels,
                           'non_temporal': non_temporal_rels}
         }
-        if 'popolo_person' in schemata:
+        if 'Person' in schemata:
             return person_profile(entity, context)
-        elif 'popolo_organization' in schemata:
+        elif 'Organization' in schemata:
             return organization_profile(entity, context)
         else:
             return render_template('profile_base.html',
