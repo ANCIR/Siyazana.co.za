@@ -7,7 +7,7 @@ FLATPAGES_ROOT = '../pages'
 FLATPAGES_EXTENSION = '.md'
 
 
-APP_NAME = 'The Brass Kap'
+APP_NAME = 'connectedAFRICA'
 
 GRANO_HOST = os.environ.get('GRANO_HOST', 'http://beta.grano.cc/')
 GRANO_APIKEY = os.environ.get('GRANO_APIKEY')

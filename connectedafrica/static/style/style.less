@@ -142,8 +142,57 @@ footer {
       margin-left: 1em;
     }
   }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
 }
+
 
 // Modifications of bootstrap defaults
 
 ul.pagination { margin: 0; }
+
+// Browser 
+
+.main-search {
+  width: 100%;
+}
+
+.form-search {
+  .form-group {
+    margin: 1em 0 1em 0;
+    padding-left: 0;
+    padding-right: 0;
+
+    input.main-search {
+      font-size: 1.2em;
+      padding: 12px 24px 12px 24px;
+      height: auto;
+    }
+  }
+}
+
+// Facets 
+
+.facets {
+  li.active {
+    a {
+      color: white;
+    }
+  }
+}
+
+
+// Home page specifics
+.data-summary {
+  width: 100%;
+
+  td.number {
+    width: 30%;
+    text-align: right;
+    padding-right: 1em;
+  }
+}
+
