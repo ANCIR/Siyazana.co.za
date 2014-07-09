@@ -1,10 +1,9 @@
 [program:connectedafrica.gunicorn]
-numprocs=4
-numprocs_start=1
+num_procs=1
 process_name=%(process-name)s
-environment=GRANO_HOST="http://localhost:9000",GRANO_PROJECT="connectedafrica",GRANO_APIKEY=""
+environment=GRANO_HOST="http://localhost:9000",GRANO_PROJECT="connectedafrica-sa"
 directory=%(project-dir)s
-command=%(ve-dir)s/bin/python %(ve-dir)s/bin/gunicorn -b %(host)s:%(port)s connectedafrica.core:app
+command=%(ve-dir)s/bin/python %(ve-dir)s/bin/gunicorn -b %(host)s:%(port)s connectedafrica.core:app -w 4
 user=%(user)s
 stdout_logfile=%(log)s
 stderr_logfile=%(err-log)s
