@@ -100,7 +100,9 @@
   description: 'A natural person'
   hidden: false
   obj: entity
-  see_also: 'http://popoloproject.com/specs/person.html'
+  meta:
+    plural_upper: 'People'
+    see_also: 'http://popoloproject.com/specs/person.html'
   attributes:
     - name: given_name
       label: 'Given name'
@@ -139,7 +141,9 @@
   description: 'A legal entity or state institution'
   hidden: false
   obj: 'entity'
-  see_also: 'http://popoloproject.com/specs/organization.html'
+  meta:
+    plural_upper: 'Organizations'
+    see_also: 'http://popoloproject.com/specs/organization.html'
   attributes:
     # A registration number, e.g. with a company register or non-profit
     # register.
@@ -167,6 +171,8 @@
   description: 'A company traded on a public stock market'
   hidden: false
   obj: 'entity'
+  meta:
+    plural_upper: 'Stock companies'
   attributes:
     - name: ticker_symbol
       label: 'Ticker symbol'
@@ -184,6 +190,8 @@
   description: 'A committee of an organization or institution'
   hidden: false
   obj: 'entity'
+  meta:
+    plural_upper: 'Committees'
   attributes: []
 
 
@@ -195,6 +203,8 @@
   description: 'A charitable or non-profit organization'
   hidden: false
   obj: 'entity'
+  meta:
+    plural_upper: 'Non-profits'
   attributes: []
 
 
@@ -206,6 +216,8 @@
   description: 'A political party'
   hidden: false
   obj: 'entity'
+  meta:
+    plural_upper: 'Political parties'
   attributes: []
 
 
@@ -217,6 +229,8 @@
   description: 'An educational institution'
   hidden: false
   obj: 'entity'
+  meta:
+    plural_upper: 'Educational institutions'
   attributes: []
 
 
@@ -228,6 +242,8 @@
   description: 'A case heard before court or settled otherwise'
   hidden: false
   obj: 'entity'
+  meta:
+    plural_upper: 'Court cases'
   attributes:
     - name: case_title
       label: 'Offical case title'
@@ -252,7 +268,8 @@
   description: 'An entity is a member of an organization'
   hidden: false
   obj: relation
-  see_also: 'http://popoloproject.com/specs/membership.html'
+  meta:
+    see_also: 'http://popoloproject.com/specs/membership.html'
   attributes:
     - name: date_start
       label: 'Start date'
