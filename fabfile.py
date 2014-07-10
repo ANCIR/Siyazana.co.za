@@ -1,7 +1,8 @@
 import os
 import pwd
-from fabric.api import cd, env, task, require, local, lcd, sudo, prefix, shell_env
+from fabric.api import cd, env, task, require, sudo, prefix, shell_env, run
 from fabric.contrib.files import exists, upload_template
+from fabric.context_managers import shell_env
 
 
 VIRTUALENV_DIR = 'connectedafrica_ve'
@@ -78,8 +79,21 @@ def deploy():
     # make sure logging dir exists and update processes
     log_dir = os.path.join(env.deploy_dir, LOG_DIR)
     sudo('mkdir -p %s' % log_dir, user=env.deploy_user)
-    sudo('supervisorctl restart connectedafrica:*')
+    sudo('supervisorctl update')
     sudo('/etc/init.d/nginx reload')
+
+
+@task
+def make(rule):
+    require('deploy_dir', provided_by=[prod])
+
+    repo_dir = os.path.join(env.deploy_dir, CODE_DIR)
+
+    with cd(repo_dir), prefix('. ../%s/bin/activate' % VIRTUALENV_DIR):
+        with shell_env(GRANO_HOST='http://localhost:9000',
+                       GRANO_PROJECT='connectedafrica-sa',
+                       COAF_SETTINGS='settings'):
+            run('make %s' % rule)
 
 
 def get_nginx_template_context():
