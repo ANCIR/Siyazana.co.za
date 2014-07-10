@@ -17,6 +17,8 @@ setup(
     install_requires=[
         "granoloader>=0.1",
         "grano-client>=0.2.4",
+        "gunicorn==19.0",
+        "Fabric==1.9.0",
         "Flask==0.10.1",
         "Flask-Assets==0.10",
         "Flask-Script==2.0.5",
