@@ -14,7 +14,7 @@ from connectedafrica.scrapers.util import make_path, clean_space
 
 
 log = logging.getLogger('npo')
-URL_PATTERN = "http://www.npo.gov.za/PublicNpo/Npo/DetailsPublicDocs/%s"
+URL_PATTERN = "http://www.npo.gov.za/PublicNpo/Npo/DetailsAllDocs/%s"
 
 
 def make_cache(i):
@@ -94,12 +94,21 @@ def scrape_npo(csv, i):
     for li in doc.findall(off_div):
         s = li.find('.//strong')
         a = s.find('./a')
+        id_number = li.find('.//div/span')
+        if id_number is not None:
+            id_number = id_number.text
+            id_number = id_number.replace('(', '')
+            id_number = id_number.replace(')', '')
+            id_number = id_number.strip()
+            if 'Neither ID or Passport' in id_number:
+                id_number = None
         officer = {
             'role': clean_space(s.text).replace(' :', ''),
             'npo_name': data['name'],
             'source_url': url,
             'officer_id': urljoin(url, a.get('href')),
-            'officer_name': clean_space(a.text)
+            'officer_name': clean_space(a.text),
+            'officer_id_number': id_number
         }
         csv.write('npo_officers.csv', officer)
 

@@ -7,6 +7,8 @@ entities:
         property: 'name'
       - column: 'officer_id'
         property: 'xid_popolo'
+      - column: 'officer_id_number'
+        property: 'national_id'
   npo:
     schemata: ['NonProfit', 'Organization']
     source_url_column: 'source_url'
