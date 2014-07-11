@@ -30,14 +30,18 @@ loadwhoswho:
 
 # Google docs
 loadgdocs: gdocs
-	granoloader csv -t 5 data/directorships.csv.yaml data/directorships.csv
-	granoloader csv -t 5 data/litigation.csv.yaml data/litigation.csv
+	granoloader csv -t 5 -f data/family.csv.yaml data/family.csv
+	granoloader csv -t 5 -f data/directorships.csv.yaml data/directorships.csv
+	granoloader csv -t 5 -f data/litigation.csv.yaml data/litigation.csv
 
-gdocs: data/directorships.csv data/litigation.csv data/persons.csv
+gdocs: data/directorships.csv data/litigation.csv data/persons.csv data/family.csv
 
 data/directorships.csv:
 	wget -O data/directorships.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=465508635"
-	sed -i '/,,,,,,,,/d' data/directorships.csv  # remove blank lines
+	#sed -i '/,,,,,,,,/d' data/directorships.csv  # remove blank lines
+
+data/family.csv:
+	wget -O data/family.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1752160727"
 
 data/litigation.csv:
 	wget -O data/litigation.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1973809171"

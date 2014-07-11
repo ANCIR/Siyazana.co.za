@@ -301,6 +301,25 @@
 
 
 #####################################################################
+# Relation: Personal
+#####################################################################
+- name: 'Personal'
+  label: 'Personal'
+  description: 'Personal relationships, such as friendship or family'
+  hidden: false
+  obj: relation
+  attributes:
+    - name: date_start
+      label: 'Start date'
+      datatype: datetime
+    - name: date_end
+      label: 'End date'
+      datatype: datetime
+    - name: type
+      label: 'Type'
+
+
+#####################################################################
 # Relation: FinancialInterest
 #####################################################################
 - name: 'FinancialInterest'

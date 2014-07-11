@@ -1,0 +1,25 @@
+
+entities:
+  personA:
+    schemata: ['Person']
+    source_url_column: 'Source URL'
+    columns:
+     - column: 'Person A'
+       property: 'name'
+  personB:
+    schemata: ['Person']
+    source_url_column: 'Source URL'
+    columns:
+     - column: 'Person B'
+       property: 'name'
+relations:
+  tie:
+    schema: 'Personal'
+    source_url_column: 'Source URL'
+    source: 'personA'
+    target: 'personB'
+    columns:
+     - column: 'Relationship type'
+       property: 'type'
+       skip_empty: true
+
