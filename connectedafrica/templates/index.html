@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% from 'teasers.html' import teasers %}
 
 {% block title %}
   Welcome
@@ -15,19 +16,13 @@
   </div>
   <div class="row">
     <div class="col-md-8">
-      <h3>All the President's Men</h3>
-      <p>
-        <strong>July 9, 2014</strong>
-        Link and announcement for president's piece goes here. This is a
-        short teaser that tells readers what we've done and what a key
-        finding is. <a href='#'>Read more...</a>
-      </p>
+      {{teasers(features)}}
       <h3>What is {{APP_NAME}}?</h3>
       <p>
         Our database is a resource for anyone interested in how relationships -
         biographical, professional or economic - influence the peopel and process
         if South African politcs.
-        <a href='#'>Read more...</a>
+        <a href='{{url_for('base.page', path='about')}}'>Read more...</a>
       </p>
     </div>
     <div class="col-md-4">

@@ -12,6 +12,7 @@
 
     <meta name="og:site_name" content="{{APP_NAME}}">
 
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800,300' rel='stylesheet' type='text/css'>
     {% assets filters="less,cssmin,cssrewrite", output="style.css",
         "style/style.less"
@@ -35,8 +36,12 @@
           <form class="navbar-form navbar-right" role="search"
                 action="{{url_for('browser.view')}}">
             <div class="form-group">
-              <input type="text" name="q" class="form-control"
-                value="{{query}}" placeholder="Search">
+              <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" name="q" class="form-control"
+                  value="{{query}}" placeholder="Search">
+              </div>
+              
             </div>
           </form>
         </nav>
