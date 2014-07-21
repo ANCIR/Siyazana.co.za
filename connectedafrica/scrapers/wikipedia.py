@@ -10,6 +10,7 @@ from connectedafrica.core import grano
 from connectedafrica.scrapers.util import MultiCSV, DATA_PATH
 
 
+ACCEPTED_EXTENSIONS = set(('.png', '.jpg', '.jpeg', '.bmp'))
 ENDPOINT_URL = 'http://en.wikipedia.org/w/api.php'
 DEFAULT_PARAMS = {
     'format': 'json',
@@ -39,6 +40,15 @@ def scrape_image(name, csv):
         return
 
     results = data['query']['pages']
+    for k in results.keys():
+        result = results[k]
+        if os.path.splitext(result['imageinfo'][0]['url'])[1] \
+                not in ACCEPTED_EXTENSIONS:
+            del results[k]
+    # in case we have no valid image files
+    if len(results) == 0:
+        return
+
     results_order = data['query']['pageids']
     rank_by_search = dict((pageid, 1 if i < 5 else (2 if i < 10 else 3))
                           for i, pageid in enumerate(results_order))
