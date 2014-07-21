@@ -15,9 +15,12 @@
       </h3>
       <form class="form-search" role="form">
         <div class="form-group col-xs-12">
-          <input type="text" class="form-control main-search" name="q"
-            value="{{query}}"
-            placeholder="Search for people, companies and institutions...">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+            <input type="text" class="form-control main-search" name="q"
+              value="{{query}}"
+              placeholder="Search for people, companies and institutions...">
+          </div>
         </div>
       </form>
     </div>
@@ -43,11 +46,11 @@
           <li class="list-group-item {{'active' if schema.name in schema_facet.active else ''}}">
             {% if schema.name in schema_facet.active %}
               <a class="facet-active" href="{{query_remove('schema', schema.name)}}">
-                {{schema.meta.plural_upper or schema.label}}
+                {{schema.meta.plural or schema.label}}
               </a>
             {% else %}
               <a href="{{query_add('schema', schema.name)}}">
-                {{schema.meta.plural_upper or schema.label}}
+                {{schema.meta.plural or schema.label}}
               </a>
             {% endif %}
             <span class="count badge">{{count}}</span>

@@ -1,10 +1,28 @@
 {% extends "layout.html" %}
+{% from 'teasers.html' import teasers %}
 
 {% block title %}{{page.title}}{% endblock %}
 {% block description %}{{page['description']}}{% endblock %}
 
 {% block content %}
-  {{page.html | safe}}
+  <h2>{{page.title}}</h2>
+  <div class="row">
+    <div class="col-md-8">
+
+      {{page.html | safe}}
+
+      {{teasers(children)}}
+    </div>
+    <div class="col-md-4">
+      <ul class="list-group">
+      {% for item in menu %}
+        <li class="list-group-item {{'active' if page.path.startswith(item.path) else ''}}">
+          <a href="{{url_for('base.page', path=item.path)}}">{{item.meta.get('menutitle')}}</a>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
 {% endblock %}
 
 

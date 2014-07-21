@@ -103,7 +103,7 @@
   hidden: false
   obj: entity
   meta:
-    plural_upper: 'People'
+    plural: 'People'
     see_also: 'http://popoloproject.com/specs/person.html'
   attributes:
     - name: given_name
@@ -144,7 +144,7 @@
   hidden: false
   obj: 'entity'
   meta:
-    plural_upper: 'Organizations'
+    plural: 'Organizations'
     see_also: 'http://popoloproject.com/specs/organization.html'
   attributes:
     # A registration number, e.g. with a company register or non-profit
@@ -174,7 +174,7 @@
   hidden: false
   obj: 'entity'
   meta:
-    plural_upper: 'Stock companies'
+    plural: 'Stock companies'
   attributes:
     - name: ticker_symbol
       label: 'Ticker symbol'
@@ -193,7 +193,7 @@
   hidden: false
   obj: 'entity'
   meta:
-    plural_upper: 'Committees'
+    plural: 'Committees'
   attributes: []
 
 
@@ -206,7 +206,7 @@
   hidden: false
   obj: 'entity'
   meta:
-    plural_upper: 'Non-profits'
+    plural: 'Non-profits'
   attributes: []
 
 
@@ -219,7 +219,7 @@
   hidden: false
   obj: 'entity'
   meta:
-    plural_upper: 'Political parties'
+    plural: 'Political parties'
   attributes: []
 
 
@@ -232,7 +232,7 @@
   hidden: false
   obj: 'entity'
   meta:
-    plural_upper: 'Educational institutions'
+    plural: 'Educational institutions'
   attributes: []
 
 
@@ -245,7 +245,7 @@
   hidden: false
   obj: 'entity'
   meta:
-    plural_upper: 'Court cases'
+    plural: 'Court cases'
   attributes:
     - name: case_title
       label: 'Offical case title'

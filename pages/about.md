@@ -1,7 +1,7 @@
 title: About the project
+menuindex: 1
+menutitle: "About"
 published: 2014-07-03
-
-# This is a title
 
 Smooth as an android's bottom, eh, Data? Mr. Worf, you sound like a man who's asking his friend if he can start dating his sister. Commander William Riker of the Starship Enterprise. Shields up! Rrrrred alert! Damage report! Now, how the hell do we defeat an enemy that knows us better than we know ourselves? I am your worst nightmare! Our neural pathways have become accustomed to your sensory input patterns. Worf, It's better than music.
 
