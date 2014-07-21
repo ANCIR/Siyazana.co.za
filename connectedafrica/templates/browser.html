@@ -43,11 +43,11 @@
           <li class="list-group-item {{'active' if schema.name in schema_facet.active else ''}}">
             {% if schema.name in schema_facet.active %}
               <a class="facet-active" href="{{query_remove('schema', schema.name)}}">
-                {{schema.meta.plural_upper or schema.label}}
+                {{schema.meta.plural or schema.label}}
               </a>
             {% else %}
               <a href="{{query_add('schema', schema.name)}}">
-                {{schema.meta.plural_upper or schema.label}}
+                {{schema.meta.plural or schema.label}}
               </a>
             {% endif %}
             <span class="count badge">{{count}}</span>

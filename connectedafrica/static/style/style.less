@@ -7,7 +7,7 @@
 @theme4: #F0563D;
 @theme5: #2C2F3B;
 
-@theme-color: @theme4;
+@theme-color: #1ad68f;
 @light-gray: #ddd;
 @dark-gray: #333;
 
@@ -15,7 +15,7 @@
 // Functional
 
 @footer-background: @dark-gray;
-@footer-foreground: @light-gray;
+@footer-foreground: @dark-gray;
 @header-background: white;
 @header-foreground: @theme-color;
 @body-background: white;
@@ -84,23 +84,37 @@
 
 body {
   font-family: 'Open Sans', sans-serif;
-  font-size: 1.4em;
-  background-color: @footer-background;
+  font-size: 1.5em;
+
+  background: url(/static/images/pics/soweto.png) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.container {
+  background-color: @body-background;
+  max-width: 1000px;
+  padding: 2em;
+  margin-top: 4em;
 }
 
 h1, h2, h3, h4 {
   font-weight: 800;
-  text-transform: uppercase;
+  t-ext-transform: uppercase;
 }
 
 // Header style
 
 .navbar.navbar-default {
   background-color: @header-background;
-  border-bottom: 1px solid @light-gray;
+  border-bottom: 0px solid @light-gray;
 
   .navbar-brand {
     color: @theme-color;
+    font-weight: 800;
+    padding-left: 0px;
   }
 }
 
@@ -108,32 +122,19 @@ h1, h2, h3, h4 {
 // Footer style
 
 #pagewrapper {
-  background-color: @body-background;
   padding-bottom: 2em;
 }
 
 footer {
-  @footer-fg-dark: lighten(@footer-background, 30%);
-
-  padding: 2em 0 2em 0;
+  margin-bottom: -1em;
   color: @footer-foreground;
 
-  a, a:hover, a:visited {
-    color: @footer-foreground;
-    text-decoration: underline;
-  }
-
   hr {
-    border-top: 1px solid  lighten(@footer-background, 10%);
+    border-top: 1px solid @light-gray;
   }
 
   p {
     font-size: 0.85em;
-    color: @footer-fg-dark;
-
-    a, a:hover, a:visited {
-      color: @footer-fg-dark;
-    }
   }
 
   .partners {
@@ -191,6 +192,16 @@ ul.pagination { margin: 0; }
 
 
 // Home page specifics
+
+.jumbotron {
+  background-color: @theme-color;
+  color: white;
+
+  h1 {
+    text-transform: none;
+  }
+}
+
 .data-summary {
   width: 100%;
 

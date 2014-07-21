@@ -36,7 +36,7 @@
         {% for schema, count in schemata.results %}
           <tr>
             <td class="number"><strong>{{count}}</strong></td>
-            <td><a href='{{url_for('browser.view', schema=schema.get('name'))}}'>{{schema.meta.plural_upper or schema.label}}</a></td>
+            <td><a href='{{url_for('browser.view', schema=schema.get('name'))}}'>{{schema.meta.plural or schema.label}}</a></td>
           </tr>
         {% endfor %}
       </table>
