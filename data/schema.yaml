@@ -78,14 +78,16 @@
     # Profile images
     # TODO: revamp when grano has proper image support.
     # https://github.com/granoproject/grano/issues/55
-    - name: image_full_url
-      label: 'Full-size image URL'
+    - name: image_full
+      label: 'Full-size image'
+      datatype: file
       hidden: true
     - name: image_full_credit
       label: 'Full-size image credit'
       hidden: true
-    - name: image_thumb_url
-      label: 'Thumbnail image URL'
+    - name: image_thumb
+      label: 'Thumbnail image'
+      datatype: file
       hidden: true
     - name: image_thumb_credit
       label: 'Thumbnail image credit'

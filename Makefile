@@ -28,6 +28,9 @@ loadwhoswho:
 	granoloader csv -t 5 data/whoswho_memberships.csv.yaml data/whoswho_memberships.csv
 	granoloader csv -t 5 data/whoswho_qualifications.csv.yaml data/whoswho_qualifications.csv
 
+loadwikipedia:
+	granoloader csv -t 5 data/wikipedia_images.csv.yaml data/wikipedia_images.csv
+
 # Google docs
 loadgdocs: gdocs
 	granoloader csv -t 5 -f data/family.csv.yaml data/family.csv

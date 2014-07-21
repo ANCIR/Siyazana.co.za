@@ -60,7 +60,9 @@ def scrape_image(name, csv):
     ranked_urls = [(k, v['imageinfo'][0]['url']) for k, v in results.iteritems()]
     ranked_urls.sort(key=lambda x: rank_by_search[x[0]] * 100 + rank_by_age[x[0]])
     csv.write('wikipedia_images.csv',
-              {'name': name, 'image_url': ranked_urls[0][1]})
+              {'name': name,
+               'image_url': ranked_urls[0][1],
+               'source_url': 'http://www.wikimedia.org/'})
 
 
 def make_names_from_persons_csv():
