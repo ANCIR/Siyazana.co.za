@@ -1,6 +1,8 @@
 {% macro teasers(pages) %}
   {% for page in pages %}
-    <h3>{{page.title}}</h3>
+    <h3 class="teaser">
+      <a href="{{url_for('base.page', path=page.path)}}">{{page.title}}</a>
+    </h3>
     <p>
       <strong>{{page.published}}</strong>
       {{page.teaser}} 

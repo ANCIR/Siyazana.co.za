@@ -10,6 +10,7 @@
 @theme-color: #1ad68f;
 @light-gray: #ddd;
 @dark-gray: #333;
+@text-color: @dark-gray;
 
 
 // Functional
@@ -85,6 +86,7 @@
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 1.5em;
+  color: @text-color;
 
   background: url(/static/images/pics/soweto.png) no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -103,6 +105,10 @@ body {
 h1, h2, h3, h4 {
   font-weight: 800;
   t-ext-transform: uppercase;
+}
+
+h3.teaser a {
+  color: @text-color;
 }
 
 // Header style
