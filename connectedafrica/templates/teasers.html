@@ -1,13 +1,21 @@
 {% macro teasers(pages) %}
   {% for page in pages %}
-    <h3 class="teaser">
-      <a href="{{url_for('base.page', path=page.path)}}">{{page.title}}</a>
-    </h3>
-    <p>
-      <strong>{{page.published}}</strong>
-      {{page.teaser}} 
-      <a href="{{url_for('base.page', path=page.path)}}">Read more...</a>
-    </p>
+    <div>
+      {% if page.meta.image %}
+        <a href="{{url_for('base.page', path=page.path)}}">
+          <img src="{{page.meta.image}}" class="pull-left teaser-image">
+        </a>
+      {% endif %}
+      <h3 class="teaser">
+        <a href="{{url_for('base.page', path=page.path)}}">{{page.title}}</a>
+      </h3>
+      <p>
+        <strong>{{page.published}}</strong>
+        {{page.teaser}} 
+        <a href="{{url_for('base.page', path=page.path)}}">Read more...</a>
+      </p>
+      <div class="clearfix"></div>
+    </div>
   {% endfor %}
 {% endmacro %}
 
