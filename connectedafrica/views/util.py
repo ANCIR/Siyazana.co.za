@@ -1,10 +1,14 @@
-from flask import request
+from datetime import datetime
 from urllib import urlencode
+
+from flask import request
 from slugify import slugify as _slugify
 
 from connectedafrica.core import url_for
 
 STOPWORDS = ['of', 'and', 'for', 'the', 'a', 'in']
+IMAGE_URL = '%(grano_host)s/api/1/files/_image/%(file_name)s-%(file_pk)s-%(config)s.png' 
+DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 
 
 def _enc(arg):
@@ -31,3 +35,12 @@ def slugify(text):
     for stopword in STOPWORDS:
         slug = slug.replace('-%s-' % stopword, '-')
     return slug
+
+
+def convert_date_fields(obj, fields=('date_start', 'date_end')):
+    for field in fields:
+        if field in obj.properties:
+            obj.properties[field]['value'] = datetime.strptime(
+                obj.properties[field]['value'],
+                DATETIME_FORMAT
+            ).date()

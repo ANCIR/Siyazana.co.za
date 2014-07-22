@@ -6,7 +6,7 @@ from flask import Blueprint, render_template, abort
 from granoclient import NotFound
 
 from connectedafrica.core import grano
-from connectedafrica.views.util import slugify
+from connectedafrica.views.util import slugify, convert_date_fields
 
 
 blueprint = Blueprint('profile', __name__)
@@ -56,16 +56,26 @@ def schemata_map(entity):
     ))
 
 
-def split_relations(entity):
+def process_relations(entity):
+    # TODO: allow for chunked, async load because crashing servers isn't nice
     temporal = []
     non_temporal = []
     for relations in (entity.inbound, entity.outbound):
         for rel in relations:
+            convert_date_fields(rel)
             if rel.properties.get('date_start', None):
                 temporal.append(rel)
             else:
                 non_temporal.append(rel)
-    return sorted(temporal, key=lambda x: x.properties['date_start']), \
+            # add an 'other' attribute that refers to the
+            # other entity in the relation, irrespective
+            # of the direction of the relation
+            if rel.target['id'] == entity.id:
+                rel.other = rel.source
+            else:
+                rel.other = rel.target
+    return sorted(temporal,
+                  key=lambda x: x.properties['date_start']['value']), \
            sorted(non_temporal,
                   key=lambda x: display_name(data_dict=x.target['properties']))
 
@@ -76,7 +86,7 @@ def view(id, slug):
         entity = grano.entities.by_id(id)
         assert slugify(entity.properties['name']['value']) == slug
         schemata = schemata_map(entity)
-        temporal_rels, non_temporal_rels = split_relations(entity)
+        temporal_rels, non_temporal_rels = process_relations(entity)
         context = {
             'entity': entity,
             'display_name': display_name(entity),

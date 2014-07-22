@@ -55,15 +55,12 @@ def make_snippet(entity):
     return snippet
 
 
-IMAGE_URL = '%(grano_host)s/api/1/files/_image/%(file_name)s-%(file_pk)s-%(config)s.png' 
-
-
 @app.template_filter('portrait_url')
 def make_portrait_url(entity):
     image_prop = entity.properties.get('image_full', None)
     if image_prop is None:
         return ''
-    return IMAGE_URL % {
+    return util.IMAGE_URL % {
         'grano_host': app.config.get('GRANO_HOST'),
         'file_name': entity.properties['name']['value'],
         'file_pk': image_prop.get('value'),
@@ -76,7 +73,7 @@ def make_thumbnail_url(entity):
     image_prop = entity.properties.get('image_thumb', None)
     if image_prop is None:
         return ''
-    return IMAGE_URL % {
+    return util.IMAGE_URL % {
         'grano_host': app.config.get('GRANO_HOST'),
         'file_name': entity.properties['name']['value'],
         'file_pk': image_prop.get('value'),
