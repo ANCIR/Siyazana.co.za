@@ -1,12 +1,12 @@
 from collections import OrderedDict
 from operator import itemgetter
 
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template, abort, request
 
 from granoclient import NotFound
 
 from connectedafrica.core import grano
-from connectedafrica.views.util import slugify, convert_date_fields
+from connectedafrica.views.util import slugify, convert_date_fields, get_schemata
 
 
 blueprint = Blueprint('profile', __name__)
@@ -56,12 +56,20 @@ def schemata_map(entity):
     ))
 
 
-def process_relations(entity):
+def process_relations(entity, schemata=None):
     # TODO: allow for chunked, async load because crashing servers isn't nice
+    # TODO: make grano return a sorted list that obeys limit and offset
     temporal = []
     non_temporal = []
+
+    def filter_relations(collection):
+        if schemata is not None:
+            collection = collection.query()
+            return collection.filter('schema', ','.join(schemata)).results
+        return collection
+
     for relations in (entity.inbound, entity.outbound):
-        for rel in relations:
+        for rel in filter_relations(relations):
             convert_date_fields(rel)
             if rel.properties.get('date_start', None):
                 temporal.append(rel)
@@ -74,10 +82,12 @@ def process_relations(entity):
                 rel.other = rel.source
             else:
                 rel.other = rel.target
-    return sorted(temporal,
-                  key=lambda x: x.properties['date_start']['value']), \
-           sorted(non_temporal,
-                  key=lambda x: display_name(data_dict=x.target['properties']))
+    return {
+        'temporal': sorted(temporal,
+                           key=lambda x: x.properties['date_start']['value']),
+        'non_temporal': sorted(non_temporal,
+                               key=lambda x: display_name(data_dict=x.target['properties'])),
+    }
 
 
 @blueprint.route('/profile/<id>/<slug>')
@@ -85,19 +95,26 @@ def view(id, slug):
     try:
         entity = grano.entities.by_id(id)
         assert slugify(entity.properties['name']['value']) == slug
-        schemata = schemata_map(entity)
-        temporal_rels, non_temporal_rels = process_relations(entity)
+        entity_schemata = schemata_map(entity)
+        relation_schemata = get_schemata('relation')
+        active_schemata = set(s.name for s in relation_schemata)
+        for schema in request.args.getlist('schema'):
+            try:
+                active_schemata.remove(schema)
+            except KeyError:
+                pass
         context = {
             'entity': entity,
             'display_name': display_name(entity),
             'source_map': source_map(entity),
-            'schemata_map': schemata,
-            'relations': {'temporal': temporal_rels,
-                          'non_temporal': non_temporal_rels}
+            'schemata_map': entity_schemata,
+            'relations': process_relations(entity, schemata=active_schemata)
         }
-        if 'Person' in schemata:
+        context['relations']['schemata'] = relation_schemata
+        context['relations']['active_schemata'] = active_schemata
+        if 'Person' in entity_schemata:
             return person_profile(entity, context)
-        elif 'Organization' in schemata:
+        elif 'Organization' in entity_schemata:
             return organization_profile(entity, context)
         else:
             return render_template('profile_base.html',

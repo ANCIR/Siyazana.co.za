@@ -4,9 +4,7 @@
 
 {% block content %}
 
-<div class="col-md-2"></div>
-
-<div class="col-md-10">
+<div class="col-md-12">
   <h1>
     {% block displayname %}{{ display_name }}{% endblock %}
   </h1>
@@ -15,56 +13,33 @@
   </p>
 </div>
 
-<div class="col-md-2 panel-body">
-  {% block leftpanel %}
-  <form>
-    <h4>Relationships</h4>
-    {% block filterinputs %}
-    <div>
-        <div class="form-control">
-          <input type="checkbox" checked>
-          <label>TODO</label>
-        </div>
-        <div class="form-control">
-          <input type="checkbox" checked>
-          <label>TODO<label>
-        </div>
-        <div class="form-control">
-          <input type="checkbox" checked>
-          <label>TODO</label>
-        </div>
-        <div class="form-control">
-          <input type="checkbox" checked>
-          <label>TODO</label>
-        </div>
-    </div>
-    <div>
-      <input type="text" class="form-control">
-      <input type="submit" class="form-control" value="Search">
-    </div>
-    {% endblock %}
-  </form>
-  {% endblock %}
-</div>
-
-<div class="col-md-10">
+<div class="col-md-12">
 
   <div class="col-md-8">
     {% block centerpanel %}
+    <div>
+      {% block filters %}
+        <div id="filters" class="btn-group btn-group-sm btn-group-justified">
+          {% for schema in relations.schemata %}
+            <a class="btn btn-default{% if schema.name in relations.active_schemata %} active" href="{{ query_add('schema', schema.name) }}{% else %}" href="{{ query_remove('schema', schema.name) }}{% endif %}">{{ schema.meta.plural or schema.label }}</a>
+          {% endfor %}
+        </div>
+      {% endblock %}
+    </div>
     {% block timeline %}
-    <ul>
+    <div>
     {% for group in relations.temporal|groupby('properties.date_start.value.year')|reverse %}
-      <li class="text-center"><h3><span class="label label-info">{{ group.grouper }}</span></h3></li>
+      <div class="text-center"><h3><span class="label label-info">{{ group.grouper }}</span></h3></div>
       {% for rel in group.list %}
-        <li class="person family">
+        <div class="relation {{ rel.schema.name|lower }}">
           <a href="{{ url_for('profile.view', id=rel.other.id, slug=rel.other.properties.name.value|slugify) }}">{{ rel.other.properties|display_name }}</a>
-          <ul>
-            <li>{{ rel.properties.role.value }} (from {{ rel.properties.date_start.value.strftime('%b %Y') }}{% if 'date_end' in rel.properties %} to {{ rel.properties.date_end.value.strftime('%b %Y') }}{% endif %})</li>
-          </ul>
-        </li>
+          <div class="roles">
+            <div>{{ rel.properties.role.value }} (from {{ rel.properties.date_start.value.strftime('%b %Y') }}{% if 'date_end' in rel.properties %} to {{ rel.properties.date_end.value.strftime('%b %Y') }}{% endif %})</div>
+          </div>
+        </div>
       {% endfor %}
     {% endfor %}
-    </ul>
+    </div>
     {% endblock %}
     {% endblock %}
   </div>
