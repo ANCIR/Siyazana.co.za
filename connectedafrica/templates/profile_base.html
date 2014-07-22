@@ -69,8 +69,8 @@
     {% block rightpanel %}
     {% block bio %}
     <div id="bio" class="panel panel-default panel-body">
-      {% if entity.properties.image_url %}
-        <img src="{{ entity.properties.image_url.value }}" alt="{{ display_name }}">
+      {% if entity.properties.image_full %}
+        <img src="{{ entity|portrait_url }}" alt="{{ display_name }}">
       {% else %}
         <img src="{% block defaultimageurl %}{% endblock %}" alt="generic profile image">
       {% endif %}
