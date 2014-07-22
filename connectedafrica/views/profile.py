@@ -61,11 +61,11 @@ def split_relations(entity):
     non_temporal = []
     for relations in (entity.inbound, entity.outbound):
         for rel in relations:
-            if rel.properties.get('start_date', None):
+            if rel.properties.get('date_start', None):
                 temporal.append(rel)
             else:
                 non_temporal.append(rel)
-    return sorted(temporal, key=lambda x: x.properties['start_date']), \
+    return sorted(temporal, key=lambda x: x.properties['date_start']), \
            sorted(non_temporal,
                   key=lambda x: display_name(data_dict=x.target['properties']))
 
