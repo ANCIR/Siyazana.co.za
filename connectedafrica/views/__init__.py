@@ -4,7 +4,7 @@ from connectedafrica.core import app
 from connectedafrica.views.base import blueprint as base_blueprint
 from connectedafrica.views.browser import blueprint as browser_blueprint
 from connectedafrica.views.profile import (blueprint as profile_blueprint,
-                                           display_name)
+                                           display_name, make_relation_tagline)
 from connectedafrica.views import util
 
 app.register_blueprint(base_blueprint)
@@ -79,3 +79,11 @@ def make_thumbnail_url(entity):
         'file_pk': image_prop.get('value'),
         'config': 'thumbnail'
     }
+
+
+@app.template_filter('relation_tagline')
+def relation_tagline(relation):
+    try:
+        return make_relation_tagline(relation)
+    except:
+        return ''

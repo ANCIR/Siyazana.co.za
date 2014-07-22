@@ -28,17 +28,17 @@
     </div>
     {% block timeline %}
     <div>
-    {% for group in relations.temporal|groupby('properties.date_start.value.year')|reverse %}
-      <div class="text-center"><h3><span class="label label-info">{{ group.grouper }}</span></h3></div>
-      {% for rel in group.list %}
-        <div class="relation {{ rel.schema.name|lower }}">
-          <a href="{{ url_for('profile.view', id=rel.other.id, slug=rel.other.properties.name.value|slugify) }}">{{ rel.other.properties|display_name }}</a>
-          <div class="roles">
-            <div>{{ rel.properties.role.value }} (from {{ rel.properties.date_start.value.strftime('%b %Y') }}{% if 'date_end' in rel.properties %} to {{ rel.properties.date_end.value.strftime('%b %Y') }}{% endif %})</div>
-          </div>
-        </div>
+      <hr/>
+      {% for rel in relations.non_temporal %}
+        {% include "includes/relation.html" %}
       {% endfor %}
-    {% endfor %}
+      {% for group in relations.temporal|groupby('properties.date_start.value.year')|reverse %}
+        <div class="text-right"><h3><span class="label label-default">{{ group.grouper }}</span></h3></div>
+        <hr/>
+        {% for rel in group.list %}
+          {% include "includes/relation.html" %}
+        {% endfor %}
+      {% endfor %}
     </div>
     {% endblock %}
     {% endblock %}
@@ -70,12 +70,12 @@
 
     {% block sources %}
     <div id="sources" class="panel panel-default panel-body">
-      <h3>Sources</h3>
-      <ul>
+      <h4>Sources</h4>
+      <ol>
       	{% for source, n in source_map.iteritems() %}
-      		<li id="source-{{ n }}">[{{ n }}] <a href="{{ source }}">{{ source }}</a></li>
+          <li id="source-{{ n }}"><a href="{{ source }}">{{ source }}</a></li>
       	{% endfor %}
-      </ul>
+      </ol>
     </div>
     {% endblock %}
 

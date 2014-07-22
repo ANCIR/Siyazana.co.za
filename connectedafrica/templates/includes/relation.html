@@ -1,0 +1,13 @@
+<div class="relation {{ rel.schema.name|lower }}">
+  <div class="icon"></div>
+  <a href="{{ url_for('profile.view', id=rel.other.id, slug=rel.other.properties.name.value|slugify) }}">{{ rel.other.properties|display_name }}</a>
+  <div class="details">
+    <div>{{ rel|relation_tagline }}
+    	{% if 'start_date' in rel.properties %}
+    	(from {{ rel.properties.date_start.value.strftime('%b %Y') }}{% if 'date_end' in rel.properties %} to {{ rel.properties.date_end.value.strftime('%b %Y') }}{% endif %})
+    	{% elif 'date_end' in rel.properties %}
+    	(until {{ rel.properties.date_end.value.strftime('%b %Y') }})
+    	{% endif %}
+   	</div>
+  </div>
+</div>
