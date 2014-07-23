@@ -96,3 +96,15 @@ def format_date(obj):
     if isinstance(obj, (date, datetime)):
         return obj.strftime('%d %b %Y')
     return ''
+
+
+@app.template_filter('major_schema')
+def get_major_schema(entity):
+    if isinstance(entity, dict):
+        schemata = entity['schemata']
+    else:
+        schemata = entity.schemata
+    major = util.guess_major_schema(schemata)
+    if major is None:
+        return 'Organization'
+    return major

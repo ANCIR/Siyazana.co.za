@@ -28,7 +28,7 @@
       {% endblock %}
     </div>
     {% block timeline %}
-    <div>
+    <div class="relations">
       <hr/>
       {% for rel in relations.non_temporal %}
         {{ render_relation(rel) }}

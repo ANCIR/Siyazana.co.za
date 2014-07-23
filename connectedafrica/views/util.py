@@ -11,6 +11,11 @@ from connectedafrica.core import grano, url_for
 STOPWORDS = ['of', 'and', 'for', 'the', 'a', 'in']
 IMAGE_URL = '%(grano_host)s/api/1/files/_image/%(file_name)s-%(file_pk)s-%(config)s.png' 
 DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
+MAJOR_ENTITY_SCHEMATA = set((
+    'Person', 'LegalCase', 'PublicCompany',
+    'Committee', 'NonProfit', 'PoliticalParty',
+    'EducationalInstitution'
+))
 
 
 def _enc(arg):
@@ -59,3 +64,13 @@ def get_schemata(obj_type, include_hidden=False):
         get_schemata._cache[key] = sorted(schemata, key=itemgetter('label'))
     return get_schemata._cache[key]
 get_schemata._cache = {}
+
+
+def guess_major_schema(schemata):
+    """ Returns the most specific schema of an entity. E.g.
+        a person entity has schemata base and Person where the
+        most specific schema is Person."""
+    for schema in schemata:
+        if schema['name'] in MAJOR_ENTITY_SCHEMATA:
+            return schema['name']
+    return None
