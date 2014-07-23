@@ -1,3 +1,21 @@
 {% extends "profile_base.html" %}
 
 {% block defaultimageurl %}{{ url_for('static', filename='images/organization_profile.png') }}{% endblock %}
+
+{% block basicinfo %}
+{% with major_schema=entity|major_schema %}
+<p>{{ schemata_map.get(major_schema) }}</p>
+{% endwith %}
+{% if 'classification' in entity.properties %}
+	<strong>Classification:</strong>{{ render_property(entity, 'classification') }}<br/>
+{% endif %}
+{% if 'registration_number' in entity.properties %}
+	<strong>Registration number:</strong>{{ render_property(entity, 'registration_number') }}<br/>
+{% endif %}
+{% if 'date_founding' in entity.properties %}
+	<strong>Founded:</strong>{{ render_property(entity, 'date_founding') }}<br/>
+{% endif %}
+{% if 'date_dissolution' in entity.properties %}
+	<strong>Dissolved:</strong>{{ render_property(entity, 'date_dissolution') }}<br/>
+{% endif %}
+{% endblock %}
