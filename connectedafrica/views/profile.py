@@ -112,7 +112,7 @@ def process_relations(entity, schemata=None):
 def view(id, slug):
     try:
         entity = grano.entities.by_id(id)
-        assert slugify(entity.properties['name']['value']) == slug
+        convert_date_fields(entity, ['date_birth'])
         entity_schemata = schemata_map(entity)
         relation_schemata = get_schemata('relation')
         active_schemata = set(s.name for s in relation_schemata)

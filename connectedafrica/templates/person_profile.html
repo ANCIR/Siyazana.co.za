@@ -3,5 +3,18 @@
 {% block defaultimageurl %}{{ url_for('static', filename='images/person_profile.png') }}{% endblock %}
 
 {% block basicinfo %}
-{{ super() }}
+{% if 'date_birth' in entity.properties %}
+	<strong>Born:</strong>{{ render_property(entity, 'date_birth') }}
+	{% if 'birth_town' in entity.properties %}
+		in {{ render_property(entity, 'birth_town') }}
+		{% if 'origin_country' in entity.properties %}
+			, {{ render_property(entity, 'origin_country') }}
+		{% endif %}
+	{% elif 'origin_country' in entity.properties %}
+		in {{ render_property(entity, 'origin_country') }}
+	{% endif %}<br/>
+{% endif %}
+{% if 'full_name' in entity.properties %}
+	<strong>Full name:</strong>{{ render_property(entity, 'full_name') }}<br/>
+{% endif %}
 {% endblock %}

@@ -1,3 +1,5 @@
+from datetime import datetime, date
+
 from granoclient import Entity
 
 from connectedafrica.core import app
@@ -87,3 +89,10 @@ def relation_tagline(relation):
         return make_relation_tagline(relation)
     except:
         return ''
+
+
+@app.template_filter('date')
+def format_date(obj):
+    if isinstance(obj, (date, datetime)):
+        return obj.strftime('%d %b %Y')
+    return ''

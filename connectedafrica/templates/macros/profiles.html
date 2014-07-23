@@ -1,9 +1,10 @@
+{% macro render_relation(rel) %}
 <div class="relation {{ rel.schema.name|lower }}">
   <div class="icon"></div>
   <a href="{{ url_for('profile.view', id=rel.other.id, slug=rel.other.properties.name.value|slugify) }}">{{ rel.other.properties|display_name }}</a>
   <div class="details">
     <div>{{ rel|relation_tagline }}
-    	{% if 'start_date' in rel.properties %}
+      {% if 'date_start' in rel.properties %}
     	(from {{ rel.properties.date_start.value.strftime('%b %Y') }}{% if 'date_end' in rel.properties %} to {{ rel.properties.date_end.value.strftime('%b %Y') }}{% endif %})
     	{% elif 'date_end' in rel.properties %}
     	(until {{ rel.properties.date_end.value.strftime('%b %Y') }})
@@ -11,3 +12,17 @@
    	</div>
   </div>
 </div>
+{% endmacro %}
+
+{% macro render_property(entity, key, source_map=None) %}
+{% if key in entity.properties %}
+  {% with data=entity.properties.get(key) %}
+  <span>{{ data.value|date|default(data.value, true) }}</span>
+  {% if source_map %}
+    {% with source_num=source_map.get(data.source_url) %}
+    <a href="#source-{{ source_num }}">[{{ source_num }}]</a>
+    {% endwith %}
+  {% endif %}
+  {% endwith %}
+{% endif %}
+{% endmacro %}

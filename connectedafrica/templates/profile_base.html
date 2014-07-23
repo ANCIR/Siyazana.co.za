@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% from "macros/profiles.html" import render_relation, render_property %}
 
 {% block title %}{{ display_name }}{% endblock %}
 
@@ -9,7 +10,7 @@
     {% block displayname %}{{ display_name }}{% endblock %}
   </h1>
   <p class="subtitle">
-    {% block subtitle %}{% with key="tagline", render_source=1 %}{% include "p.html" %}{% endwith %}{% endblock %}
+    {% block subtitle %}{{ render_property(entity, 'tagline', source_map) }}{% endblock %}
   </p>
 </div>
 
@@ -30,13 +31,13 @@
     <div>
       <hr/>
       {% for rel in relations.non_temporal %}
-        {% include "includes/relation.html" %}
+        {{ render_relation(rel) }}
       {% endfor %}
       {% for group in relations.temporal|groupby('properties.date_start.value.year')|reverse %}
         <div class="text-right"><h3><span class="label label-default">{{ group.grouper }}</span></h3></div>
         <hr/>
         {% for rel in group.list %}
-          {% include "includes/relation.html" %}
+          {{ render_relation(rel) }}
         {% endfor %}
       {% endfor %}
     </div>
@@ -53,7 +54,18 @@
       {% else %}
         <img src="{% block defaultimageurl %}{% endblock %}" alt="generic profile image">
       {% endif %}
-      <p>{% block biotext %}{% endblock %}</p>
+      <p class="summary">
+        {% block biotext %}
+        {% if 'summary' in entity.properties %}
+          {% if entity.properties.summary.value|length > 255 %}
+            <span class="truncated">{{ entity.properties.summary.value|truncate }}<br/><a href="#" onclick="$('#bio .summary .truncated').hide(); $('#bio .summary .complete').show(); return false;">Show more</a></span>
+            <span class="complete" style="display: none;">{{ entity.properties.summary.value }}<br/><a href="#" onclick="$('#bio .summary .truncated').show(); $('#bio .summary .complete').hide(); return false;">Show less</a></span>
+          {% else %}
+            {{ entity.properties.summary.value }}
+          {% endif %}
+        {% endif %}
+        {% endblock %}
+      </p>
       <p>
         {% block basicinfo %}
         <strong>Types: </strong>{{ schemata_map.values()|join(', ') }}<br/>
