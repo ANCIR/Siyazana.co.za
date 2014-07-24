@@ -90,7 +90,7 @@ def make(rule):
     repo_dir = os.path.join(env.deploy_dir, CODE_DIR)
 
     with cd(repo_dir), prefix('. ../%s/bin/activate' % VIRTUALENV_DIR):
-        with shell_env(GRANO_HOST='http://localhost:9000',
+        with shell_env(GRANO_HOST='http://backend.connectedafrica.org',
                        GRANO_PROJECT='connectedafrica-sa',
                        COAF_SETTINGS='settings'):
             run('make %s' % rule)

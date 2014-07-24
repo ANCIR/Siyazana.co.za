@@ -31,6 +31,11 @@ setup(
         "networkx==1.9",
         "python-slugify>=0.0.7"
     ],
+    # until file support branches have landed
+    dependency_links=[
+        "git+https://github.com/granoproject/granoloader.git@file-support#egg=granoloader",
+        "git+https://github.com/Rizziepit/grano-client.git@file_support#egg=grano-client",
+    ],
     tests_require=[],
     entry_points=""" """,
 )
