@@ -2,7 +2,7 @@ import logging
 import json
 import os
 #from pprint import pprint
-from itertools import count
+#from itertools import count
 from urlparse import urljoin
 
 from lxml import html
@@ -18,12 +18,12 @@ URL_PATTERN = "http://www.npo.gov.za/PublicNpo/Npo/DetailsAllDocs/%s"
 
 
 def make_cache(i):
-    return make_path('.cache/npo/%s/%s/%s.json' % (
-        i % 1000, i % 100, i))
+    return make_path('.cache/npo/%s/%s/%s/%s/%s.json' % (
+        i % 10, i % 100, i % 1000, i % 10000, i))
 
 
 def make_urls():
-    for i in count(1):
+    for i in xrange(1, 16000000):
         yield i
 
 
