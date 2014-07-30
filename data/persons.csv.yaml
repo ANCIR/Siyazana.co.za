@@ -1,0 +1,27 @@
+entities:
+  person:
+    schemata: ['Person']
+    source_url_column: 'Source URL for Information'
+    columns:
+     - column: 'Full Name'
+       property: 'name'
+     - column: 'First Name'
+       property: 'given_name'
+       skip_empty: true
+     - column: 'Last Name'
+       property: 'family_name'
+       skip_empty: true
+     - column: 'ID #'
+       property: 'national_id'
+       skip_empty: true
+     - column: 'Tagline'
+       property: 'tagline'
+       skip_empty: true
+     - column: 'Date of Birth'
+       property: 'date_birth'
+       skip_empty: true
+       type: 'date'
+     - column: 'Country of Origin'
+       property: 'origin_country'
+       skip_empty: true
+
