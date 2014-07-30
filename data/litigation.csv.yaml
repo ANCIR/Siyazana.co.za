@@ -46,3 +46,13 @@ relations:
      - column: 'Role'
        property: 'role'
        skip_empty: true
+     - column: 'Date of hearing start'
+       property: 'date_start'
+       type: datetime
+       format: '%m/%d/%Y'
+       skip_empty: true
+     - column: 'Date of hearing end'
+       property: 'date_end'
+       type: datetime
+       format: '%m/%d/%Y'
+       skip_empty: true
