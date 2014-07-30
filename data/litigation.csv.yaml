@@ -11,7 +11,8 @@ entities:
     source_url_column: 'Source URL'
     columns:
      - column: 'Case No.'
-       property: 'name'
+       property: 'case_no'
+       skip_empty: true
      - column: 'Title'
        property: 'case_title'
        skip_empty: true
@@ -33,6 +34,8 @@ entities:
      - column: 'Citation'
        property: 'citation'
        skip_empty: true
+     - column: 'Citation'
+       property: 'name'
 relations:
   membership:
     schema: 'Membership'

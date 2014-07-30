@@ -247,6 +247,8 @@
   meta:
     plural: 'Court cases'
   attributes:
+    - name: case_no
+      label: 'Offical case number'
     - name: case_title
       label: 'Offical case title'
     - name: date_start_hearing
