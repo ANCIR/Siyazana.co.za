@@ -13,3 +13,9 @@ connectedafrica/static/.webassets-cache/*
 data/.cache/*
 data/npo_officers.csv
 data/npo_organisations.csv
+
+data/family.csv
+data/litigation.csv
+data/persons.csv
+data/wikipedia_images.csv
+data/directorships.csv
