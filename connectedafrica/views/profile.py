@@ -135,7 +135,7 @@ def view(id, slug):
         elif 'Organization' in entity_schemata:
             return organization_profile(entity, context)
         else:
-            return render_template('profile_base.html',
+            return render_template('profile/base.html',
                                    **context)
     except (AssertionError, NotFound):
         pass
@@ -143,10 +143,10 @@ def view(id, slug):
 
 
 def person_profile(person, context):
-    return render_template('person_profile.html',
+    return render_template('profile/person.html',
                            **context)
 
 
 def organization_profile(organization, context):
-    return render_template('organization_profile.html',
+    return render_template('profile/organization.html',
                            **context)
