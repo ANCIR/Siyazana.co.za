@@ -1,7 +1,5 @@
 {% extends "profile_base.html" %}
 
-{% block defaultimageurl %}{{ url_for('static', filename='images/organization_profile.png') }}{% endblock %}
-
 {% block basicinfo %}
 {% with major_schema=entity|major_schema %}
 <p>{{ schemata_map.get(major_schema) }}</p>

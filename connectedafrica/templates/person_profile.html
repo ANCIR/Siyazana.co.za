@@ -1,7 +1,5 @@
 {% extends "profile_base.html" %}
 
-{% block defaultimageurl %}{{ url_for('static', filename='images/person_profile.png') }}{% endblock %}
-
 {% block basicinfo %}
 {% if 'date_birth' in entity.properties %}
 	<strong>Born:</strong>{{ render_property(entity, 'date_birth') }}

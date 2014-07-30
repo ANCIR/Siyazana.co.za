@@ -51,8 +51,6 @@
     <div id="bio" class="panel panel-default panel-body">
       {% if entity.properties.image_full %}
         <img src="{{ entity|portrait_url }}" alt="{{ display_name }}">
-      {% else %}
-        <img src="{% block defaultimageurl %}{% endblock %}" alt="generic profile image">
       {% endif %}
       <p class="summary">
         {% block biotext %}
@@ -90,10 +88,6 @@
       </ol>
     </div>
     {% endblock %}
-
-    <div>
-	  	Icon made by Elegant Themes from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>
-	  </div>
     {% endblock %}
   </div>
 
