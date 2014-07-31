@@ -166,6 +166,10 @@ li.active a {
   color: white;
 }
 
+.navbar-toggle {
+  border: 0;
+}
+
 // Browser 
 
 .main-search {
@@ -277,3 +281,27 @@ li.active a {
     padding-left: 15px;
   }
 }
+
+
+// Responsive fixes. 
+
+@media (max-width: @screen-xs-max) {
+  footer {
+    .partners {
+      display: none;
+    }
+  }
+
+}
+
+@media (max-width: @screen-sm-max) {
+  .navbar-search {
+    display: none;
+  }
+
+  .container {
+    margin-top: 25px;
+    padding: 10px;
+  }
+}
+
