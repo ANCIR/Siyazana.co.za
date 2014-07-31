@@ -1,4 +1,5 @@
 from datetime import datetime, date
+from urlparse import urlparse
 
 from granoclient import Entity
 
@@ -63,8 +64,7 @@ def make_portrait_url(entity):
     if image_prop is None:
         return ''
     return util.IMAGE_URL % {
-        'grano_host': app.config.get('GRANO_HOST'),
-        'file_name': entity.properties['name']['value'],
+        'grano_host': app.config.get('GRANO_HOST').rstrip('/'),
         'file_pk': image_prop.get('value'),
         'config': 'portrait'
     }
@@ -96,6 +96,14 @@ def format_date(obj):
     if isinstance(obj, (date, datetime)):
         return obj.strftime('%d %b %Y')
     return ''
+
+
+@app.template_filter('source_readable')
+def format_source_readable(url):
+    if url is None:
+        return ''
+    parsed = urlparse(url)
+    return parsed.hostname
 
 
 @app.template_filter('major_schema')

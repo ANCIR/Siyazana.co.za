@@ -9,7 +9,7 @@ from connectedafrica.core import grano, url_for
 
 
 STOPWORDS = ['of', 'and', 'for', 'the', 'a', 'in']
-IMAGE_URL = '%(grano_host)s/api/1/files/_image/%(file_name)s-%(file_pk)s-%(config)s.png' 
+IMAGE_URL = '%(grano_host)s/api/1/files/%(file_pk)s/_image/%(config)s.png'
 DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 MAJOR_ENTITY_SCHEMATA = set((
     'Person', 'LegalCase', 'PublicCompany',
