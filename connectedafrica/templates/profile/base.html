@@ -4,93 +4,103 @@
 {% block title %}{{ display_name }}{% endblock %}
 
 {% block content %}
+<div class="profile">
 
-<div class="col-md-12">
-  <h1>
-    {% block displayname %}{{ display_name }}{% endblock %}
-  </h1>
-  <p class="subtitle">
-    {% block subtitle %}{{ render_property(entity, 'tagline', source_map) }}{% endblock %}
-  </p>
-</div>
+  <div class="row header">
+    <div class="col-md-12">
+      {% if entity.properties.image_full %}
+        <div class="pull-left">
+          <img src="{{ entity | portrait_url }}" class="profile-image" alt="{{ display_name }}">
+        </div>
+      {% endif %}
+      <h1>
+        {% block displayname %}{{ display_name }}{% endblock %}
+      </h1>
+      <p class="subtitle">
+        {% block subtitle %}{{ render_property(entity, 'tagline', source_map) }}{% endblock %}
+      </p>
+    </div>
+  </div>
 
-<div class="col-md-12">
+  <div class="row">
 
-  <div class="col-md-8">
+
+    <div class="col-md-4">
+      {% block rightpanel %}
+      {% block bio %}
+      <div id="bio">
+        <h4>Details</h4>
+        <p class="summary">
+          {% block biotext %}
+          {% if 'summary' in entity.properties %}
+            {% if entity.properties.summary.value|length > 255 %}
+              <span class="truncated">{{ entity.properties.summary.value|truncate }}<br/><a href="#" onclick="$('#bio .summary .truncated').hide(); $('#bio .summary .complete').show(); return false;">Show more</a></span>
+              <span class="complete" style="display: none;">{{ entity.properties.summary.value }}<br/><a href="#" onclick="$('#bio .summary .truncated').show(); $('#bio .summary .complete').hide(); return false;">Show less</a></span>
+            {% else %}
+              {{ entity.properties.summary.value }}
+            {% endif %}
+          {% endif %}
+          {% endblock %}
+        </p>
+        <p>
+          {% block basicinfo %}
+          <strong>Types: </strong>{{ schemata_map.values()|join(', ') }}<br/>
+          {% for k, v in entity.properties.iteritems() %}
+            <strong>{{ k|capitalize }}: </strong>{{ v.value }}<br/>
+          {% endfor %}
+          {% endblock %}
+        </p>
+        <div id="related-entities" class="text-center">
+          {% block relatedentities %}{% endblock %}
+        </div>
+      </div>
+      {% endblock %}
+
+      {% block sources %}
+      <div id="sources">
+        <h4>Sources</h4>
+        <ol>
+          {% for source, n in source_map.iteritems() %}
+            <li id="source-{{ n }}"><a href="{{ source }}">{{ source |
+              source_readable }}</a></li>
+          {% endfor %}
+        </ol>
+      </div>
+      {% endblock %}
+      {% endblock %}
+    </div>
+
+    <div class="col-md-8">
     {% block centerpanel %}
-    <div>
-      {% block filters %}
-        <div id="filters" class="btn-group btn-group-sm btn-group-justified">
-          {% for schema in relations.schemata %}
-            <a class="btn btn-default{% if schema.name in relations.active_schemata %} active" href="{{ query_add('schema', schema.name) }}{% else %}" href="{{ query_remove('schema', schema.name) }}{% endif %}">{{ schema.meta.plural or schema.label }}</a>
+      <div>
+        {% block filters %}
+          <div id="filters" class="btn-group btn-group-sm btn-group-justified">
+            {% for schema in relations.schemata %}
+              <a class="btn btn-default {% if schema.name in relations.active_schemata %} active"          href="{{ query_add('schema', schema.name) }}{% else %}"
+                 href="{{ query_remove('schema', schema.name) }}{% endif %}">
+                  {{ schema.meta.plural or schema.label }}</a>
+            {% endfor %}
+          </div>
+        {% endblock %}
+      </div>
+
+      {% block timeline %}
+        <div class="relations">
+          {% for rel in relations.non_temporal %}
+            {{ render_relation(rel) }}
+          {% endfor %}
+          {% for group in relations.temporal|groupby('properties.date_start.value.year')|reverse %}
+            <div class="text-right"><h3><span class="label label-default">{{ group.grouper }}</span></h3></div>
+            <hr/>
+            {% for rel in group.list %}
+              {{ render_relation(rel) }}
+            {% endfor %}
           {% endfor %}
         </div>
       {% endblock %}
-    </div>
-    {% block timeline %}
-    <div class="relations">
-      <hr/>
-      {% for rel in relations.non_temporal %}
-        {{ render_relation(rel) }}
-      {% endfor %}
-      {% for group in relations.temporal|groupby('properties.date_start.value.year')|reverse %}
-        <div class="text-right"><h3><span class="label label-default">{{ group.grouper }}</span></h3></div>
-        <hr/>
-        {% for rel in group.list %}
-          {{ render_relation(rel) }}
-        {% endfor %}
-      {% endfor %}
-    </div>
     {% endblock %}
-    {% endblock %}
+    </div>
   </div>
-
-  <div class="col-md-4">
-    {% block rightpanel %}
-    {% block bio %}
-    <div id="bio" class="panel panel-default panel-body">
-      {% if entity.properties.image_full %}
-        <img src="{{ entity|portrait_url }}" alt="{{ display_name }}">
-      {% endif %}
-      <p class="summary">
-        {% block biotext %}
-        {% if 'summary' in entity.properties %}
-          {% if entity.properties.summary.value|length > 255 %}
-            <span class="truncated">{{ entity.properties.summary.value|truncate }}<br/><a href="#" onclick="$('#bio .summary .truncated').hide(); $('#bio .summary .complete').show(); return false;">Show more</a></span>
-            <span class="complete" style="display: none;">{{ entity.properties.summary.value }}<br/><a href="#" onclick="$('#bio .summary .truncated').show(); $('#bio .summary .complete').hide(); return false;">Show less</a></span>
-          {% else %}
-            {{ entity.properties.summary.value }}
-          {% endif %}
-        {% endif %}
-        {% endblock %}
-      </p>
-      <p>
-        {% block basicinfo %}
-        <strong>Types: </strong>{{ schemata_map.values()|join(', ') }}<br/>
-        {% for k, v in entity.properties.iteritems() %}
-          <strong>{{ k|capitalize }}: </strong>{{ v.value }}<br/>
-        {% endfor %}
-        {% endblock %}
-      </p>
-      <div id="related-entities" class="text-center">
-        {% block relatedentities %}{% endblock %}
-      </div>
-    </div>
-    {% endblock %}
-
-    {% block sources %}
-    <div id="sources" class="panel panel-default panel-body">
-      <h4>Sources</h4>
-      <ol>
-      	{% for source, n in source_map.iteritems() %}
-          <li id="source-{{ n }}"><a href="{{ source }}">{{ source }}</a></li>
-      	{% endfor %}
-      </ol>
-    </div>
-    {% endblock %}
-    {% endblock %}
-  </div>
-
 </div>
-
+ 
 {% endblock %}

@@ -75,6 +75,13 @@
 @import "../vendor/bootstrap/less/responsive-utilities.less";
 
 
+// Mixins
+.grayscale-image {
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+
 
 .container-fixed, .jumbotron .container-fixed {
   margin: 0 auto;
@@ -226,62 +233,74 @@ li.active a {
   margin-right: 1em;
   width: 150px;
 
-  -webkit-filter: grayscale(100%);
-  -moz-filter: grayscale(100%);
-  filter: grayscale(100%);
+  .grayscale-image;
 }
 
 
 // Profiles
 
-.relations {
-  h3 {
-    margin-bottom: -15px;
+.profile {
+
+  .header {
+    margin-bottom: 1em;
   }
-}
 
-.relation { 
-  margin-bottom: 20px;
-
-  a {
-    font-size: 16px;
-    font-weight: bold;
-
-    .fa {
-      color: @text-color;
+  .relations {
+    h3 {
+      margin-bottom: -15px;
     }
   }
-  .details {
-    margin: 4px 0 0 32px;
-    font-size: 14px;
-  }
 
-  .fa {
-    width: 16px;
-    display: inline-block;
-    text-align: center;
-  }
-
-  .fa-lg {
-    width: 32px;
-  }
-}
-
-#bio {
-  img:first-child {
-    width: 100%;
+  .relation { 
     margin-bottom: 20px;
+
+    a {
+      font-size: 16px;
+      font-weight: bold;
+
+      .fa {
+        color: @text-color;
+      }
+    }
+    .details {
+      margin: 4px 0 0 32px;
+      font-size: 14px;
+    }
+
+    .fa {
+      width: 16px;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .fa-lg {
+      width: 32px;
+    }
+  }
+
+  img.profile-image {
+    margin-bottom: 0;
+    height: 10em;
+    margin-right: 2em;
+    .grayscale-image;
+    border-radius: 50%;
+  }
+
+  #filters {
+    margin-bottom: 2em;
+  }
+
+  #bio {
+  }
+
+  #sources {
+    font-size: small;
+
+    ol {
+      padding-left: 15px;
+    }
   }
 }
-
-#sources {
-  font-size: small;
-
-  ol {
-    padding-left: 15px;
-  }
-}
-
 
 // Responsive fixes. 
 
