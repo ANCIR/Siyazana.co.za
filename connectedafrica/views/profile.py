@@ -47,6 +47,12 @@ class Properties(object):
         for name, data in self.obj.properties.items():
             yield Property(data, self.attributes.get(name))
 
+    def __getattr__(self, name):
+        for prop in self.properties:
+            if prop.name == name:
+                return prop
+        return None
+
     def __iter__(self):
         for prop in self.properties:
             if not prop.hidden:

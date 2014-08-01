@@ -8,17 +8,20 @@
 
   <div class="row header">
     <div class="col-md-12">
-      {% if entity.properties.image_full %}
+
+      {% if properties.image_full %}
         <div class="pull-left">
           <img src="{{ entity | portrait_url }}" class="profile-image" alt="{{ display_name }}">
         </div>
       {% endif %}
+      
       <h1>
         {% block displayname %}{{ display_name }}{% endblock %}
       </h1>
       <p class="subtitle">
         {% block subtitle %}{{ render_property(entity, 'tagline', source_map) }}{% endblock %}
       </p>
+
     </div>
   </div>
 
