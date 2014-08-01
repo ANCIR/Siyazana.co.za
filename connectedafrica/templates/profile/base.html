@@ -23,8 +23,6 @@
   </div>
 
   <div class="row">
-
-
     <div class="col-md-4">
       {% block rightpanel %}
       {% block bio %}
@@ -74,13 +72,15 @@
     {% block centerpanel %}
       <div>
         {% block filters %}
-          <div id="filters" class="btn-group btn-group-sm btn-group-justified">
+          <ul id="filters" class="nav nav-pills">
             {% for schema in relations.schemata %}
-              <a class="btn btn-default {% if schema.name in relations.active_schemata %} active"          href="{{ query_add('schema', schema.name) }}{% else %}"
-                 href="{{ query_remove('schema', schema.name) }}{% endif %}">
-                  {{ schema.meta.plural or schema.label }}</a>
+              {% set active = schema.name in relations.active_schemata %}
+              <li class="{% if active %}active{% endif %}">
+              <a {% if active %}href="{{ query_add('schema', schema.name) }}"
+                 {% else %}href="{{ query_remove('schema', schema.name) }}"{% endif %}>
+                 {{ schema.meta.plural or schema.label }}</a></li>
             {% endfor %}
-          </div>
+          </ul>
         {% endblock %}
       </div>
 
@@ -90,7 +90,11 @@
             {{ render_relation(rel) }}
           {% endfor %}
           {% for group in relations.temporal|groupby('properties.date_start.value.year')|reverse %}
-            <div class="text-right"><h3><span class="label label-default">{{ group.grouper }}</span></h3></div>
+            <div class="text-right">
+              <h3>
+                <span class="label label-default">{{ group.grouper }}</span>
+              </h3>
+            </div>
             <hr/>
             {% for rel in group.list %}
               {{ render_relation(rel) }}

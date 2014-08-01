@@ -1,5 +1,5 @@
 {% macro render_relation(rel) %}
-<div class="relation {{ rel.schema.name|lower }}">
+<div class="panel panel-default relation {{ rel.schema.name|lower }}">
   <a href="{{ url_for('profile.view', id=rel.other.id, slug=rel.other.properties.name.value|slugify) }}">{% with major_schema=rel.other|major_schema %}<span class="pull-left fa fa-lg
     {% if major_schema == 'EducationalInstitution' %}fa-university
     {% elif major_schema == 'Organization' %}fa-sitemap
