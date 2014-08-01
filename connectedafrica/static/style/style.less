@@ -114,8 +114,23 @@ h1, h2, h3, h4 {
   text-transform: uppercase;
 }
 
-h3.teaser a {
+a, a:hover {
   color: @text-color;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: darken(@theme-color, 10%);
+}
+
+.simple-links {
+  a {
+    text-decoration: none;
+  }
+}
+
+h3.teaser, .nav-tabs, .navbar, .list-group {
+  .simple-links;
 }
 
 // Header style
@@ -137,6 +152,12 @@ h3.teaser a {
 footer {
   margin-bottom: -1em;
   color: @footer-foreground;
+
+  .simple-links;
+
+  a {
+    color: @theme-color;
+  }
 
   hr {
     border-top: 1px solid @light-gray;

@@ -20,6 +20,7 @@ def inject_globals():
     return {
         'APP_NAME': app.config.get('APP_NAME'),
         'query_add': util.query_add,
+        'query_replace': util.query_replace,
         'query_remove': util.query_remove
     }
 

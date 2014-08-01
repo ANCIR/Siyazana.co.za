@@ -34,7 +34,7 @@
   <span>{{ data.value|date|default(data.value, true) }}</span>
   {% if source_map %}
     {% with source_num=source_map.get(data.source_url) %}
-    <a href="#source-{{ source_num }}">[{{ source_num }}]</a>
+    <sup><a href="#source-{{ source_num }}">[{{ source_num }}]</a></sup>
     {% endwith %}
   {% endif %}
   {% endwith %}

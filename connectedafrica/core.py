@@ -40,9 +40,11 @@ class SchemaCache(object):
         return self.cache.get(name)
 
     def by_obj(self, obj):
+        named = {}
         for schema in self.cache.values():
             if schema.obj == obj:
-                yield schema
+                named[schema.name] = schema
+        return named
 
     def schemata(self, obj):
         schemata = obj._data.get('schemata', [])

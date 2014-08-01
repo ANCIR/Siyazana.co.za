@@ -85,15 +85,19 @@
 
     <div class="col-md-8">
     {% block centerpanel %}
+      <h4>Relationships</h4>
       <div>
         {% block filters %}
-          <ul id="filters" class="nav nav-pills">
-            {% for schema in relations.schemata %}
-              {% set active = schema.name in relations.active_schemata %}
+          <ul id="filters" class="nav nav-tabs nav-justified">
+            {% for schema_name, count in relations.schemata_counts.items() %}
+              {% set schema = relations.schemata.get(schema_name) %}
+              {% set active = schema.name in relations.schemata_filters %}
               <li class="{% if active %}active{% endif %}">
-              <a {% if active %}href="{{ query_add('schema', schema.name) }}"
+              <a {% if not active %}href="{{ query_replace('schema', schema.name) }}"
                  {% else %}href="{{ query_remove('schema', schema.name) }}"{% endif %}>
-                 {{ schema.meta.plural or schema.label }}</a></li>
+                 {{ schema.meta.plural or schema.label }}
+                 <span class="badge">{{count}}</span>
+               </a></li>
             {% endfor %}
           </ul>
         {% endblock %}

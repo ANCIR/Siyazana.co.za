@@ -273,6 +273,7 @@
   hidden: false
   obj: relation
   meta:
+    plural: 'Memberships'
     see_also: 'http://popoloproject.com/specs/membership.html'
   attributes:
     - name: date_start
@@ -293,6 +294,8 @@
   description: 'Two entities are associated by some type of agreement'
   hidden: false
   obj: relation
+  meta:
+    plural: 'Partnerships'
   attributes:
     - name: date_start
       label: 'Start date'
@@ -312,6 +315,8 @@
   description: 'Personal relationships, such as friendship or family'
   hidden: false
   obj: relation
+  meta:
+    plural: 'Personal ties'
   attributes:
     - name: date_start
       label: 'Start date'
@@ -331,6 +336,8 @@
   description: 'An entity has a financial interest (e.g. shares) in another'
   hidden: false
   obj: relation
+  meta:
+    plural: 'Financial ties'
   attributes:
     - name: date_start
       label: 'Start date'

@@ -1,4 +1,4 @@
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from operator import itemgetter
 
 from flask import Blueprint, render_template, abort, request
@@ -124,22 +124,24 @@ def schemata_map(entity):
 def process_relations(entity):
     # TODO: allow for chunked, async load because crashing servers isn't nice
     # TODO: make grano return a sorted list that obeys limit and offset
-    active_schemata = set(s.name for s in schemata.by_obj('relation'))
-    for schema in request.args.getlist('schema'):
-        try:
-            active_schemata.remove(schema)
-        except KeyError:
-            pass
+    schemata_all = schemata.by_obj('relation')
+    schemata_filters = request.args.getlist('schema')
+    schemata_counts = defaultdict(int)
 
     temporal = []
     non_temporal = []
 
     def filter_relations(collection):
-        if schemata is not None:
-            collection = collection.query(params={'limit': 1000})
-            collection = collection.filter('schema', ','.join(active_schemata))
-            return collection.results
-        return collection
+        params = {'limit': 0, 'facet': 'schema'}
+        fc = collection.query(params=params)
+        facets = fc.data.get('facets', {}).get('schema', {})
+        for schema, count in facets.get('results'):
+            schemata_counts[schema['name']] += count
+        params = {'limit': 1000}
+        collection = collection.query(params=params)
+        if schemata_filters:
+            collection = collection.filter('schema', ','.join(schemata_filters))
+        return collection.results
 
     for relations in (entity.inbound, entity.outbound):
         for rel in filter_relations(relations):
@@ -155,9 +157,11 @@ def process_relations(entity):
                 rel.other = rel.source
             else:
                 rel.other = rel.target
+    
     return {
-        'schemata': schemata.by_obj('relation'),
-        'active_schemata': active_schemata,
+        'schemata': schemata_all,
+        'schemata_filters': schemata_filters,
+        'schemata_counts': schemata_counts,
         'temporal': sorted(temporal,
                            key=lambda x: x.properties['date_start']['value']),
         'non_temporal': sorted(non_temporal,

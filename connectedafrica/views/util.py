@@ -31,6 +31,13 @@ def query_add(arg, val):
     return _enc(args)
 
 
+def query_replace(arg, val):
+    args = request.args.items(multi=True)
+    args = [(a, b) for (a, b) in args if a != arg]
+    args = args + [(arg, val)]
+    return _enc(args)
+
+
 def query_remove(arg, val):
     args = request.args.items(multi=True)
     args = [(a, b) for (a, b) in args if a != arg or b != val]
