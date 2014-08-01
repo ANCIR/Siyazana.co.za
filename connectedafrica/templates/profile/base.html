@@ -40,6 +40,7 @@
           {% endif %}
           {% endblock %}
         </p>
+        <!--
         <p>
           {% block basicinfo %}
           <strong>Types: </strong>{{ schemata_map.values()|join(', ') }}<br/>
@@ -48,6 +49,17 @@
           {% endfor %}
           {% endblock %}
         </p>
+        -->
+
+        <table class="table">
+          {% for property in properties %}
+            <tr>
+              <th>{{property.label}}:</th>
+              <td>{{property.value}}</td>
+            </tr>
+          {% endfor %}
+        </table>
+
         <div id="related-entities" class="text-center">
           {% block relatedentities %}{% endblock %}
         </div>

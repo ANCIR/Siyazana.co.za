@@ -5,11 +5,52 @@ from flask import Blueprint, render_template, abort, request
 
 from granoclient import NotFound
 
-from connectedafrica.core import grano
-from connectedafrica.views.util import slugify, convert_date_fields, get_schemata
+from connectedafrica.core import grano, schemata
+from connectedafrica.views.util import convert_date_fields
 
 
 blueprint = Blueprint('profile', __name__)
+
+PROPERTIES_TABLE_IGNORE = ['name', 'tagline', 'summary']
+
+
+class Property(object):
+
+    def __init__(self, prop, attr):
+        self.name = attr.get('name')
+        self.label = attr.get('label', attr.get('name'))
+        self.prop = prop
+        self.attr = attr
+
+    @property
+    def hidden(self):
+        return self.attr.get('hidden') \
+            or self.attr.get('name') in PROPERTIES_TABLE_IGNORE
+
+    @property
+    def value(self):
+        val = self.prop.get('value')
+        typ = self.attr.get('datatype')
+        if typ == 'datetime':
+            val = val.strftime('%Y')
+        return val
+
+
+class Properties(object):
+
+    def __init__(self, obj):
+        self.obj = obj
+        self.attributes = schemata.attributes(obj)
+
+    @property
+    def properties(self):
+        for name, data in self.obj.properties.items():
+            yield Property(data, self.attributes.get(name))
+
+    def __iter__(self):
+        for prop in self.properties:
+            if not prop.hidden:
+                yield prop
 
 
 def display_name(entity=None, data_dict=None):
@@ -74,16 +115,24 @@ def schemata_map(entity):
     ))
 
 
-def process_relations(entity, schemata=None):
+def process_relations(entity):
     # TODO: allow for chunked, async load because crashing servers isn't nice
     # TODO: make grano return a sorted list that obeys limit and offset
+    active_schemata = set(s.name for s in schemata.by_obj('relation'))
+    for schema in request.args.getlist('schema'):
+        try:
+            active_schemata.remove(schema)
+        except KeyError:
+            pass
+
     temporal = []
     non_temporal = []
 
     def filter_relations(collection):
         if schemata is not None:
-            collection = collection.query()
-            return collection.filter('schema', ','.join(schemata)).results
+            collection = collection.query(params={'limit': 1000})
+            collection = collection.filter('schema', ','.join(active_schemata))
+            return collection.results
         return collection
 
     for relations in (entity.inbound, entity.outbound):
@@ -101,6 +150,8 @@ def process_relations(entity, schemata=None):
             else:
                 rel.other = rel.target
     return {
+        'schemata': schemata.by_obj('relation'),
+        'active_schemata': active_schemata,
         'temporal': sorted(temporal,
                            key=lambda x: x.properties['date_start']['value']),
         'non_temporal': sorted(non_temporal,
@@ -114,39 +165,21 @@ def view(id, slug):
         entity = grano.entities.by_id(id)
         convert_date_fields(entity, ['date_birth'])
         entity_schemata = schemata_map(entity)
-        relation_schemata = get_schemata('relation')
-        active_schemata = set(s.name for s in relation_schemata)
-        for schema in request.args.getlist('schema'):
-            try:
-                active_schemata.remove(schema)
-            except KeyError:
-                pass
         context = {
             'entity': entity,
+            'properties': Properties(entity),
             'display_name': display_name(entity),
             'source_map': source_map(entity),
             'schemata_map': entity_schemata,
-            'relations': process_relations(entity, schemata=active_schemata)
+            'relations': process_relations(entity)
         }
-        context['relations']['schemata'] = relation_schemata
-        context['relations']['active_schemata'] = active_schemata
+
+        template = 'profile/base.html'
         if 'Person' in entity_schemata:
-            return person_profile(entity, context)
+            template = 'profile/person.html'
         elif 'Organization' in entity_schemata:
-            return organization_profile(entity, context)
-        else:
-            return render_template('profile/base.html',
-                                   **context)
+            template = 'profile/organization.html'
+        return render_template(template, **context)
     except (AssertionError, NotFound):
         pass
     abort(404)
-
-
-def person_profile(person, context):
-    return render_template('profile/person.html',
-                           **context)
-
-
-def organization_profile(organization, context):
-    return render_template('profile/organization.html',
-                           **context)

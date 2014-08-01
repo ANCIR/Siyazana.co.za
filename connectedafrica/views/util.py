@@ -53,19 +53,6 @@ def convert_date_fields(obj, fields=('date_start', 'date_end')):
             ).date()
 
 
-def get_schemata(obj_type, include_hidden=False):
-    """ Returns all schemata on grano for either relations
-        or entities. By default this does not include
-        hidden schemata. """
-    key = (obj_type, include_hidden)
-    if key not in get_schemata._cache:
-        schemata = [s for s in grano.schemata if (include_hidden
-                    or not s.hidden) and s.obj == obj_type]
-        get_schemata._cache[key] = sorted(schemata, key=itemgetter('label'))
-    return get_schemata._cache[key]
-get_schemata._cache = {}
-
-
 def guess_major_schema(schemata):
     """ Returns the most specific schema of an entity. E.g.
         a person entity has schemata base and Person where the
