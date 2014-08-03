@@ -1,0 +1,22 @@
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}(Untitled){% endblock %} - {{APP_NAME}}</title>
+    <meta name="description" content="{% block description %}{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}{% endblock %}">
+    <meta name="author" content="Institute for Security Studies, Code for Africa, ANCIR">
+
+    <meta name="og:site_name" content="{{APP_NAME}}">
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800,300' rel='stylesheet' type='text/css'>
+    {% assets filters="less,cssmin,cssrewrite", output="style.css",
+        "style/style.less"
+    %}
+      <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
