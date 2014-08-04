@@ -3,13 +3,12 @@
   {% include 'head.html' %}
 
   <body>
-    <div id="pagewrapper">
-      <div class="container">
-        {% include 'header.html' %}
 
-        {% block content %}{% endblock %}
-      </div>
+    <div class="container">
+      {% include 'header.html' %}
+      {% block content %}{% endblock %}
     </div>
+
 
     {% include 'footer.html' %}
 
