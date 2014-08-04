@@ -1,0 +1,48 @@
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3 col-sm-6">
+            <ul>
+              <li><a href="{{url_for('base.page', path='about')}}">About {{APP_NAME}}</a></li>
+              <li><a href="{{url_for('base.page', path='faq')}}">Frequently Asked Questions</a></li>
+              <li><a href="{{url_for('base.page', path='contact')}}">Contact us</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <ul>
+              <li><a href="https://github.com/CodeForAfrica/connectedAFRICA">Source code</a></li>
+              <li>Powered by <a href="http://granoproject.org/">grano</a></li>
+              <li><a href="http://backend.connectedafrica.org">Backend login</a></li>
+            </ul>
+          </div>
+        </div>
+      <hr>
+      <!--/div>
+      <hr>
+      <div class="container"-->
+        <div class="row">
+          <div class="col-md-6">
+            <p>
+              {{APP_NAME}} is a project of the <a href="http://iss.co.za">Institute
+                for Security Studies</a> and the <a href="http://www.investigativecenters.org/">
+                African Network of Centers for Investigative Reporting</a>, with support
+              from the <a href="http://icfj.org">International Center for Journalists</a>.
+            </p>
+            <p>
+            Content licensed under the terms of <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons 4.0 BY</a>
+            </p>
+          </div>
+          <div class="col-md-6 partners">
+            <a href="http://www.iss.co.za">
+              <img src="/static/images/iss_africa_alpha_dark.png" alt="Institute for Security Studies">
+            </a>
+            <a href="http://www.icfj.org">
+              <img src="/static/images/icfj_alpha_dark.png" alt="International Center for Journalists">
+            </a>
+            <a href="http://www.investigativecenters.org/">
+              <img src="/static/images/ancir_alpha_dark.png" alt="African Network of Centers for Investigative Reporting">
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
