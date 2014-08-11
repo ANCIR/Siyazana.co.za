@@ -2,6 +2,7 @@
 {% from "macros/profiles.html" import render_relation, render_property %}
 
 {% block title %}{{ display_name }}{% endblock %}
+{% block description %}{{ entity.properties.tagline.value or entity.properties.summary.value | truncate }}{% endblock %}
 
 {% block content %}
 <div class="profile">
