@@ -2,7 +2,14 @@
 {% from "macros/profiles.html" import render_relation, render_property %}
 
 {% block title %}{{ display_name }}{% endblock %}
-{% block description %}{{ entity.properties.tagline.value or entity.properties.summary.value | truncate }}{% endblock %}
+
+{% block description %}
+  {% if entity.properties.tagline %}
+    {{ entity.properties.tagline.value | truncate }}
+  {% elif entity.properties.summary %}
+    {{ entity.properties.summary.value | truncate }}
+  {% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="profile">
@@ -15,7 +22,6 @@
           <img src="{{ entity | portrait_url }}" class="profile-image" alt="{{ display_name }}">
         </div>
       {% endif %}
-      
       <h1>
         {% block displayname %}{{ display_name }}{% endblock %}
       </h1>
