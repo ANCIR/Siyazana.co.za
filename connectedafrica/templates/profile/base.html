@@ -50,17 +50,6 @@
           {% endif %}
           {% endblock %}
         </p>
-        <!--
-        <p>
-          {% block basicinfo %}
-          <strong>Types: </strong>{{ schemata_map.values()|join(', ') }}<br/>
-          {% for k, v in entity.properties.iteritems() %}
-            <strong>{{ k|capitalize }}: </strong>{{ v.value }}<br/>
-          {% endfor %}
-          {% endblock %}
-        </p>
-        -->
-
         <table class="table">
           {% for property in properties %}
             <tr>
