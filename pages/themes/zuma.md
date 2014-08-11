@@ -1,5 +1,5 @@
-title: All the President's Men
-parent: stories
+title: The Big Five
+parent: themes
 featured: true
 teaser: >
   We've mapped out the holdings of President Jacob Zuma and his
