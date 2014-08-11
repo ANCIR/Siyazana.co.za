@@ -63,12 +63,14 @@ def view(id, slug):
         entity = grano.entities.by_id(id)
         entity_schemata = schemata_map(entity)
         relation_schemata = request.args.getlist('schema')
+        grouper = request.args.get('grouper')
         context = {
             'entity': entity,
             'properties': Properties(entity),
             'display_name': display_name(entity),
             'source_map': source_map(entity),
-            'relations': load_relations(entity, relation_schemata)
+            'relations': load_relations(entity, grouper,
+                                        relation_schemata)
         }
 
         print context

@@ -49,6 +49,14 @@ def get_time_key(relation):
     return 'Undated'
 
 
+def get_schema(relation):
+    """ Get the most relevant date for a relation. """
+    meta = relation.schema.get('meta', {})
+    return meta.get('plural',
+                    relation.schema.get('label',
+                                        relation.schema.get('name')))
+
+
 def relation_key_prop(relation):
     """ Get the name of the most relevant property for a relation. """
     schema = relation.schema['name']
@@ -64,7 +72,7 @@ def relation_key_prop(relation):
         return relation.props.get(prop)
 
 
-def load_relations(entity, schemata_filters):
+def load_relations(entity, grouper, schemata_filters):
     # TODO: allow for chunked, async load because crashing servers isn't nice
     # TODO: make grano return a sorted list that obeys limit and offset
     query_filters = {}
@@ -73,6 +81,12 @@ def load_relations(entity, schemata_filters):
     schemata_all = schemata.by_obj('relation')
     schemata_counts = load_entity_relations_schemata(entity, query_filters)
 
+    group_func = {
+        'time': get_time_key,
+        'type': get_schema
+    }
+    group_func = group_func.get(grouper, get_schema)
+
     relations = {}
 
     for relation in load_entity_relations(entity, query_filters):
@@ -80,7 +94,7 @@ def load_relations(entity, schemata_filters):
             relation.other = relation.source
         else:
             relation.other = relation.target
-        key = get_time_key(relation)
+        key = group_func(relation)
         if key not in relations:
             relations[key] = []
         relations[key].append(relation)
