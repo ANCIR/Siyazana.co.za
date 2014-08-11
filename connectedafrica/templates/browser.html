@@ -26,7 +26,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-8">
       <table class="search-results table">
         {% for result in paginator.results.results %}
           <tr>
@@ -40,7 +40,7 @@
         {% endfor %}
       </table>
     </div>
-    <div class="col-md-3 facets">
+    <div class="col-md-4 facets">
       <ul class="list-group">
         {% for schema, count in schema_facet.results %}
           <li class="list-group-item {{'active' if schema.name in schema_facet.active else ''}}">
