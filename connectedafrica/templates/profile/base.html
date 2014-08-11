@@ -65,6 +65,20 @@
       </div>
       {% endblock %}
 
+      <h4>Filter relationships</h4>
+      <ul class="list-group">
+        {% for schema_name, count in relations.schemata_counts.items() %}
+          {% set schema = relations.schemata.get(schema_name) %}
+          {% set active = schema.name in relations.schemata_filters %}
+          <li class="list-group-item {% if active %}active{% endif %}">
+          <a {% if not active %}href="{{ query_replace('schema', schema.name) }}"
+             {% else %}href="{{ query_remove('schema', schema.name) }}"{% endif %}>
+             {{ schema.meta.plural or schema.label }}</a>
+             <span class="count badge">{{count}}</span>
+           </li>
+        {% endfor %}
+      </ul>
+
       {% block sources %}
       <div id="sources">
         <h4>Sources</h4>
@@ -81,36 +95,24 @@
 
     <div class="col-md-8">
     {% block centerpanel %}
-      <h4>Relationships</h4>
-      <div>
-        {% block filters %}
-          <ul id="filters" class="nav nav-tabs nav-justified">
-            {% for schema_name, count in relations.schemata_counts.items() %}
-              {% set schema = relations.schemata.get(schema_name) %}
-              {% set active = schema.name in relations.schemata_filters %}
-              <li class="{% if active %}active{% endif %}">
-              <a {% if not active %}href="{{ query_replace('schema', schema.name) }}"
-                 {% else %}href="{{ query_remove('schema', schema.name) }}"{% endif %}>
-                 {{ schema.meta.plural or schema.label }}
-                 <span class="badge">{{count}}</span>
-               </a></li>
-            {% endfor %}
-          </ul>
-        {% endblock %}
-      </div>
+      <h4>
+        Relationships
+        <small>
+          <a href="#">by time</a>
+          |
+          <a href="#">by type</a>
+        </small>
+      </h4>
 
       {% block timeline %}
         <div class="relations">
           {% for group, items in relations.relations %}
-            <div class="text-right">
-              <h3>
-                <span class="label label-default">{{ group }}</span>
-              </h3>
+            <div class="section">
+              <div class="section-heading">{{ group }}</div>
+              {% for item in items %}
+                {{ render_relation(item) }}
+              {% endfor %}
             </div>
-            <hr>
-            {% for item in items %}
-              {{ render_relation(item) }}
-            {% endfor %}
           {% endfor %}
         </div>
       {% endblock %}
