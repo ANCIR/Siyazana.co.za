@@ -1,18 +1,17 @@
 // Variables
 
 @theme-color: #1ad68f;
-@light-gray: #ddd;
-@dark-gray: #333;
-@text-color: @dark-gray;
-@light-text-color: lighten(@text-color, 20%);
-
+@light-text-color: @gray-light;
+@border-color: #ddd;
 
 // Functional
 
-@footer-background: @dark-gray;
-@footer-foreground: @dark-gray;
-@header-background: white;
-@header-foreground: @theme-color;
-@body-background: white;
+@footer-bg: @body-bg;
+@footer-fg: @gray-dark;
+@header-bg: @body-bg;
+@header-fg: @theme-color;
 
+// Bootstrap overrides
 @brand-primary: @theme-color;
+@nav-tabs-border-color: @border-color;
+@table-border-color: @border-color;
