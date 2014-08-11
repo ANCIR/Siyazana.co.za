@@ -11,6 +11,7 @@ class Property(object):
 
     def __init__(self, prop, attr):
         self.name = attr.get('name')
+        self.source_url = prop.get('source_url')
         self.label = attr.get('label', attr.get('name'))
         self.prop = prop
         self.attr = attr
@@ -41,6 +42,9 @@ class Properties(object):
             yield Property(data, self.attributes.get(name))
 
     def __getattr__(self, name):
+        return self.get(name)
+
+    def get(self, name):
         for prop in self.properties:
             if prop.name == name:
                 return prop
