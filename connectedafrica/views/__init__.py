@@ -8,7 +8,7 @@ from connectedafrica.views.base import blueprint as base_blueprint
 from connectedafrica.views.browser import blueprint as browser_blueprint
 from connectedafrica.views.profile import (blueprint as profile_blueprint,
                                            display_name, make_relation_tagline)
-from connectedafrica.views import util
+from connectedafrica import util
 
 app.register_blueprint(base_blueprint)
 app.register_blueprint(browser_blueprint)

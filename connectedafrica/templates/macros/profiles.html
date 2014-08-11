@@ -1,31 +1,24 @@
 {% macro render_relation(rel) %}
-<div class="panel panel-default relation {{ rel.schema.name|lower }}">
-  <a href="{{ url_for('profile.view', id=rel.other.id, slug=rel.other.properties.name.value|slugify) }}">{% with major_schema=rel.other|major_schema %}<span class="pull-left fa fa-lg
-    {% if major_schema == 'EducationalInstitution' %}fa-university
-    {% elif major_schema == 'Organization' %}fa-sitemap
-    {% elif major_schema == 'LegalCase' %}fa-gavel
-    {% elif major_schema == 'Committee' %}fa-users
-    {% elif major_schema == 'PoliticalParty' %}fa-sitemap
-    {% elif major_schema == 'Person' %}fa-user
-    {% elif major_schema == 'NonProfit' %}fa-gift
-    {% elif major_schema == 'PublicCompany' %}fa-suitcase
-    {% endif %}"></span>{% endwith %}{{ rel.other.properties|display_name }}</a>
-  <div class="details">
-    <span class="pull-left fa
-    {% if rel.schema.name == 'Education' %}fa-graduation-cap
-    {% elif rel.schema.name == 'Membership' %}fa-level-down
-    {% elif rel.schema.name == 'Partnership' %}fa-exchange
-    {% elif rel.schema.name == 'FinancialInterest' %}fa-money
-    {% elif rel.schema.name == 'Personal' %}fa-smile-o
-    {% endif %}"></span>
-    {{ rel|relation_tagline }}
-    {% if 'date_start' in rel.properties %}
-    (from {{ rel.properties.date_start.value.strftime('%b %Y') }}{% if 'date_end' in rel.properties %} to {{ rel.properties.date_end.value.strftime('%b %Y') }}{% endif %})
-    {% elif 'date_end' in rel.properties %}
-    (until {{ rel.properties.date_end.value.strftime('%b %Y') }})
-    {% endif %}
+  <div class="panel panel-default relation {{ rel.schema.name|lower }}">
+    <a href="{{ url_for('profile.view', id=rel.other.id, slug=rel.other.properties.name.value|slugify) }}">{% with major_schema=rel.other|major_schema %}<span class="pull-left fa fa-lg
+      {% if major_schema == 'EducationalInstitution' %}fa-university
+      {% elif major_schema == 'Organization' %}fa-sitemap
+      {% elif major_schema == 'LegalCase' %}fa-gavel
+      {% elif major_schema == 'Committee' %}fa-users
+      {% elif major_schema == 'PoliticalParty' %}fa-sitemap
+      {% elif major_schema == 'Person' %}fa-user
+      {% elif major_schema == 'NonProfit' %}fa-gift
+      {% elif major_schema == 'PublicCompany' %}fa-suitcase
+      {% endif %}"></span>{% endwith %}{{ rel.other.properties|display_name }}</a>
+    <div class="details">
+      {{ rel|relation_tagline }}
+      {% if 'date_start' in rel.props %}
+      (from {{ rel.props.date_start.value.strftime('%b %Y') }}{% if 'date_end' in rel.props %} to {{ rel.props.date_end.value.strftime('%b %Y') }}{% endif %})
+      {% elif 'date_end' in rel.props %}
+      (until {{ rel.props.date_end.value.strftime('%b %Y') }})
+      {% endif %}
+    </div>
   </div>
-</div>
 {% endmacro %}
 
 {% macro render_property(entity, key, source_map=None) %}

@@ -101,18 +101,15 @@
 
       {% block timeline %}
         <div class="relations">
-          {% for rel in relations.non_temporal %}
-            {{ render_relation(rel) }}
-          {% endfor %}
-          {% for group in relations.temporal|groupby('properties.date_start.value.year')|reverse %}
+          {% for group, items in relations.relations %}
             <div class="text-right">
               <h3>
-                <span class="label label-default">{{ group.grouper }}</span>
+                <span class="label label-default">{{ group }}</span>
               </h3>
             </div>
-            <hr/>
-            {% for rel in group.list %}
-              {{ render_relation(rel) }}
+            <hr>
+            {% for item in items %}
+              {{ render_relation(item) }}
             {% endfor %}
           {% endfor %}
         </div>

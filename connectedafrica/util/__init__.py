@@ -1,16 +1,13 @@
 from datetime import datetime
 from urllib import urlencode
-from operator import itemgetter
 
 from flask import request
 from slugify import slugify as _slugify
 
-from connectedafrica.core import grano, url_for
-
+from connectedafrica.core import url_for
 
 STOPWORDS = ['of', 'and', 'for', 'the', 'a', 'in']
 IMAGE_URL = '%(grano_host)s/api/1/files/%(file_pk)s/_image/%(config)s.png'
-DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 MAJOR_ENTITY_SCHEMATA = set((
     'Person', 'LegalCase', 'PublicCompany',
     'Committee', 'NonProfit', 'PoliticalParty',
@@ -49,15 +46,6 @@ def slugify(text):
     for stopword in STOPWORDS:
         slug = slug.replace('-%s-' % stopword, '-')
     return slug
-
-
-def convert_date_fields(obj, fields=('date_start', 'date_end')):
-    for field in fields:
-        if field in obj.properties:
-            obj.properties[field]['value'] = datetime.strptime(
-                obj.properties[field]['value'],
-                DATETIME_FORMAT
-            ).date()
 
 
 def guess_major_schema(schemata):

@@ -1,7 +1,10 @@
+from datetime import datetime
+
 from connectedafrica.core import schemata
 
 
 PROPERTIES_TABLE_IGNORE = ['name', 'tagline', 'summary']
+DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 
 
 class Property(object):
@@ -22,7 +25,7 @@ class Property(object):
         val = self.prop.get('value')
         typ = self.attr.get('datatype')
         if typ == 'datetime':
-            val = val.strftime('%Y')
+            val = datetime.strptime(val, DATETIME_FORMAT)
         return val
 
 
@@ -42,6 +45,12 @@ class Properties(object):
             if prop.name == name:
                 return prop
         return None
+
+    def __contains__(self, name):
+        for prop in self.properties:
+            if prop.name == name:
+                return True
+        return False
 
     def __iter__(self):
         for prop in self.properties:
