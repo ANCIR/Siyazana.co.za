@@ -83,6 +83,7 @@ h3.teaser, .nav-tabs, .navbar, .list-group {
 .navbar.navbar-default {
   background-color: @header-background;
   border-bottom: 0px solid @light-gray;
+  color: @light-text-color;
 
   .navbar-brand {
     color: @theme-color;
@@ -163,6 +164,17 @@ li.active a {
   }
 }
 
+.search-results {
+  .snippet {
+    color: @light-text-color;
+  }
+
+  a {
+    text-decoration: none;
+    font-weight: 800;
+  }
+}
+
 // Facets 
 
 .facets {
@@ -187,6 +199,10 @@ li.active a {
 
 .data-summary {
   width: 100%;
+
+  td {
+    padding-bottom: 0.3em;
+  }
 
   td.number {
     width: 30%;
