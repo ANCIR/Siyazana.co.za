@@ -32,6 +32,7 @@ def load_entity_relations_schemata(entity, filters={}):
 
 
 def sort_key(relation):
+    """ Sort relations by date by default. """
     if 'date_start' in relation.props:
         return relation.props.date_start.value
     if 'date_end' in relation.props:
@@ -40,11 +41,27 @@ def sort_key(relation):
 
 
 def get_time_key(relation):
+    """ Get the most relevant date for a relation. """
     if 'date_start' in relation.props:
         return relation.props.date_start.value.year
     if 'date_end' in relation.props:
         return relation.props.date_end.value.year
     return 'Undated'
+
+
+def relation_key_prop(relation):
+    """ Get the name of the most relevant property for a relation. """
+    schema = relation.schema['name']
+    tagline_prop = {
+        'Membership': 'role',
+        'Partnership': 'extent',
+        'Personal': 'type',
+        'FinancialInterest': 'nature',
+        'Education': 'qualification_name'
+    }
+    prop = tagline_prop.get(schema)
+    if prop in relation.props:
+        return relation.props.get(prop)
 
 
 def load_relations(entity, schemata_filters):

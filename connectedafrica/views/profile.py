@@ -36,24 +36,6 @@ def display_name(entity=None, data_dict=None):
         return properties['name']['value'].title()
 
 
-def make_relation_tagline(relation):
-    schema = relation.schema['name']
-    props = relation.properties
-    tagline_prop = {
-        'Membership': 'role',
-        'Partnership': 'extent',
-        'Personal': 'type',
-        'FinancialInterest': 'nature',
-        'Education': 'qualification_name'
-    }[schema]
-    if tagline_prop not in props:
-        return relation.schema['label']
-    tagline = props[tagline_prop]['value']
-    if schema == 'Education' and 'level' in props:
-        tagline = '%s (%s)' % (tagline, props['level']['value'])
-    return tagline
-
-
 def source_map(entity):
     '''
     Returns an OrderedDict that maps sources to their citation

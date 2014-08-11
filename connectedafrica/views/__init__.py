@@ -6,9 +6,11 @@ from granoclient import Entity
 from connectedafrica.core import app
 from connectedafrica.views.base import blueprint as base_blueprint
 from connectedafrica.views.browser import blueprint as browser_blueprint
-from connectedafrica.views.profile import (blueprint as profile_blueprint,
-                                           display_name, make_relation_tagline)
+from connectedafrica.views.profile import blueprint as profile_blueprint
+from connectedafrica.views.profile import display_name
 from connectedafrica import util
+from connectedafrica.util.relations import relation_key_prop
+
 
 app.register_blueprint(base_blueprint)
 app.register_blueprint(browser_blueprint)
@@ -86,10 +88,18 @@ def make_thumbnail_url(entity):
 
 @app.template_filter('relation_tagline')
 def relation_tagline(relation):
-    try:
-        return make_relation_tagline(relation)
-    except:
-        return ''
+    prop = relation_key_prop(relation)
+    if prop is None:
+        return relation.schema.get('label')
+    return prop.value
+
+
+@app.template_filter('relation_source')
+def relation_source(relation):
+    prop = relation_key_prop(relation)
+    if prop is None:
+        return None
+    return prop.source_url
 
 
 @app.template_filter('date')
@@ -102,7 +112,7 @@ def format_date(obj):
 @app.template_filter('source_readable')
 def format_source_readable(url):
     if url is None:
-        return ''
+        return 'missing'
     parsed = urlparse(url)
     return parsed.hostname
 
