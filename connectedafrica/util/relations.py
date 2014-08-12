@@ -83,7 +83,7 @@ def load_relations(entity, grouper, schemata_filters):
 
     group_func = {
         'time': get_time_key,
-        'type': get_schema
+        'schema': get_schema
     }
     group_func = group_func.get(grouper, get_schema)
 
@@ -106,5 +106,6 @@ def load_relations(entity, grouper, schemata_filters):
         'schemata': schemata_all,
         'schemata_filters': schemata_filters,
         'schemata_counts': schemata_counts,
+        'grouper': grouper,
         'relations': sorted(relations.items(), reverse=True)
     }

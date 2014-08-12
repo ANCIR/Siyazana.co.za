@@ -65,7 +65,7 @@
       </div>
       {% endblock %}
 
-      <h4>Filter relationships</h4>
+      <h4>Relationship types</h4>
       <ul class="list-group">
         {% for schema_name, count in relations.schemata_counts.items() %}
           {% set schema = relations.schemata.get(schema_name) %}
@@ -98,9 +98,9 @@
       <h4>
         Relationships
         <small>
-          <a href="#">by time</a>
+          <a href="{{ query_replace('grouper', 'time') }}">by time</a>
           |
-          <a href="#">by type</a>
+          <a href="{{ query_replace('grouper', 'schema') }}">by type</a>
         </small>
       </h4>
 
