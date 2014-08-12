@@ -16,18 +16,20 @@ scraper = make_scraper('windeeds', config={'threads': 4})
 
 
 def documentcloudify(file_name, data):
-    key = data.get('DbKey')
     auth = (app.config.get('DOCCLOUD_USER'),
             app.config.get('DOCCLOUD_PASS'))
     host = app.config.get('DOCCLOUD_HOST')
     project_id = app.config.get('DOCCLOUD_PROJECT')
+    title = data.get('Description')
     search_url = urljoin(host, '/api/search.json')
-    params = {'q': 'projectid:%s title:%s' % (project_id, key)}
+    params = {'q': 'projectid:%s title:"%s"' % (project_id, title)}
     res = requests.get(search_url, params=params, auth=auth,
                        verify=False)
-    print res.json()
+    found = res.json()
+    if found.get('total') > 0:
+        return found.get('documents')[0].get('canonical_url')
     req_data = {
-        'title': data.get('Description'),
+        'title': title,
         'source': 'Windeeds CIPC Search',
         'published_url': data.get('url'),
         'access': 'private',
@@ -36,13 +38,10 @@ def documentcloudify(file_name, data):
     files = {
         'file': open(file_name, 'rb')
     }
-    print req_data
     upload_url = urljoin(host, '/api/upload.json')
     res = requests.post(upload_url, files=files,
                         verify=False, auth=auth, data=req_data)
-    print res, res.content, res.json()
-
-    return file_name
+    return res.json().get('canonical_url')
 
 
 def download_pdf(session, data):
@@ -59,8 +58,7 @@ def download_pdf(session, data):
         res = session.get(url)
         with open(file_name, 'wb') as fh:
             fh.write(res.content)
-    #return documentcloudify(file_name, data)
-    return file_name
+    return documentcloudify(file_name, data)
 
 
 @scraper.task
