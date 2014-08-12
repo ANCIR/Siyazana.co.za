@@ -2,6 +2,8 @@ import os
 import re
 import json
 from threading import RLock
+
+from scrapekit import Scraper
 from unicodecsv import DictWriter
 
 from connectedafrica.core import app
@@ -9,6 +11,13 @@ from connectedafrica.core import app
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
 DATA_PATH = os.path.abspath(DATA_PATH)
+
+
+def make_scraper(name, config=None):
+    if config is None:
+        config = {}
+    config['data_path'] = DATA_PATH
+    return Scraper(name, config=config)
 
 
 def make_path(file_name):

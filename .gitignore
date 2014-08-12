@@ -1,5 +1,6 @@
 _site/
 *.DS_Store
+*.jsonlog
 .env
 *.egg-info
 pyenv/*
@@ -12,9 +13,14 @@ connectedafrica/static/.webassets-cache/*
 data/.cache/*
 data/npo_officers.csv
 data/npo_organisations.csv
+data/windeeds_companies.csv
+data/windeeds_directors.csv
+data/cipc_pdfs/*
 
 data/family.csv
 data/litigation.csv
 data/persons.csv
 data/wikipedia_images.csv
 data/directorships.csv
+
+reports/*

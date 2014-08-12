@@ -1,19 +1,17 @@
 import os
-import requests
 from pprint import pprint
 from itertools import count
 from urlparse import urljoin
 
-import dataset
-from scrapekit import Scraper
+import requests
 from scrapekit.util import collapse_whitespace
 
+from connectedafrica.scrapers.util import make_scraper
+from connectedafrica.scrapers.util import MultiCSV
+
+
 URL = 'https://www.windeedsearch.co.za/'
-scraper = Scraper('windeeds', config={'threads': 4})
-db_file = os.path.join(scraper.config.data_path, 'windeeds.db')
-db = dataset.connect('sqlite:///%s' % db_file)
-table_directors = db['directors']
-table_companies = db['companies']
+scraper = make_scraper('windeeds', config={'threads': 4})
 
 
 def documentcloudify(file_name, data):
@@ -26,8 +24,9 @@ def download_pdf(session, data):
     file_name = os.path.join(scraper.config.data_path, 'cipc_pdfs', file_name)
     if not os.path.exists(file_name):
         dir_name = os.path.dirname(file_name)
-        if not os.path.isdir(dir_name):
+        try:
             os.makedirs(dir_name)
+        except: pass
         url = urljoin(URL, '/Cipc/OtherPrintout/%s?format=Pdf' % key)
         res = session.get(url)
         with open(file_name, 'wb') as fh:
@@ -36,7 +35,7 @@ def download_pdf(session, data):
 
 
 @scraper.task
-def init_session():
+def init_session(csv):
     url = urljoin(URL, '/Account/LoginByEmailPartial')
     params = {
         'GetCampaigns': 'True',
@@ -49,11 +48,11 @@ def init_session():
     session = scraper.Session()
     res = session.get(url, params=params)
     assert res.json().get('success'), res.json()
-    all_results.queue(session)
+    all_results.queue(csv, session)
 
 
 @scraper.task
-def all_results(session):
+def all_results(csv, session):
     url = urljoin(URL, '/Client/AllResultsList')
     for page_no in count(1):
         params = {
@@ -73,23 +72,23 @@ def all_results(session):
         res = session.post(url, params)
         data = res.json()
         for row in data.get('Data'):
-            scrape_result.queue(session, row)
+            scrape_result.queue(csv, session, row)
 
         if page_no >= data.get('Total'):
             break
 
 
 @scraper.task
-def scrape_result(session, data):
+def scrape_result(csv, session, data):
     url = urljoin(URL, data.get('SearchAction'))
     if 'Cipc' not in url:
         return
     data['url'] = url
     data['pdf'] = download_pdf(session, data)
     if 'DirectorResult' in url:
-        director_details(session, data)
+        director_details(csv, session, data)
     if 'CompanyResult' in url:
-        company_details(session, data)
+        company_details(csv, session, data)
 
 
 def box_to_kv(block, prefix=None):
@@ -102,16 +101,17 @@ def box_to_kv(block, prefix=None):
                 label = collapse_whitespace(div.text_content())
             else:
                 value = collapse_whitespace(div.text)
-                if value and len(value) and value != '-':
-                    if prefix:
-                        label = '%s %s' % (prefix, label)
-                    data[label] = value
+                if not len(value) or value == '-':
+                    value = None
+                if prefix:
+                    label = '%s %s' % (prefix, label)
+                data[label] = value
                 label = None
     return data
 
 
 @scraper.task
-def director_details(session, data):
+def director_details(csv, session, data):
     doc = session.get(data['url']).html()
     for block in doc.findall('.//div[@class="result-section-block"]'):
         prof = block.find('./a[@rel="DirectorCompanyProfile"]')
@@ -126,12 +126,12 @@ def director_details(session, data):
         data['company_regno'] = company_regno
         data.update(box_to_kv(block, prefix="CIPC"))
         scraper.log.info("Director's details: %s" % company_name)
-        table_directors.upsert(data, ['company_regno', 'url', 'CIPC ID'])
+        csv.write('windeeds_directors.csv', data)
         #pprint(data)
 
 
 @scraper.task
-def company_details(session, data):
+def company_details(csv, session, data):
     doc = session.get(data['url']).html()
     for block in doc.findall('.//div[@class="result-block"]'):
         if block.find('./a[@name="CompanyInformation"]') is None:
@@ -147,16 +147,16 @@ def company_details(session, data):
         data['director_name'] = collapse_whitespace(title)
         scraper.log.info("Company details: %s" % data['director_name'])
         data.update(box_to_kv(block, prefix="CIPC-Person"))
-        table_companies.upsert(data, ['CIPC-Company Registration number', 'url', 'director_name'])
+        csv.write('windeeds_companies.csv', data)
         #pprint(data)
 
 
-if __name__ == '__main__':
-    init_session.run()
-    dataset.freeze(table_companies, format='csv',
-                   prefix=scraper.config.data_path,
-                   filename='windeeds_cipc_companies.csv')
-    dataset.freeze(table_directors, format='csv',
-                   prefix=scraper.config.data_path,
-                   filename='windeeds_cipc_directors.csv')
+def scrape():
+    csv = MultiCSV()
+    init_session.run(csv)
+    csv.close()
     scraper.report()
+
+
+if __name__ == '__main__':
+    scrape()
