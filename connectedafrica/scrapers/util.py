@@ -11,13 +11,6 @@ DATA_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
 DATA_PATH = os.path.abspath(DATA_PATH)
 
 
-def clean_space(text):
-    if text is None:
-        return None
-    text = re.sub('\s+', ' ', text)
-    return text.strip()
-
-
 def make_path(file_name):
     file_path = os.path.join(DATA_PATH, file_name)
     dir_name = os.path.dirname(file_path)

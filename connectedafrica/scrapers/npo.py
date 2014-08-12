@@ -8,9 +8,10 @@ from urlparse import urljoin
 from lxml import html
 from thready import threaded
 import requests
+from scrapekit.util import collapse_whitespace
 
 from connectedafrica.scrapers.util import MultiCSV
-from connectedafrica.scrapers.util import make_path, clean_space
+from connectedafrica.scrapers.util import make_path
 
 
 log = logging.getLogger('npo')
@@ -56,7 +57,7 @@ def scrape_npo(csv, i):
     sub_titles = doc.findall('.//h5')
     next_heading = None
     for sub_title in sub_titles:
-        text = clean_space(sub_title.text)
+        text = collapse_whitespace(sub_title.text)
         if 'Registration No' in text:
             data['reg_no'] = sub_title.find('./span').text.strip()
             next_heading = 'category'
@@ -68,21 +69,22 @@ def scrape_npo(csv, i):
         elif next_heading == 'legal_form':
             data['legal_form'] = text
     for span in doc.findall('.//span'):
-        text = clean_space(span.text)
+        text = collapse_whitespace(span.text)
         if text is not None and 'Registered on' in text:
             data['reg_date'] = text
     for addr in doc.findall('.//div[@class="address"]'):
-        addr_type = clean_space(addr.find('./h4').text)
-        addrs = [clean_space(a) for a in addr.xpath('string()').split('\n')]
+        addr_type = collapse_whitespace(addr.find('./h4').text)
+        addrs = [collapse_whitespace(a) for a in
+                 addr.xpath('string()').split('\n')]
         addrs = '\n'.join([a for a in addrs if len(a)][1:])
         if 'Physical' in addr_type:
             data['physical_address'] = addrs
         elif 'Postal' in addr_type:
             data['postal_address'] = addrs
         elif 'Contact' in addr_type:
-            data['contact_name'] = clean_space(addr.find('./p').text)
+            data['contact_name'] = collapse_whitespace(addr.find('./p').text)
             for li in addr.findall('.//li'):
-                contact = clean_space(li.xpath('string()'))
+                contact = collapse_whitespace(li.xpath('string()'))
                 contact_type = {
                     'phone': 'phone',
                     'mailinfo': 'email',
@@ -103,11 +105,11 @@ def scrape_npo(csv, i):
             if 'Neither ID or Passport' in id_number:
                 id_number = None
         officer = {
-            'role': clean_space(s.text).replace(' :', ''),
+            'role': collapse_whitespace(s.text).replace(' :', ''),
             'npo_name': data['name'],
             'source_url': url,
             'officer_id': urljoin(url, a.get('href')),
-            'officer_name': clean_space(a.text),
+            'officer_name': collapse_whitespace(a.text),
             'officer_id_number': id_number
         }
         csv.write('npo_officers.csv', officer)
