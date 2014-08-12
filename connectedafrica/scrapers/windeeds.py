@@ -6,6 +6,7 @@ from urlparse import urljoin
 import requests
 from scrapekit.util import collapse_whitespace
 
+from connectedafrica.core import app
 from connectedafrica.scrapers.util import make_scraper
 from connectedafrica.scrapers.util import MultiCSV
 
@@ -15,7 +16,33 @@ scraper = make_scraper('windeeds', config={'threads': 4})
 
 
 def documentcloudify(file_name, data):
-    pass
+    key = data.get('DbKey')
+    auth = (app.config.get('DOCCLOUD_USER'),
+            app.config.get('DOCCLOUD_PASS'))
+    host = app.config.get('DOCCLOUD_HOST')
+    project_id = app.config.get('DOCCLOUD_PROJECT')
+    search_url = urljoin(host, '/api/search.json')
+    params = {'q': 'projectid:%s title:%s' % (project_id, key)}
+    res = requests.get(search_url, params=params, auth=auth,
+                       verify=False)
+    print res.json()
+    req_data = {
+        'title': data.get('Description'),
+        'source': 'Windeeds CIPC Search',
+        'published_url': data.get('url'),
+        'access': 'private',
+        'project': project_id
+        }
+    files = {
+        'file': open(file_name, 'rb')
+    }
+    print req_data
+    upload_url = urljoin(host, '/api/upload.json')
+    res = requests.post(upload_url, files=files,
+                        verify=False, auth=auth, data=req_data)
+    print res, res.content, res.json()
+
+    return file_name
 
 
 def download_pdf(session, data):
@@ -26,11 +53,13 @@ def download_pdf(session, data):
         dir_name = os.path.dirname(file_name)
         try:
             os.makedirs(dir_name)
-        except: pass
+        except:
+            pass
         url = urljoin(URL, '/Cipc/OtherPrintout/%s?format=Pdf' % key)
         res = session.get(url)
         with open(file_name, 'wb') as fh:
             fh.write(res.content)
+    #return documentcloudify(file_name, data)
     return file_name
 
 
@@ -40,8 +69,8 @@ def init_session(csv):
     params = {
         'GetCampaigns': 'True',
         'EmailIntegrationMode': 'False',
-        'EmailAddress': 'ksharife@gmail.com',
-        'Password': 'burtks',
+        'EmailAddress': app.config.get('WINDEEDS_USER'),
+        'Password': app.config.get('WINDEEDS_PASS'),
         'RememberMe': 'true',
         'submitemail': 'Log%20In',
     }
