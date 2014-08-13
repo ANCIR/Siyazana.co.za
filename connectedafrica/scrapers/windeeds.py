@@ -1,4 +1,5 @@
 import os
+from time import time
 from pprint import pprint
 from itertools import count
 from urlparse import urljoin
@@ -90,7 +91,7 @@ def all_results(csv, session):
             'userScope': '0',
             'ResultCategoryFilter': '0',
             '_search': 'false',
-            'nd': '1407843168396',
+            'nd': str(int(time() * 1000)),
             'rows': '50',
             'page': page_no,
             'sidx': 'SearchDate',
@@ -154,7 +155,6 @@ def director_details(csv, session, data):
         data.update(box_to_kv(block, prefix="CIPC"))
         scraper.log.info("Director's details: %s" % company_name)
         csv.write('windeeds_directors.csv', data)
-        #pprint(data)
 
 
 @scraper.task
@@ -175,7 +175,6 @@ def company_details(csv, session, data):
         scraper.log.info("Company details: %s" % data['director_name'])
         data.update(box_to_kv(block, prefix="CIPC-Person"))
         csv.write('windeeds_companies.csv', data)
-        #pprint(data)
 
 
 def scrape():
