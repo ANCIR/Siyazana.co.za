@@ -140,7 +140,7 @@ def box_to_kv(block, prefix=None):
 
 @scraper.task
 def director_details(csv, session, data):
-    doc = session.get(data['url']).html()
+    doc = session.get(data['url'], cache='force').html()
     for block in doc.findall('.//div[@class="result-section-block"]'):
         prof = block.find('./a[@rel="DirectorCompanyProfile"]')
         if prof is None:
@@ -159,7 +159,7 @@ def director_details(csv, session, data):
 
 @scraper.task
 def company_details(csv, session, data):
-    doc = session.get(data['url']).html()
+    doc = session.get(data['url'], cache='force').html()
     for block in doc.findall('.//div[@class="result-block"]'):
         if block.find('./a[@name="CompanyInformation"]') is None:
             continue
