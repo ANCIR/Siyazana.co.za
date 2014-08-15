@@ -70,10 +70,10 @@ def deploy():
         sudo('make install', user=env.deploy_user)
 
     # render and upload templates
-    upload_template(os.path.join(os.path.dirname(__file__), 'conf/nginx.template'),
+    upload_template(os.path.join(os.path.dirname(__file__), 'deploy/nginx.template'),
                     '/etc/nginx/sites-enabled/connectedafrica.conf',
                     get_nginx_template_context(), use_sudo=True, backup=False)
-    upload_template(os.path.join(os.path.dirname(__file__), 'conf/supervisor.template'),
+    upload_template(os.path.join(os.path.dirname(__file__), 'deploy/supervisor.template'),
                     '/etc/supervisor/conf.d/connectedafrica.conf',
                     get_supervisor_template_context(), use_sudo=True, backup=False)
     # make sure logging dir exists and update processes

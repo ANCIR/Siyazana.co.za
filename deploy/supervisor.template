@@ -3,7 +3,7 @@ num_procs=1
 process_name=%(process-name)s
 environment=GRANO_HOST="http://backend.connectedafrica.org",GRANO_PROJECT="southafrica",COAF_SETTINGS='%(ve-dir)s/settings.py'
 directory=%(project-dir)s
-command=%(ve-dir)s/bin/gunicorn -b %(host)s:%(port)s connectedafrica.manage:app -w 4
+command=%(ve-dir)s/bin/gunicorn --log-file - -b %(host)s:%(port)s connectedafrica.manage:app -w 4
 user=%(user)s
 stdout_logfile=%(log)s
 stderr_logfile=%(err-log)s
