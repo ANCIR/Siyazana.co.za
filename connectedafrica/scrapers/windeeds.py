@@ -87,7 +87,7 @@ def all_results(csv, session):
             'SortOrder': 'Descending',
             'ColumnToSortBy': 'SearchDate',
             'firstLoad': 'true',
-            'dateFilter': '5',
+            'dateFilter': '4',
             'userScope': '0',
             'ResultCategoryFilter': '0',
             '_search': 'false',
