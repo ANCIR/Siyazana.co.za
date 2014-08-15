@@ -86,7 +86,7 @@ def all_results(csv, session):
         params = {
             'SortOrder': 'Descending',
             'ColumnToSortBy': 'SearchDate',
-            'firstLoad': 'true',
+            'firstLoad': 'false',
             'dateFilter': '4',
             'userScope': '0',
             'ResultCategoryFilter': '0',
