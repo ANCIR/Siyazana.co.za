@@ -1,0 +1,86 @@
+
+entities:
+  person:
+    schemata: ['Person']
+    source_url_column: 'url'
+    columns:
+     - column: 'director_name'
+       property: 'name'
+     - column: 'CIPC-Person ID/Passport number'
+       property: 'national_id'
+       skip_empty: true
+     - column: 'CIPC-Person Residential address'
+       property: 'contact_address_physical'
+       skip_empty: true
+     - column: 'CIPC-Person Postal address'
+       property: 'contact_address_postal'
+       skip_empty: true
+     - column: 'CIPC-Person Country of residence'
+       property: 'origin_country'
+       skip_empty: true
+     - column: 'CIPC-Person Date of birth'
+       property: 'date_birth'
+       type: datetime
+       format: '%m/%d/%Y'
+       skip_empty: true
+  org:
+    schemata: ['Organization']
+    source_url_column: 'url'
+    columns:
+     - column: 'CIPC-Company Enterprise name'
+       property: 'name'
+     - column: 'CIPC-Company Country of origin'
+       property: 'origin_country'
+       skip_empty: true
+     - column: 'CIPC-Company Industry'
+       property: 'industry'
+       skip_empty: true
+     - column: 'CIPC-Company Registered address'
+       property: 'contact_address_physical'
+       skip_empty: true
+     - column: 'CIPC-Company Postal address'
+       property: 'contact_address_postal'
+       skip_empty: true
+     - column: 'CIPC-Company Tax number'
+       property: 'tax_number'
+       skip_empty: true
+     - column: 'CIPC-Company Status'
+       property: 'registration_status'
+       skip_empty: true
+     - column: 'CIPC-Company Enterprise type'
+       property: 'legal_form'
+       skip_empty: true
+     - column: 'CIPC-Company Business start date'
+       property: 'date_founding'
+       type: datetime
+       format: '%m/%d/%Y'
+       skip_empty: true
+     - column: 'CIPC-Company Registration number'
+       property: 'registration_number'
+       skip_empty: true
+relations:
+  membership:
+    schema: 'Membership'
+    source_url_column: 'url'
+    source: 'person'
+    target: 'org'
+    columns:
+     - column: 'CIPC-Person Type'
+       property: 'role'
+       skip_empty: true
+       unique: true
+     - column: 'CIPC-Person Status'
+       property: 'status'
+       skip_empty: true
+     - column: 'CIPC-Person Appointment date'
+       property: 'date_start'
+       type: datetime
+       format: '%m/%d/%Y'
+       skip_empty: true
+     - column: 'CIPC-Person Resignation date'
+       property: 'date_end'
+       type: datetime
+       format: '%m/%d/%Y'
+       skip_empty: true
+
+

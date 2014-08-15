@@ -151,6 +151,10 @@
     # register.
     - name: registration_number
       label: 'Registration number'
+    - name: industry
+      label: 'Industry'
+    - name: tax_number
+      label: 'Tax number'
     - name: registration_status
       label: 'Registration status'
     - name: classification
@@ -284,6 +288,8 @@
       datatype: datetime
     - name: role
       label: 'Role'
+    - name: status
+      label: 'Status'
 
 
 #####################################################################
