@@ -73,8 +73,6 @@ def view(id, slug):
                                         relation_schemata)
         }
 
-        print context
-
         template = 'profile/base.html'
         if 'Person' in entity_schemata:
             template = 'profile/person.html'
