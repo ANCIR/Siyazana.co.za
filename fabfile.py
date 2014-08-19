@@ -29,6 +29,7 @@ def prod():
     env.deploy_user = 'connectedafrica'
     env.deploy_dir = '/home/connectedafrica/'
     env.branch = 'master'
+    env.nginx_bind = '127.0.0.1:80'
     env.hosts = PROD_HOSTS
 
 
@@ -99,7 +100,7 @@ def make(rule):
 def get_nginx_template_context():
     return {
         'server-name': SERVER_NAMES,
-        'server-port': 80,
+        'server-port': env.nginx_bind,
         'static-path': os.path.join(env.deploy_dir, 'connectedafrica/connectedafrica/static/'),
         'log': os.path.join(env.deploy_dir, LOG_DIR, 'nginx.log'),
         'err-log': os.path.join(env.deploy_dir, LOG_DIR, 'nginx.err'),
