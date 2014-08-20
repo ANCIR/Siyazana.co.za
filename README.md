@@ -25,8 +25,8 @@ After that, you need to set up a configuration file, e.g. ``settings.py`` to hol
 connectedAFRICA is licensed under the terms of an MIT open source license. The project is developed with support from these organisations: 
 
 * [Institute for Security Studies (ISS)](http://www.issafrica.org/)
-* [International Center for Journalists (ICFJ)](http://icfj.org)
 * [African Network of Centers for Investigative Reporting (ANCIR)](http://investigativecenters.org/)
+* [International Center for Journalists (ICFJ)](http://icfj.org)
 
 
 
