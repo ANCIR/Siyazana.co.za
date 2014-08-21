@@ -88,7 +88,7 @@ def all_results(csv, session):
             'ColumnToSortBy': 'SearchDate',
             'firstLoad': 'false',
             'dateFilter': '4',
-            'userScope': '0',
+            'userScope': '1',
             'ResultCategoryFilter': '0',
             '_search': 'false',
             'nd': str(int(time() * 1000)),
