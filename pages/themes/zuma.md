@@ -8,4 +8,5 @@ teaser: >
 image: /static/images/pics/zumamoney.jpg
 published: 2014-07-03
 
-I'm a banana!
+(Placeholder)
+
