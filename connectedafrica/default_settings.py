@@ -7,7 +7,7 @@ FLATPAGES_ROOT = '../pages'
 FLATPAGES_EXTENSION = '.md'
 
 
-APP_NAME = 'connectedAFRICA'
+APP_NAME = 'Siyazana'
 
 GRANO_HOST = os.environ.get('GRANO_HOST', 'http://beta.grano.cc/')
 GRANO_APIKEY = os.environ.get('GRANO_APIKEY')
