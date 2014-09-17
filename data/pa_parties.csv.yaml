@@ -1,7 +1,7 @@
 
 entities:
   party:
-    schemata: ['PoliticalParty', 'Organization']
+    schema: 'PoliticalParty'
     source_url_column: 'source_url'
     columns:
      - column: 'name'

@@ -1,6 +1,6 @@
 entities:
   officer:
-    schemata: ['Person']
+    schema: 'Person'
     source_url_column: 'source_url'
     columns:
       - column: 'officer_name'
@@ -10,7 +10,7 @@ entities:
       - column: 'officer_id_number'
         property: 'national_id'
   npo:
-    schemata: ['NonProfit', 'Organization']
+    schema: 'NonProfit'
     source_url_column: 'source_url'
     columns:
       - column: 'npo_name'

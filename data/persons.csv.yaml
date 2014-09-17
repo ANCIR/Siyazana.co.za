@@ -1,6 +1,6 @@
 entities:
   person:
-    schemata: ['Person']
+    schema: 'Person'
     source_url_column: 'Source URL for Information'
     columns:
      - column: 'Full Name'

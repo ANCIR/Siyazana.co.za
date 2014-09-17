@@ -1,8 +1,6 @@
-# TODO: Are these committees organizations in their own right?
-#   - I'd argue no, - pudo
 entities:
   committee:
-    schemata: ['Committee']
+    schema: 'Committee'
     source_url_column: 'source_url'
     columns:
      - column: 'name'

@@ -12,7 +12,7 @@
 
 
 # Overwrite the base model to add some common properties.
-- name: 'base'
+- name: 'Entity'
   label: 'Common base schema'
   obj: 'entity'
   hidden: true
@@ -172,13 +172,14 @@
 #####################################################################
 # Entity: PublicCompany
 #####################################################################
-- name: 'PublicCompany'
-  label: 'Publicly-traded company'
+- name: 'Company'
+  label: 'Company'
   description: 'A company traded on a public stock market'
   hidden: false
   obj: 'entity'
+  parent: 'Organization'
   meta:
-    plural: 'Stock companies'
+    plural: 'Companies'
   attributes:
     - name: ticker_symbol
       label: 'Ticker symbol'
@@ -208,6 +209,7 @@
   label: 'Not for Profit'
   description: 'A charitable or non-profit organization'
   hidden: false
+  parent: 'Organization'
   obj: 'entity'
   meta:
     plural: 'Non-profits'
@@ -234,6 +236,7 @@
   label: 'Educational institution'
   description: 'An educational institution'
   hidden: false
+  parent: 'Organization'
   obj: 'entity'
   meta:
     plural: 'Educational institutions'
@@ -280,12 +283,6 @@
     plural: 'Memberships'
     see_also: 'http://popoloproject.com/specs/membership.html'
   attributes:
-    - name: date_start
-      label: 'Start date'
-      datatype: datetime
-    - name: date_end
-      label: 'End date'
-      datatype: datetime
     - name: role
       label: 'Role'
     - name: status
@@ -303,12 +300,6 @@
   meta:
     plural: 'Partnerships'
   attributes:
-    - name: date_start
-      label: 'Start date'
-      datatype: datetime
-    - name: date_end
-      label: 'End date'
-      datatype: datetime
     - name: extent
       label: 'Extent'
 
@@ -324,12 +315,6 @@
   meta:
     plural: 'Personal ties'
   attributes:
-    - name: date_start
-      label: 'Start date'
-      datatype: datetime
-    - name: date_end
-      label: 'End date'
-      datatype: datetime
     - name: type
       label: 'Type'
 
@@ -345,12 +330,6 @@
   meta:
     plural: 'Financial ties'
   attributes:
-    - name: date_start
-      label: 'Start date'
-      datatype: datetime
-    - name: date_end
-      label: 'End date'
-      datatype: datetime
     - name: nature
       label: 'Nature of the interest'
     - name: shares_number
@@ -368,12 +347,6 @@
   hidden: false
   obj: relation
   attributes:
-    - name: year_start
-      label: 'Start year'
-      datatype: integer
-    - name: year_end
-      label: 'End year'
-      datatype: integer
     - name: qualification_name
       label: 'Name of qualification'
     - name: level

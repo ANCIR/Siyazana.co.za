@@ -1,13 +1,13 @@
 
 entities:
   company:
-    schemata: ['PublicCompany', 'Organization']
+    schema: 'Company'
     source_url_column: 'source_url'
     columns:
       - column: 'TargetName'
         property: 'name'
   assoc:
-    schemata: ['PublicCompany', 'Organization']
+    schema: 'Company'
     source_url_column: 'source_url'
     columns:
       - column: 'SourceName'

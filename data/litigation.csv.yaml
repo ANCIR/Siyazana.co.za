@@ -1,13 +1,13 @@
 
 entities:
   entity:
-    schemata: []
+    schema: 'Entity'
     source_url_column: 'Source URL'
     columns:
      - column: 'Entity'
        property: 'name'
   case:
-    schemata: ['LegalCase']
+    schema: 'LegalCase'
     source_url_column: 'Source URL'
     columns:
      - column: 'Case No.'

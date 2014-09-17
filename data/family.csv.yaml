@@ -1,13 +1,13 @@
 
 entities:
   personA:
-    schemata: ['Person']
+    schema: 'Person'
     source_url_column: 'Source URL'
     columns:
      - column: 'Person A'
        property: 'name'
   personB:
-    schemata: ['Person']
+    schema: 'Person'
     source_url_column: 'Source URL'
     columns:
      - column: 'Person B'

@@ -1,7 +1,7 @@
 
 entities:
   person:
-    schemata: ['Person']
+    schema: 'Person'
     source_url_column: 'url'
     columns:
      - column: 'CIPC Name'
@@ -21,7 +21,7 @@ entities:
        format: '%m/%d/%Y'
        skip_empty: true
   org:
-    schemata: ['Organization']
+    schema: 'Company'
     source_url_column: 'url'
     columns:
      - column: 'company_name'

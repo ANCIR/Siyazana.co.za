@@ -1,7 +1,7 @@
 
 entities:
   npo:
-    schemata: ['NonProfit', 'Organization']
+    schema: 'NonProfit'
     source_url_column: 'source_url'
     columns:
       - column: 'name'
