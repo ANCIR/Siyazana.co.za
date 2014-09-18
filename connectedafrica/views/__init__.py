@@ -47,18 +47,20 @@ def display_name_filter(entity_or_data):
 def make_snippet(entity):
     if isinstance(entity, Entity):
         properties = entity.properties
+        schema_label = entity.schema.label
     elif isinstance(entity, dict):
         properties = entity.get('properties')
+        schema_label = entity.get('schema', {}).get('label')
     else:
         properties = {}
+        schema_label = None
 
-    snippet = ''
     if 'tagline' in properties:
-        snippet = properties.get('tagline').get('value')
+        return properties.get('tagline').get('value')
     elif 'tagline' in properties:
-        snippet = properties.get('summary').get('value')
-
-    return snippet
+        return properties.get('summary').get('value')
+    elif schema_label is not None:
+        return schema_label
 
 
 @app.template_filter('portrait_url')
@@ -115,15 +117,3 @@ def format_source_readable(url):
         return 'missing'
     parsed = urlparse(url)
     return parsed.hostname
-
-
-@app.template_filter('major_schema')
-def get_major_schema(entity):
-    if isinstance(entity, dict):
-        schemata = entity['schemata']
-    else:
-        schemata = entity.schemata
-    major = util.guess_major_schema(schemata)
-    if major is None:
-        return 'Organization'
-    return major

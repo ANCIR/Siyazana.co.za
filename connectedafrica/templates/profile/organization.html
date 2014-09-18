@@ -1,9 +1,6 @@
 {% extends "profile/base.html" %}
 
 {% block basicinfo %}
-{% with major_schema=entity|major_schema %}
-<p>{{ schemata_map.get(major_schema) }}</p>
-{% endwith %}
 {% if 'classification' in entity.properties %}
 	<strong>Classification:</strong>{{ render_property(entity, 'classification') }}<br/>
 {% endif %}

@@ -1,11 +1,10 @@
-
 from flask import Flask, url_for
 from flask.ext.assets import Environment
 from flask_flatpages import FlatPages
 from granoclient import Grano, NotFound
 
 from connectedafrica import default_settings
-from connectedafrica import logs
+from connectedafrica import logs # noqa
 
 app = Flask(__name__)
 app.config.from_object(default_settings)
@@ -44,21 +43,16 @@ class SchemaCache(object):
                 named[schema.name] = schema
         return named
 
-    def schemata(self, obj):
-        schemata = obj._data.get('schemata', [])
-        if 'schema' in obj._data:
-            schemata = [obj._data.get('schema')]
-        schemata = [s['name'] for s in schemata]
+    def schema(self, obj):
         for name, schema in self.cache.items():
-            if name in schemata:
-                yield schema
+            if name == obj.schema.name:
+                return schema
 
     def attributes(self, obj):
         attribs = {}
-        for schema in self.schemata(obj):
-            for attr in schema.attributes:
-                name = attr.get('name')
-                attribs[name] = attr
+        for attr in self.schema(obj).attributes:
+            name = attr.get('name')
+            attribs[name] = attr
         return attribs
 
 schemata = SchemaCache()

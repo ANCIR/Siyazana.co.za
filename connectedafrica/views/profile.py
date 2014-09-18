@@ -1,8 +1,6 @@
 from collections import OrderedDict
-from operator import itemgetter
 
 from flask import Blueprint, render_template, abort, request
-
 from granoclient import NotFound
 
 from connectedafrica.core import grano
@@ -45,40 +43,23 @@ def source_map(entity):
     return OrderedDict((s, i + 1) for i, s in enumerate(sorted(sources)))
 
 
-def schemata_map(entity):
-    '''
-    Returns and OrderedDict that maps schemata to their label
-    in alphabetical order.
-    '''
-    return OrderedDict(sorted(
-        [(s['name'], s['label']) for s in entity.schemata
-         if not s['hidden']],
-        key=itemgetter(0)
-    ))
-
-
 @blueprint.route('/profile/<id>/<slug>')
 def view(id, slug):
-    try:
-        entity = grano.entities.by_id(id)
-        entity_schemata = schemata_map(entity)
-        relation_schemata = request.args.getlist('schema')
-        grouper = request.args.get('grouper')
-        context = {
-            'entity': entity,
-            'properties': Properties(entity),
-            'display_name': display_name(entity),
-            'source_map': source_map(entity),
-            'relations': load_relations(entity, grouper,
-                                        relation_schemata)
-        }
+    entity = grano.entities.by_id(id)
+    relation_schemata = request.args.getlist('schema')
+    grouper = request.args.get('grouper')
+    context = {
+        'entity': entity,
+        'properties': Properties(entity),
+        'display_name': display_name(entity),
+        'source_map': source_map(entity),
+        'relations': load_relations(entity, grouper,
+                                    relation_schemata)
+    }
 
-        template = 'profile/base.html'
-        if 'Person' in entity_schemata:
-            template = 'profile/person.html'
-        elif 'Organization' in entity_schemata:
-            template = 'profile/organization.html'
-        return render_template(template, **context)
-    except (AssertionError, NotFound):
-        pass
-    abort(404)
+    template = 'profile/base.html'
+    if entity.schema.name == 'Person':
+        template = 'profile/person.html'
+    elif entity.schema.name == 'Organization':
+        template = 'profile/organization.html'
+    return render_template(template, **context)

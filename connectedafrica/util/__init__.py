@@ -8,11 +8,6 @@ from connectedafrica.core import url_for
 
 STOPWORDS = ['of', 'and', 'for', 'the', 'a', 'in']
 IMAGE_URL = '%(grano_host)s/api/1/files/%(file_pk)s/_image/%(config)s.png'
-MAJOR_ENTITY_SCHEMATA = set((
-    'Person', 'LegalCase', 'PublicCompany',
-    'Committee', 'NonProfit', 'PoliticalParty',
-    'EducationalInstitution'
-))
 
 
 def _enc(arg):
@@ -46,13 +41,3 @@ def slugify(text):
     for stopword in STOPWORDS:
         slug = slug.replace('-%s-' % stopword, '-')
     return slug
-
-
-def guess_major_schema(schemata):
-    """ Returns the most specific schema of an entity. E.g.
-        a person entity has schemata base and Person where the
-        most specific schema is Person."""
-    for schema in schemata:
-        if schema['name'] in MAJOR_ENTITY_SCHEMATA:
-            return schema['name']
-    return None
