@@ -28,7 +28,7 @@
   <div class="row">
     <div class="col-md-8">
       <table class="search-results table">
-        {% for result in paginator.results.results %}
+        {% for result in pager %}
           <tr>
              <td>
                <a href="{{url_for('profile.view', id=result.id, slug=result.properties.name.value|slugify)}}">
@@ -41,6 +41,7 @@
         {% endfor %}
       </table>
     </div>
+
     <div class="col-md-4 facets">
       <ul class="list-group">
         {% for schema, count in schema_facet.results %}
@@ -60,7 +61,8 @@
       </ul>
     </div>
   </div>
-  {{ paginate(paginator) }}
+
+  {{ paginate(pager) }}
 {% endblock %}
 
 {% block js %}{% endblock %}

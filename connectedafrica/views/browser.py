@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request
+from restpager import Pager
 
 from connectedafrica.core import grano
-from connectedafrica.views.paginator import Paginator
 
 
 blueprint = Blueprint('browser', __name__)
@@ -9,20 +9,15 @@ blueprint = Blueprint('browser', __name__)
 
 @blueprint.route('/browse')
 def view():
-    limit = 15
-    params = {
-        'q': request.args.get('q', ''),
-        'limit': limit,
-        'offset': request.args.get('offset', 0),
-        'schema': request.args.getlist('schema'),
-        'project': grano.slug,
-        'facet': 'schema'
-    }
-    s, results = grano.client.get('/entities', params=params)
-    schema_facet = results.get('facets').get('schema')
+    query = grano.entities.query()
+    query = query.filter('q', request.args.get('q', ''))
+    query = query.filter('schema', request.args.getlist('schema'))
+    query = query.filter('facet', 'schema')
+    pager = Pager(query)
+
+    schema_facet = query.data.get('facets').get('schema')
     schema_facet['active'] = request.args.getlist('schema')
-    paginator = Paginator(results)
     return render_template('browser.html',
                            schema_facet=schema_facet,
-                           paginator=paginator,
+                           pager=pager,
                            query=request.args.get('q', ''))

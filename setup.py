@@ -30,7 +30,8 @@ setup(
         "cssmin==0.2.0",
         "networkx==1.9",
         "python-slugify>=0.0.7",
-        "scrapekit>=0.0.1"
+        "scrapekit>=0.0.1",
+        "restpager>=0.0.1"
     ],
     # until file support branches have landed
     dependency_links=[
