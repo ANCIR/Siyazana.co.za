@@ -13,6 +13,7 @@ def view():
         query = query.filter('q', request.args.get('q', ''))
         query = query.filter('schema', request.args.getlist('schema'))
         query = query.filter('facet', 'schema')
+        query = query.filter('sort', '-degree')
         pager = Pager(query)
 
         facet = query.data.get('facets').get('schema').get('results')
