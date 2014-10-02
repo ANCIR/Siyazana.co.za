@@ -34,7 +34,14 @@
                <a href="{{url_for('profile.view', id=result.id, slug=result.properties.name.value|slugify)}}">
                 {{result.properties.name.value}}</a>
                <span class="snippet">
-                  {{ result | snippet | truncate(60) }}
+                  {{ result | snippet | truncate(60) }},
+                  {% if result.degree == 0 %}
+                    no connections.
+                  {% elif result.degree == 1 %}
+                    One connection.
+                  {% else %}
+                    {{result.degree}} connections.
+                  {% endif %}
                </span>
              </td>
           </tr>

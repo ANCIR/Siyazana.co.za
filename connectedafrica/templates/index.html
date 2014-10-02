@@ -27,10 +27,10 @@
     <div class="col-md-4">
       <h3>Data summary</h3>
       <table class="data-summary">
-        {% for schema, count in schemata.results %}
+        {% for schema, count in schemata %}
           <tr>
             <td class="number"><strong>{{count}}</strong></td>
-            <td><a href='{{url_for('browser.view', schema=schema.get('name'))}}'>{{schema.meta.plural or schema.label}}</a></td>
+            <td><a href='{{url_for('browser.view', schema=schema.name)}}'>{{schema.meta.plural or schema.label}}</a></td>
           </tr>
         {% endfor %}
       </table>

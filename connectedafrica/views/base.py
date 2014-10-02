@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 
-from connectedafrica.core import pages, grano
+from connectedafrica.core import pages, grano, schemata
 
 
 blueprint = Blueprint('base', __name__)
@@ -15,8 +15,10 @@ def index():
     }
     s, results = grano.client.get('/entities', params=params)
     features = [p for p in pages if p.meta.get('featured')]
+    counts = results.get('facets').get('schema').get('results')
+    counts = [(schemata.by_name(d.get('name')), c) for d, c in counts]
     return render_template('index.html', features=features,
-                           schemata=results.get('facets').get('schema'))
+                           schemata=counts)
 
 
 @blueprint.route('/pages/<path:path>/')
