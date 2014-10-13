@@ -34,9 +34,9 @@ def load_entity_relations_schemata(entity, filters={}):
 def sort_key(relation):
     """ Sort relations by date by default. """
     if 'date_start' in relation.props:
-        return relation.props.date_start.value
+        return unicode(relation.props.date_start.value)
     if 'date_end' in relation.props:
-        return relation.props.date_end.value
+        return unicode(relation.props.date_end.value)
     return '3000-' + relation.id
 
 
