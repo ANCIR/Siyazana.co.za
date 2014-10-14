@@ -272,12 +272,29 @@
 
 
 #####################################################################
+# Relation: Relation (base schema)
+#####################################################################
+- name: 'Relation'
+  label: 'Relation base schema'
+  hidden: true
+  obj: relation
+  attributes:
+    - name: date_start
+      label: 'Start date'
+      datatype: datetime
+    - name: date_end
+      label: 'End date'
+      datatype: datetime
+
+
+#####################################################################
 # Relation: Membership
 #####################################################################
 - name: 'Membership'
   label: 'Member'
   description: 'An entity is a member of an organization'
   hidden: false
+  parent: 'Relation'
   obj: relation
   meta:
     plural: 'Memberships'
@@ -296,6 +313,7 @@
   label: 'Partner'
   description: 'Two entities are associated by some type of agreement'
   hidden: false
+  parent: 'Relation'
   obj: relation
   meta:
     plural: 'Partnerships'
@@ -311,6 +329,7 @@
   label: 'Personal'
   description: 'Personal relationships, such as friendship or family'
   hidden: false
+  parent: 'Relation'
   obj: relation
   meta:
     plural: 'Personal ties'
@@ -326,6 +345,7 @@
   label: 'Financial interest'
   description: 'An entity has a financial interest (e.g. shares) in another'
   hidden: false
+  parent: 'Relation'
   obj: relation
   meta:
     plural: 'Financial ties'
@@ -345,6 +365,7 @@
   label: 'Education'
   description: 'An entity received an education from another'
   hidden: false
+  parent: 'Relation'
   obj: relation
   attributes:
     - name: qualification_name
