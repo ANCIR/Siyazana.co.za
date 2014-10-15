@@ -30,3 +30,17 @@ def view():
                                schema_facet=schema_facet,
                                pager=pager,
                                query=request.args.get('q', ''))
+
+
+@blueprint.route('/organizations')
+def organizations():
+        query = grano.entities.query()
+        query = query.filter('q', request.args.get('q', ''))
+        query = query.filter('schema', ['Organization', 'Company'])
+        query = query.filter('sort', '-degree')
+        query = query.limit(27)
+        pager = Pager(query)
+
+        return render_template('organizations.html',
+                               pager=pager,
+                               query=request.args.get('q', ''))

@@ -1,0 +1,9 @@
+{% macro connections(ent) %}
+  {% if ent.degree == 0 %}
+    no connections.
+  {% elif ent.degree == 1 %}
+    one connection.
+  {% else %}
+    {{ent.degree}} connections.
+  {% endif %}
+{% endmacro %}
