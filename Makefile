@@ -40,14 +40,10 @@ loadwikipedia:
 
 # Google docs
 loadgdocs:
-	@wget -q -O data/family.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1752160727"
-	@granoloader csv -t 5 -f data/family.csv.yaml data/family.csv
-	@wget -q -O data/directorships.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=465508635"
-	@granoloader csv -t 5 -f data/directorships.csv.yaml data/directorships.csv
-	@wget -q -O data/litigation.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1973809171"
-	@granoloader csv -t 5 -f data/litigation.csv.yaml data/litigation.csv
 	@wget -q -O data/persons.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1657155089"
 	@granoloader csv -t 5 -f data/persons.csv.yaml data/persons.csv
+	#@wget -q -O data/litigation.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1973809171"
+	#@granoloader csv -t 5 -f data/litigation.csv.yaml data/litigation.csv
 
 cleangdocs:
-	rm data/litigation.csv data/directorships.csv data/family.csv data/persons.csv
+	rm data/litigation.csv data/persons.csv
