@@ -21,3 +21,8 @@ DOCCLOUD_HOST = os.environ.get('DOCCLOUD_HOST',
 DOCCLOUD_USER = os.environ.get('DOCCLOUD_USER')
 DOCCLOUD_PASS = os.environ.get('DOCCLOUD_PASS')
 DOCCLOUD_PROJECT = int(os.environ.get('DOCCLOUD_PROJECT', '130'))
+
+SOURCE_NAMES = {
+    'za-new-import.popit.mysociety.org': "People's Assembly Data",
+    'www.windeedsearch.co.za': "Windeed CIPC Search",
+}
