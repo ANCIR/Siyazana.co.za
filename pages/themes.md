@@ -1,6 +1,6 @@
 title: What we found
-menuindex: 2
-menutitle: Themes
+#menuindex: 2
+#menutitle: Themes
 published: 2014-07-03
 
 As we map out the structures of influence in South Africa, we throw a
