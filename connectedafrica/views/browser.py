@@ -11,7 +11,12 @@ blueprint = Blueprint('browser', __name__)
 def view():
         query = grano.entities.query()
         query = query.filter('q', request.args.get('q', ''))
-        query = query.filter('schema', request.args.getlist('schema'))
+        schema_active = request.args.getlist('schema')
+        if not len(schema_active):
+            # TODO: get this from schema 'meta':
+            schema_active = ['Person', 'Organization', 'Company',
+                             'NonProfit', 'EducationalInstitution']
+        query = query.filter('schema', schema_active)
         query = query.filter('facet', 'schema')
         query = query.filter('sort', '-degree')
         pager = Pager(query)
