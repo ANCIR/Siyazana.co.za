@@ -1,5 +1,4 @@
 {% extends "layout.html" %}
-{% from 'teasers.html' import teasers %}
 
 {% block title %}
   Welcome
@@ -15,7 +14,6 @@
   </div>
   <div class="row">
     <div class="col-md-8">
-      {{teasers(features)}}
       <h3>What is {{APP_NAME}}?</h3>
       <p>
         Our database is a resource for anyone interested in how relationships -

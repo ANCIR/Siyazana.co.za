@@ -116,4 +116,7 @@ def format_source_readable(url):
     if url is None:
         return 'missing'
     parsed = urlparse(url)
-    return parsed.hostname
+    source_name = parsed.hostname
+    if source_name in app.config.get('SOURCE_NAMES', {}):
+        source_name = app.config.get('SOURCE_NAMES', {}).get(source_name)
+    return source_name

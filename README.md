@@ -29,4 +29,10 @@ connectedAFRICA is licensed under the terms of an MIT open source license. The p
 * [International Center for Journalists (ICFJ)](http://icfj.org)
 
 
+# Noun Project
+
+* Links: http://thenounproject.com/term/links/78632/ 
+* Links 2: http://thenounproject.com/term/links/78632/ 
+* Company: http://thenounproject.com/term/building/26205/ 
+* Committee (ugly): http://thenounproject.com/term/committee/75777/ 
 
