@@ -18,6 +18,10 @@ def truncateproject():
     resp = client.session.delete(client.path('/projects/%s/_truncate' % project.slug))
     client.evaluate(resp)
 
+    resp = client.session.get(client.path('/projects/%s/schemata' % project.slug))
+    # iterate over schemata in reverse to yield parents last
+    for schemata in reversed(client.evaluate(resp)[1]['results']):
+        client.session.delete(schemata['api_url'])
 
 if __name__ == "__main__":
     manager.run()
