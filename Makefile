@@ -42,8 +42,13 @@ loadwikipedia:
 loadgdocs:
 	@wget -q -O data/persons.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1657155089"
 	@granoloader csv -t 5 -f data/persons.csv.yaml data/persons.csv
-	#@wget -q -O data/litigation.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1973809171"
-	#@granoloader csv -t 5 -f data/litigation.csv.yaml data/litigation.csv
+	@wget -q -O data/litigation.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1973809171"
+	@granoloader csv -t 5 -f data/litigation.csv.yaml data/litigation.csv
+	@wget -q -O data/connections.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1752160727"
+	@head -n 1 data/connections.csv > data/personalconnections.csv
+	@sed -n "/\(Family,Family >\|Personal,Personal >\)/p" data/connections.csv >> data/personalconnections.csv
+	@granoloader csv -t 5 -f data/personalconnections.csv.yaml data/personalconnections.csv
+	# TODO: also split up financial, geographic, affiliation, event connections
 
 cleangdocs:
 	rm data/litigation.csv data/persons.csv

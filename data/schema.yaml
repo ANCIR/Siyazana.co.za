@@ -372,3 +372,12 @@
       label: 'Name of qualification'
     - name: level
       label: 'Level of education'
+
+
+# TODO: create appropriate relations for all person-to-person connection types
+# Family
+# Personal
+# Financial
+# Geography
+# Affiliations
+# Event

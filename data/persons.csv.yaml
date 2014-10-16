@@ -42,7 +42,7 @@ entities:
      - column: 'WhosWho'
        property: 'xurl_whos_who'
        skip_empty: true
-  party:  # TODO: skip party entity altogether if not present
+  party:
     schema: 'PoliticalParty'
     source_url_column: 'Source URL for Information'
     columns:
@@ -50,7 +50,7 @@ entities:
        property: 'name'
        skip_empty: true
 relations:
-  member:  # TODO: skip member relation altogether if party isn't present
+  member:
     schema: 'Membership'
     source_url_column: 'Source URL for Information'
     source: 'person'

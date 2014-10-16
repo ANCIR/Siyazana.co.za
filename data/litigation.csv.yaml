@@ -10,32 +10,41 @@ entities:
     schema: 'LegalCase'
     source_url_column: 'Source URL'
     columns:
+     - column: 'Citation'
+       property: 'name'
      - column: 'Case No.'
        property: 'case_no'
        skip_empty: true
-     - column: 'Title'
+     - column: 'Title'  # TODO: correct case titles in spreadsheet
        property: 'case_title'
        skip_empty: true
      - column: 'Date of hearing start'
        property: 'date_start_hearing'
        type: datetime
-       format: '%m/%d/%Y'
+       format:
+          day: ['%d/%m/%Y', '%d-%m-%Y']
+          month: ['%m/%Y', '%m-%Y']
+          year: '%Y'
        skip_empty: true
      - column: 'Date of hearing end'
        property: 'date_end_hearing'
        type: datetime
-       format: '%m/%d/%Y'
+       format:
+          day: ['%d/%m/%Y', '%d-%m-%Y']
+          month: ['%m/%Y', '%m-%Y']
+          year: '%Y'
        skip_empty: true
      - column: 'Date decided'
        property: 'date_decision'
        type: datetime
-       format: '%m/%d/%Y'
+       format:
+          day: ['%d/%m/%Y', '%d-%m-%Y']
+          month: ['%m/%Y', '%m-%Y']
+          year: '%Y'
        skip_empty: true
      - column: 'Citation'
        property: 'citation'
        skip_empty: true
-     - column: 'Citation'
-       property: 'name'
 relations:
   membership:
     schema: 'Membership'
@@ -49,10 +58,16 @@ relations:
      - column: 'Date of hearing start'
        property: 'date_start'
        type: datetime
-       format: '%m/%d/%Y'
+       format:
+          day: ['%d/%m/%Y', '%d-%m-%Y']
+          month: ['%m/%Y', '%m-%Y']
+          year: '%Y'
        skip_empty: true
      - column: 'Date of hearing end'
        property: 'date_end'
        type: datetime
-       format: '%m/%d/%Y'
+       format:
+          day: ['%d/%m/%Y', '%d-%m-%Y']
+          month: ['%m/%Y', '%m-%Y']
+          year: '%Y'
        skip_empty: true
