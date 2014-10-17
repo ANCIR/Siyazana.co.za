@@ -272,6 +272,21 @@
 
 
 #####################################################################
+# Entity: Event
+#####################################################################
+- name: 'Event'
+  label: 'Event'
+  description: 'An event such as a conference or wedding'
+  hidden: false
+  obj: 'entity'
+  meta:
+    plural: 'Events'
+  attributes:
+    - name: 'type'
+      label: 'Type of event'
+
+
+#####################################################################
 # Relation: Relation (base schema)
 #####################################################################
 - name: 'Relation'
@@ -365,16 +380,30 @@
 
 
 #####################################################################
+# Relation: FinancialRelation
+#####################################################################
+- name: 'FinancialRelation'
+  label: 'Financial relation'
+  description: 'A generic financial relation'
+  hidden: false
+  parent: 'Relation'
+  obj: relation
+  meta:
+    plural: 'Financial ties'
+  attributes: []
+
+
+#####################################################################
 # Relation: FinancialInterest
 #####################################################################
 - name: 'FinancialInterest'
   label: 'Financial interest'
   description: 'An entity has a financial interest (e.g. shares) in another'
   hidden: false
-  parent: 'Relation'
+  parent: 'FinancialRelation'
   obj: relation
   meta:
-    plural: 'Financial ties'
+    plural: 'Financial interests'
   attributes:
     - name: nature
       label: 'Nature of the interest'
@@ -382,6 +411,20 @@
       label: 'Number of shares'
     - name: nominal_value
       label: 'Nominal value'
+
+
+#####################################################################
+# Relation: Benefactor
+#####################################################################
+- name: 'Benefactor'
+  label: 'Benefactor'
+  description: 'An entity has donated (or donates) money to another'
+  hidden: false
+  parent: 'FinancialRelation'
+  obj: relation
+  meta:
+    plural: 'Benefactors'
+  attributes: []
 
 
 #####################################################################
@@ -401,9 +444,6 @@
 
 
 # TODO: create appropriate relations for all person-to-person connection types
-# Family
-# Personal
 # Financial
-# Geography
 # Affiliations
 # Event
