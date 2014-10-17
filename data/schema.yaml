@@ -323,6 +323,20 @@
 
 
 #####################################################################
+# Relation: BoardMembership
+#####################################################################
+- name: 'BoardMembership'
+  label: 'Board member'
+  description: 'An entity is on the board of directors of an organization'
+  hidden: false
+  parent: 'Membership'
+  obj: relation
+  meta:
+    plural: 'Board memberships'
+  attributes: []
+
+
+#####################################################################
 # Relation: Personal
 #####################################################################
 - name: 'Personal'
@@ -336,6 +350,18 @@
   attributes:
     - name: type
       label: 'Type'
+
+
+#####################################################################
+# Relation: Family
+#####################################################################
+- name: 'Family'
+  label: 'Family'
+  description: 'Two entities are members of the same family'
+  hidden: false
+  parent: 'Personal'
+  obj: relation
+  attributes: []
 
 
 #####################################################################
