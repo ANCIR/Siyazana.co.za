@@ -1,16 +1,19 @@
 import os
 import re
 import json
+import requests
+from StringIO import StringIO
 from threading import RLock
 
 from scrapekit import Scraper
-from unicodecsv import DictWriter
+from unicodecsv import DictWriter, DictReader
 
 from connectedafrica.core import app
 
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
 DATA_PATH = os.path.abspath(DATA_PATH)
+PERSONS_CSV_URL = 'https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1657155089'
 
 
 def make_scraper(name, config=None):
@@ -55,6 +58,16 @@ def set_to_empty(data, empty_keys=(), empty_values=('', ), empty_value=None):
     for k in empty_keys:
         if k not in data:
             data[k] = empty_value
+
+
+def gdocs_persons():
+    resp = requests.get(PERSONS_CSV_URL, stream=True)
+    resp.raise_for_status()
+    reader = DictReader(resp.raw)
+    for data in reader:
+        if not data['Full Name']:
+            continue
+        yield data
 
 
 class ScraperException(Exception):
