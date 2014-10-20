@@ -1,7 +1,7 @@
 import os
 
 DEBUG = True
-ASSETS_DEBUG = False
+ASSETS_DEBUG = True
 
 FLATPAGES_ROOT = '../pages'
 FLATPAGES_EXTENSION = '.md'
