@@ -1,9 +1,9 @@
-{% macro connections(ent) %}
-  {% if ent.degree == 0 %}
-    no connections.
-  {% elif ent.degree == 1 %}
-    one connection.
+{% macro connections(num) %}
+  {% if num == 0 %}
+    no connections
+  {% elif num == 1 %}
+    one connection
   {% else %}
-    {{ent.degree}} connections.
+    {{num}} connections
   {% endif %}
 {% endmacro %}

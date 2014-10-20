@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% from 'macros/paginator.html' import paginate %}
+{% from 'macros/mini.html' import connections %}
 
 {% block title %}Explore{% endblock %}
 
@@ -35,13 +36,7 @@
                 {{result.properties.name.value}}</a>
                <span class="snippet">
                   {{ result | snippet | truncate(60) }},
-                  {% if result.degree == 0 %}
-                    no connections.
-                  {% elif result.degree == 1 %}
-                    one connection.
-                  {% else %}
-                    {{result.degree}} connections.
-                  {% endif %}
+                  {{connections(result.degree)}}
                </span>
              </td>
           </tr>
