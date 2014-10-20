@@ -32,18 +32,16 @@
       {% include 'nav.html' %}
       {% block content %}{% endblock %}
     </div>
-
     {% include 'footer.html' %}
     
     {% assets filters="uglifyjs", output="gen/app.js",
           "vendor/jquery/dist/jquery.js",
           "vendor/bootstrap/js/collapse.js",
-          "vendor/bootstrap/js/dropdown.js"
+          "vendor/bootstrap/js/dropdown.js",
+          "js/graph.js"
       %}
       <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
-
-    {% block js %}{% endblock %}
 
     {% include 'ga.html' %}
   </body>
