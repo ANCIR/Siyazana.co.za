@@ -25,8 +25,17 @@ relations:
        unique: true
      - column: 'start_date'
        property: 'date_start'
+       type: datetime
        skip_empty: true
+       format:
+          day: '%Y-%m-%d'
+          month: '%Y-%m'
+          year: '%Y'
      - column: 'end_date'
        property: 'date_end'
+       type: datetime
        skip_empty: true
-
+       format:
+          day: '%Y-%m-%d'
+          month: '%Y-%m'
+          year: '%Y'

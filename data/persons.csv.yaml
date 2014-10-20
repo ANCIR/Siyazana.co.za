@@ -5,11 +5,16 @@ entities:
     columns:
      - column: 'Full Name'
        property: 'name'
+     - column: 'Full Name'
+       property: 'full_name'
      - column: 'First Name'
        property: 'given_name'
        skip_empty: true
      - column: 'Last Name'
        property: 'family_name'
+       skip_empty: true
+     - column: 'Title'
+       property: 'honorific_prefix'
        skip_empty: true
      - column: 'ID #'
        property: 'national_id'
@@ -21,7 +26,36 @@ entities:
        property: 'date_birth'
        skip_empty: true
        type: 'date'
+       format:
+          day: ['%d/%m/%Y', '%d-%m-%Y']
+          month: ['%m/%Y', '%m-%Y']
+          year: '%Y'
      - column: 'Country of Origin'
        property: 'origin_country'
        skip_empty: true
-
+     - column: 'City of Origin'
+       property: 'birth_town'
+       skip_empty: true
+     - column: 'Email'
+       property: 'contact_email'
+       skip_empty: true
+     - column: 'WhosWho'
+       property: 'xurl_whos_who'
+       skip_empty: true
+  party:
+    schema: 'PoliticalParty'
+    source_url_column: 'Source URL for Information'
+    columns:
+     - column: 'Party'
+       property: 'name'
+       skip_empty: true
+relations:
+  member:
+    schema: 'Membership'
+    source_url_column: 'Source URL for Information'
+    source: 'person'
+    target: 'party'
+    columns:
+     - column: 'Role'  # TODO: figure out where to store body, post and portfolio
+       property: 'role'
+       skip_empty: true
