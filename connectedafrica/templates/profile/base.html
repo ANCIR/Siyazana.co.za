@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
+{% from 'macros/paginator.html' import paginate %}
 {% from "macros/profiles.html" import render_relation, render_property %}
+{% from "macros/snippets.html" import entity_link, relation_ts %}
 
 {% block title %}{{ display_name }}{% endblock %}
 
@@ -34,52 +36,52 @@
 
   <div class="row">
     <div class="col-md-4">
-      {% block rightpanel %}
-      {% block bio %}
-      <div id="bio">
-        <h4>Details</h4>
-        <p class="summary">
-          {% block biotext %}
-          {% if 'summary' in entity.properties %}
-            {% if entity.properties.summary.value|length > 255 %}
-              <span class="truncated">{{ entity.properties.summary.value|truncate }}<br/><a href="#" onclick="$('#bio .summary .truncated').hide(); $('#bio .summary .complete').show(); return false;">Show more</a></span>
-              <span class="complete" style="display: none;">{{ entity.properties.summary.value }}<br/><a href="#" onclick="$('#bio .summary .truncated').show(); $('#bio .summary .complete').hide(); return false;">Show less</a></span>
-            {% else %}
-              {{ entity.properties.summary.value }}
-            {% endif %}
-          {% endif %}
-          {% endblock %}
-        </p>
-        <table class="table">
-          {% for property in properties %}
+    </div>
+    <div class="col-md-8">
+      <!-- TODO: summary and/or abstract -->
+
+      <table class="table table-condensed">
+        {% for property in properties %}
+          <tr>
+            <th width="30%">{{property.label}}:</th>
+            <td>{{property.value}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+      
+      {% for section in relation_sections %}
+        <h3>{{ section.schema.meta.section_label or section.schema.meta.plural or section.schema.label }}</h3>
+        <p>{{section.schema.meta.get('section_text', '')}}</p>
+        <table class="table table-condensed">
+          <tr>
+            <th>&nbsp;</th>
+            {% for k, v in section.schema.meta.get('section_table', {}).items() %}
+              <th>{{v}}</th>
+            {% endfor %}
+            <th>Dates</th>
+            <th></th>
+          </tr>
+          {% for relation in section.relations %}
             <tr>
-              <th>{{property.label}}:</th>
-              <td>{{property.value}}</td>
+              <td>
+                {{ entity_link(relation.other) }}
+              </td>
+              {% for k, v in section.schema.meta.get('section_table', {}).items() %}
+                <td>{{ relation.props.get(k) or '-' }}</td>
+              {% endfor %}
+              <td>
+                {{ relation_ts(relation) }}
+              </td>
+              <td>
+                {% if relation | relation_source %}
+                  <a href="{{ relation | relation_source }}"><i class="fa fa-external-link-square"></i></a>
+                {% endif %}
+              </td>
             </tr>
           {% endfor %}
         </table>
-
-        <div id="related-entities" class="text-center">
-          {% block relatedentities %}{% endblock %}
-        </div>
-      </div>
-      {% endblock %}
-
-      {% block sources %}
-      <div id="sources">
-        <h4>Sources</h4>
-        <ol>
-          {% for source, n in source_map.iteritems() %}
-            <li id="source-{{ n }}"><a href="{{ source }}">{{ source |
-              source_readable }}</a></li>
-          {% endfor %}
-        </ol>
-      </div>
-      {% endblock %}
-      {% endblock %}
-    </div>
-    <div class="col-md-8">
-      huhu
+        {{ paginate(section.pager) }}
+      {% endfor %}
     </div>
   </div>
 </div>

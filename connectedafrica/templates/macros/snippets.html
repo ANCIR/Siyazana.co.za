@@ -1,0 +1,28 @@
+{% macro connections(num) %}
+  {% if num == 0 %}
+    no connections
+  {% elif num == 1 %}
+    one connection
+  {% else %}
+    {{num}} connections
+  {% endif %}
+{% endmacro %}
+
+{% macro relation_ts(rel) %}
+  {% if 'date_start' in rel.props %}
+    {{ rel.props.date_start.value.strftime('%b %Y') }}
+    {% if 'date_end' in rel.props %}
+      to {{ rel.props.date_end.value.strftime('%b %Y') }}
+    {% endif %}
+  {% elif 'date_end' in rel.props %}
+    until {{ rel.props.date_end.value.strftime('%b %Y') }}
+  {% else %}
+    unknown
+  {% endif %}
+{% endmacro %}
+
+{% macro entity_link(ent) %}
+  <a href="{{ url_for('profile.view', id=ent.id, slug=ent.properties.name.value | slugify) }}">
+    {{ ent | display_name }}
+  </a>
+{% endmacro %}

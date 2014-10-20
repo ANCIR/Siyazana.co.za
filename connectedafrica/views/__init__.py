@@ -9,7 +9,6 @@ from connectedafrica.views.browser import blueprint as browser_blueprint
 from connectedafrica.views.profile import blueprint as profile_blueprint
 from connectedafrica.views.profile import display_name
 from connectedafrica import util
-from connectedafrica.util.relations import relation_key_prop
 
 
 app.register_blueprint(base_blueprint)
@@ -88,20 +87,11 @@ def make_thumbnail_url(entity):
     }
 
 
-@app.template_filter('relation_tagline')
-def relation_tagline(relation):
-    prop = relation_key_prop(relation)
-    if prop is None:
-        return relation.schema.get('label')
-    return prop.value
-
-
 @app.template_filter('relation_source')
 def relation_source(relation):
-    prop = relation_key_prop(relation)
-    if prop is None:
-        return None
-    return prop.source_url
+    for name, prop in relation.properties.items():
+        if prop.get('source_url') is not None:
+            return prop.get('source_url')
 
 
 @app.template_filter('date')

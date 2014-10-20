@@ -314,6 +314,10 @@
   meta:
     plural: 'Memberships'
     see_also: 'http://popoloproject.com/specs/membership.html'
+    section_label: 'Memberships'
+    section_table:
+      role: 'Role'
+      status: 'Status'
   attributes:
     - name: role
       label: 'Role'
@@ -348,6 +352,9 @@
   obj: relation
   meta:
     plural: 'Board memberships'
+    section_table:
+      role: 'Role'
+      status: 'Status'
   attributes: []
 
 
@@ -404,6 +411,9 @@
   obj: relation
   meta:
     plural: 'Financial interests'
+    section_table:
+      nature: 'Nature'
+      nominal_value: 'Value'
   attributes:
     - name: nature
       label: 'Nature of the interest'

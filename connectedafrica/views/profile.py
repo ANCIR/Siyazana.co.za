@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from flask import Blueprint, render_template, abort, request
 from granoclient import NotFound
-from restpager import Pager
+
 
 from connectedafrica.core import grano, schemata
 from connectedafrica.util.properties import Properties
@@ -47,24 +47,7 @@ def source_map(entity):
 @blueprint.route('/profile/<id>/<slug>')
 def view(id, slug):
     entity = grano.entities.by_id(id)
-
-    relations = []
-    q = grano.relations.query().limit(0)
-    q = q.filter('facet', 'schema').filter('entity', id)
-    schema_types = q.data.get('facets', {}).get('schema', {})
-    for (schema, count) in schema_types.get('results', []):
-        
-        iq = grano.relations.query().limit(50)
-        iq = iq.filter('schema', schema.get('name'))
-        iq = iq.filter('sort', '-degree')
-        data = {
-            'schema': schemata.by_name(schema.get('name')),
-            'count': count,
-            'pager': Pager(iq)
-        }
-        relations.append(data)
-
-    relations = sorted(relations, key=lambda r: r['schema'].label)
+    relation_sections = load_relations(entity, id, slug)
 
     template = 'profile/base.html'
     if entity.schema.name == 'Person':
@@ -76,4 +59,4 @@ def view(id, slug):
                            properties=Properties(entity),
                            display_name=display_name(entity),
                            source_map=source_map(entity),
-                           relations=relations)
+                           relation_sections=relation_sections)

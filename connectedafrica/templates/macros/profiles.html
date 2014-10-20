@@ -1,27 +1,4 @@
-{% macro render_relation(rel) %}
-  <div class="relation {{ rel.schema.name|lower }}">
-    <div class="other">
-      {{ rel | relation_tagline }}:
-      <a href="{{ url_for('profile.view', id=rel.other.id, slug=rel.other.properties.name.value|slugify) }}">
-        {{ rel.other.properties | display_name }}
-      </a>
-    </div>
-    <div class="details">
-      {% if 'date_start' in rel.props %}
-        {{ rel.props.date_start.value.strftime('%b %Y') }}
-        {% if 'date_end' in rel.props %}
-          to {{ rel.props.date_end.value.strftime('%b %Y') }}
-        {% endif %}
-      {% elif 'date_end' in rel.props %}
-        until {{ rel.props.date_end.value.strftime('%b %Y') }}
-      {% else %}
-        Dates unknown
-      {% endif %}
-      | Source: 
-      <a href="{{ rel | relation_source }}">{{ rel | relation_source | source_readable }}</a>
-    </div>
-  </div>
-{% endmacro %}
+
 
 {% macro render_property(entity, key, source_map=None) %}
 {% if key in entity.properties %}

@@ -29,6 +29,9 @@ class Property(object):
             val = datetime.strptime(val, DATETIME_FORMAT)
         return val
 
+    def __unicode__(self):
+        return unicode(self.value)
+
 
 class Properties(object):
 
