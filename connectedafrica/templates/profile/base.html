@@ -65,20 +65,6 @@
       </div>
       {% endblock %}
 
-      <h4>Relationship types</h4>
-      <ul class="list-group">
-        {% for schema_name, count in relations.schemata_counts.items() %}
-          {% set schema = relations.schemata.get(schema_name) %}
-          {% set active = schema.name in relations.schemata_filters %}
-          <li class="list-group-item {% if active %}active{% endif %}">
-          <a {% if not active %}href="{{ query_replace('schema', schema.name) }}"
-             {% else %}href="{{ query_remove('schema', schema.name) }}"{% endif %}>
-             {{ schema.meta.plural or schema.label }}</a>
-             <span class="count badge">{{count}}</span>
-           </li>
-        {% endfor %}
-      </ul>
-
       {% block sources %}
       <div id="sources">
         <h4>Sources</h4>
@@ -92,31 +78,8 @@
       {% endblock %}
       {% endblock %}
     </div>
-
     <div class="col-md-8">
-    {% block centerpanel %}
-      <h4>
-        Relationships
-        <small>
-          <a href="{{ query_replace('grouper', 'time') }}">by time</a>
-          |
-          <a href="{{ query_replace('grouper', 'schema') }}">by type</a>
-        </small>
-      </h4>
-
-      {% block timeline %}
-        <div class="relations">
-          {% for group, items in relations.relations %}
-            <div class="section">
-              <div class="section-heading">{{ group }}</div>
-              {% for item in items %}
-                {{ render_relation(item) }}
-              {% endfor %}
-            </div>
-          {% endfor %}
-        </div>
-      {% endblock %}
-    {% endblock %}
+      huhu
     </div>
   </div>
 </div>

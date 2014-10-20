@@ -12,7 +12,7 @@
         {% if 'summary' in org.properties %}
           {{ org.properties.summary.value | truncate(100) }}
         {% else %}
-          {{org.schema.label}}, {{connections(org)}}
+          {{org.schema.label}}, {{connections(org.degree)}}
         {% endif %}
     </span>
   </div>
