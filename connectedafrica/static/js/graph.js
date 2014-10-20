@@ -65,17 +65,13 @@ $(function() {
         .on('dragstart', function(d) {
             d3.event.sourceEvent.stopPropagation();
         })
-        //.on('click', expandNode)
+        .on('click', clickNode)
         //.on('dblclick', viewNode)
-        //.on('mouseenter', mouseEnter)
-        //.on('mouseleave', mouseLeave)
+        .on('mouseenter', mouseEnter)
+        .on('mouseleave', mouseLeave)
         .call(d3cola.drag);
 
     node.append('svg:circle')
-      //.style('fill', getColor)
-      .attr('tooltip-append-to-body', true)
-      .attr('tooltip-placement', 'top')
-      .attr('tooltip', function(d) { return d.name; })
       .attr('r', getRadius);
 
     var cutoff = (max_r - min_r) * 0.5;
@@ -86,7 +82,38 @@ $(function() {
       .text(function(d) { return d.name.length > 50 ? d.name.slice(0, 50) + '...' : d.name; });
   };
 
+  var clickNode = function(d) {
+    if (!d.isRoot) {
+      document.location.href = '/profile/' + d.id;  
+    }
+  };
+
+  var mouseEnter = function(d) {
+    path.filter(function(p) {
+      return p.source.id == d.id || p.target.id == d.id;
+    }).style('stroke', '#666');
+
+    node.filter(function(dx) { return d.id == dx.id; })
+      .append("text")
+      .attr("x", -12)
+      .attr("dy", ".4em")
+      .text(function(d) { return d.name.length > 50 ? d.name.slice(0, 50) + '...' : d.name; });
+
+  };
+
+  var mouseLeave = function(d) {
+    path.filter(function(p) {
+      return p.source.id == d.id || p.target.id == d.id;
+    }).style('stroke', '#ccc');
+
+    node.filter(function(dx) { return d.id == dx.id; })
+      .select('text')
+      .remove();
+  };
+
+
   d3cola.on('tick', function() {
+
     path.attr("d", function(d) {
       var dx = d.target.x - d.source.x,
           dy = d.target.y - d.source.y,
@@ -100,9 +127,16 @@ $(function() {
     });
 
     node
+      .filter(function(d) {
+        //console.log(d);
+        return !d.fixed;
+      })
       .attr("transform", function(d) {
         d.x = Math.max(d.radius, Math.min(w - d.radius, d.x));
         d.y = Math.max(d.radius, Math.min(h - d.radius, d.y));
+        if (d.isRoot) {
+          d.fixed = true;
+        }
         return "translate(" + d.x + "," + d.y + ")";
       });
   });
@@ -192,9 +226,10 @@ $(function() {
 
       nodes[obj.id] = {
         'id': obj.id,
-        'isRoot': false,
+        'isRoot': obj.id == entityId,
         'schema': obj.schema,
         'degree': obj.degree,
+        'fixed': false,
         'name': obj.properties.name.value
       };
     };
