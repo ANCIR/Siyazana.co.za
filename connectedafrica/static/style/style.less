@@ -300,3 +300,33 @@ li.active a {
 .org-item {
   margin: 1em 0 1em 0;
 }
+
+
+
+#graph-viz {
+  svg {
+    height: 20em;
+    width: 100%;
+  }
+
+  path.link {
+    fill: none;
+    stroke: #ddd;
+    stroke-width: 2px;
+  }
+
+  circle {
+    fill: @theme-color;
+    stroke: #fff;
+    cursor: pointer;
+    stroke-width: 2px;
+  }
+
+  text {
+    fill: #000;
+    font: 12px 'Open Sans', sans-serif;
+    font-weight: bold;
+    pointer-events: none;
+  }
+}
+
