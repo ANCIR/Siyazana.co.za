@@ -1,4 +1,4 @@
-import os, re, sys
+import re, sys
 from datetime import datetime
 import threading
 import urlparse
@@ -9,8 +9,8 @@ import requests
 from thready import threaded
 import unicodecsv as csv
 
-from connectedafrica.scrapers.util import (ScraperException, MultiCSV, DATA_PATH,
-                                           set_to_empty)
+from connectedafrica.scrapers.util import (ScraperException, MultiCSV,
+                                           set_to_empty, gdocs_persons)
 
 
 ENDPOINT_URL = 'http://whoswho.co.za/'
@@ -58,6 +58,12 @@ def get_absolute_url(url):
     return url
 
 
+def first_or_empty(xpath_list):
+    if len(xpath_list) > 0:
+        return xpath_list[0].strip()
+    return ''
+
+
 def parse_content(content):
     # TODO: achievements sections
     data = {
@@ -73,10 +79,10 @@ def parse_content(content):
     if len(basic_el) == 0:
         raise ScraperException("Content doesn't appear to be a person's profile")
     basic_el = basic_el[0]
-    display_name = basic_el.xpath("*[@itemprop='name'][1]/text()")[0].strip()
-    full_name = basic_el.xpath("*[@itemprop='name']/following-sibling::p[1]/em/text()")[0].strip()
-    job_title = basic_el.xpath("*[@itemprop='jobTitle'][1]/text()")[0].strip()
-    bio = basic_el.xpath("*[@id='contact_info']/preceding-sibling::p[1]/text()")[0].strip()
+    display_name = first_or_empty(basic_el.xpath("*[@itemprop='name'][1]/text()"))
+    full_name = first_or_empty(basic_el.xpath("*[@itemprop='name']/following-sibling::p[1]/em/text()"))
+    job_title = first_or_empty(basic_el.xpath("*[@itemprop='jobTitle'][1]/text()"))
+    bio = first_or_empty(basic_el.xpath("*[@id='contact_info']/preceding-sibling::p[1]/text()"))
     data['basic_info'] = {
         'display_name': display_name,
         'full_name': full_name,
@@ -127,7 +133,7 @@ def parse_content(content):
                                 .split('|')
                               if s.strip() != '']
                 role_data = {
-                    'role_name': role_parts[0],
+                    'role_name': first_or_empty(role_parts),
                     'status': 'active' if current else 'inactive'
                 }
                 # get start and end year
@@ -318,8 +324,11 @@ class NetworkScraper(object):
         self.lock = threading.Condition()
         self.out_lock = threading.Lock()
 
-    def scrape(self, search_term, degrees=0):
-        start_url = lookup(search_term)
+    def scrape(self, search_term=None, start_url=None, degrees=0):
+        if not (search_term or start_url):
+            raise ValueError("Either search_term or start_url argument "
+                             "is required.")
+        start_url = start_url or lookup(search_term)
         shared_state = {'processed_urls': 0}
 
         if start_url in self.url_scraped:
@@ -370,8 +379,12 @@ class NetworkScraper(object):
         def thread_func(url):
             with self.out_lock:
                 sys.stderr.write('Scraping %s\n' % url)
-            data = get_data(url)
-            produce_urls(url, [d['url'] for d in data['related_profiles']])
+            try:
+                data = get_data(url)
+                produce_urls(url, [d['url'] for d in data['related_profiles']])
+            except:
+                produce_urls(url, [])
+                raise
             if self.csv is not None:
                 write_to_csv(self.csv, data)
             else:
@@ -382,14 +395,18 @@ class NetworkScraper(object):
 
 
 if __name__ == '__main__':
-    with open(os.path.join(DATA_PATH, 'persons.csv')) as f:
-        reader = csv.reader(f)
-        row = next(reader)
-        name_index = row.index('Full Name')
-        scraper = NetworkScraper(csv=MultiCSV(), thread_count=5)
-        for row in csv.reader(f):
-            name = row[name_index]
-            try:
-                scraper.scrape(name, degrees=1)
-            except ProfileNotFound as e:
-                sys.stderr.write("%s\n" % str(e))
+    scraper = NetworkScraper(csv=MultiCSV(), thread_count=5)
+    degrees = 0
+    try:
+        degrees = int(sys.argv[1])
+    except (IndexError, ValueError):
+        pass
+    for data in gdocs_persons():
+        try:
+            scraper.scrape(
+                search_term=data['Full Name'],
+                start_url=data['WhosWho'],
+                degrees=degrees
+            )
+        except ProfileNotFound as e:
+            sys.stderr.write("%s\n" % str(e))

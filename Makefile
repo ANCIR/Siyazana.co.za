@@ -51,7 +51,7 @@ loadgdocs:
 	@sed -n "/Family,Family >/p" data/connections.csv >> data/familyconnections.csv
 	@granoloader csv -t 5 -f data/personalconnections.csv.yaml data/personalconnections.csv
 	@granoloader csv -t 5 -f data/familyconnections.csv.yaml data/familyconnections.csv
-	# TODO: also split up financial, geographic, affiliation, event connections
+	# TODO: also split up financial, affiliation, event connections
 
 cleangdocs:
-	rm data/litigation.csv data/persons.csv
+	rm data/litigation.csv data/persons.csv data/*connections.csv
