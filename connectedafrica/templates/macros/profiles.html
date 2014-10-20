@@ -3,7 +3,7 @@
     <div class="other">
       {{ rel | relation_tagline }}:
       <a href="{{ url_for('profile.view', id=rel.other.id, slug=rel.other.properties.name.value|slugify) }}">
-        {{ rel.other.properties|display_name }}
+        {{ rel.other.properties | display_name }}
       </a>
     </div>
     <div class="details">
