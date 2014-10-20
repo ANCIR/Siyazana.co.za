@@ -3,7 +3,7 @@ from urlparse import urlparse
 
 from granoclient import Entity
 
-from connectedafrica.core import app
+from connectedafrica.core import app, grano
 from connectedafrica.views.base import blueprint as base_blueprint
 from connectedafrica.views.browser import blueprint as browser_blueprint
 from connectedafrica.views.profile import blueprint as profile_blueprint
@@ -20,6 +20,7 @@ app.register_blueprint(profile_blueprint)
 def inject_globals():
     return {
         'APP_NAME': app.config.get('APP_NAME'),
+        'PROJECT_API': grano.api_url,
         'query_add': util.query_add,
         'query_replace': util.query_replace,
         'query_remove': util.query_remove

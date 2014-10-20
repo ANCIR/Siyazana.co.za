@@ -11,6 +11,7 @@ def load_relations(entity, id, slug):
     schema_types = q.data.get('facets', {}).get('schema', {})
     for (schema, count) in schema_types.get('results', []):
         iq = grano.relations.query().limit(15)
+        iq = iq.filter('entity', id)
         iq = iq.filter('schema', schema.get('name'))
         pager = Pager(iq, name=schema.get('name'), id=id, slug=slug)
         relations = []
