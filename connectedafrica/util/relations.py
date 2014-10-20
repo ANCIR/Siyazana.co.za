@@ -77,7 +77,7 @@ def load_relations(entity, grouper, schemata_filters):
     # TODO: make grano return a sorted list that obeys limit and offset
     query_filters = {}
     if len(schemata_filters):
-        query_filters['schema'] = ','.join(schemata_filters)
+        query_filters['schema'] = schemata_filters
     schemata_all = schemata.by_obj('relation')
     schemata_counts = load_entity_relations_schemata(entity, query_filters)
 
