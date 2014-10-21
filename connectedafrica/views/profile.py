@@ -52,17 +52,11 @@ def fwd_view(id):
 
 
 @blueprint.route('/profile/<id>/<slug>')
-@cache.cached()
+#@cache.cached()  # fucking pagination
 def view(id, slug):
     entity = grano.entities.by_id(id)
     relation_sections = load_relations(entity, id, slug)
-
-    template = 'profile/base.html'
-    if entity.schema.name == 'Person':
-        template = 'profile/person.html'
-    elif entity.schema.name == 'Organization':
-        template = 'profile/organization.html'
-    return render_template(template,
+    return render_template('profile.html',
                            entity=entity,
                            properties=Properties(entity),
                            display_name=display_name(entity),

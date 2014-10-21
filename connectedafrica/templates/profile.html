@@ -23,7 +23,14 @@
     {% for property in properties %}
       <tr>
         <th width="25%">{{property.label}}:</th>
-        <td>{{property.value}}</td>
+        <td class="property-value">
+          {{property.value}}
+          {% if property.source_url %}
+            <a href="{{ property.source_url }}" class="source-ref"
+              title="Source: {{ property.source_url | source_readable }}"
+              data-toggle="tooltip" data-placement="right"><i class="fa fa-external-link-square"></i></a>
+          {% endif %}
+        </td>
       </tr>
     {% endfor %}
   </table>
@@ -82,7 +89,9 @@
           </td>
           <td width="1%">
             {% if relation | relation_source %}
-              <a href="{{ relation | relation_source }}"><i class="fa fa-external-link-square"></i></a>
+              <a href="{{ relation | relation_source }}" class="source-ref"
+                title="Source: {{ relation | relation_source | source_readable }}"
+                data-toggle="tooltip" data-placement="left"><i class="fa fa-external-link-square"></i></a>
             {% endif %}
           </td>
         </tr>

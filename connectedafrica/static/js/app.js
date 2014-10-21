@@ -1,0 +1,3 @@
+$(function() {
+  $('.source-ref').tooltip();
+});

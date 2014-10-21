@@ -227,6 +227,10 @@ footer {
     right: 0em;
     bottom: 1em;
   }
+
+  .container {
+    min-height: @banner-height * 0.7;
+  }  
 }
 
 .home-teaser {
@@ -294,6 +298,16 @@ table.table.table-properties {
 
   th {
     padding-left: 0;
+  }
+
+  td.property-value {
+    .source-ref {
+      display: none;
+    }
+
+    &:hover .source-ref {
+      display: inline-block;
+    }
   }
 }
 
