@@ -6,14 +6,17 @@
 
 {% block content %}
       <h3>Search
+        {% if main_schema %}
+          {{ main_schema.meta.plural or main_schema.label }}
+        {% endif %}
         {% if query_text %}
           for '{{ query_text }}'
         {% else %}
-          {{APP_NAME}}
+          in {{APP_NAME}}
         {% endif %}
       </h3>
 
-      <table class="search-results table">
+      <table class="table table-search">
         {% for result in pager %}
           <tr>
             <td>

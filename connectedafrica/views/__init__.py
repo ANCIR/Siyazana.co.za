@@ -1,7 +1,7 @@
 from datetime import datetime, date
 from urlparse import urlparse
 
-from flask import request
+from flask import request, url_for
 from granoclient import Entity
 
 from connectedafrica.core import app, grano
@@ -10,6 +10,7 @@ from connectedafrica.views.browser import blueprint as browser_blueprint
 from connectedafrica.views.profile import blueprint as profile_blueprint
 from connectedafrica.views.profile import display_name
 from connectedafrica import util
+from connectedafrica.util.entities import schema_facets
 
 
 app.register_blueprint(base_blueprint)
@@ -20,10 +21,18 @@ app.register_blueprint(profile_blueprint)
 @app.context_processor
 def inject_globals():
     query_text = request.args.get('q', '')
+    sidebar_schemata = []
+    
+    for (schema, count) in schema_facets(q=query_text):
+        active = schema.name in request.args.getlist('schema')
+        url = url_for('browser.view', q=query_text, schema=schema.name)
+        sidebar_schemata.append((schema, url, active, count))
+
     return {
         'APP_NAME': app.config.get('APP_NAME'),
         'PROJECT_API': grano.api_url,
         'query_text': query_text,
+        'sidebar_schemata': sidebar_schemata,
         'query_add': util.query_add,
         'query_replace': util.query_replace,
         'query_remove': util.query_remove
