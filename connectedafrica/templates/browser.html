@@ -5,46 +5,35 @@
 {% block title %}Explore{% endblock %}
 
 {% block content %}
-  <div class="row">
-    <div class="col-xs-12">
       <h3>Search
-        {% if query %}
-          for '{{ query }}'
+        {% if query_text %}
+          for '{{ query_text }}'
         {% else %}
           {{APP_NAME}}
         {% endif %}
       </h3>
-      <form class="form-search" role="form">
-        <div class="form-group col-xs-12">
-          <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-search"></i></span>
-            <input type="text" class="form-control main-search" name="q"
-              value="{{query}}"
-              placeholder="Search for people, companies and institutions...">
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-8">
+
       <table class="search-results table">
         {% for result in pager %}
           <tr>
-             <td>
-               <a href="{{url_for('profile.view', id=result.id, slug=result.properties.name.value|slugify)}}">
+            <td>
+              <a href="{{url_for('profile.view', id=result.id, slug=result.properties.name.value|slugify)}}">
                 {{result.properties.name.value}}</a>
-               <span class="snippet">
-                  {{ result | snippet | truncate(60) }},
-                  {{connections(result.degree)}}
-               </span>
+            </td>
+            <td>
+              {{ result | snippet | truncate(60) }}
+            </td>
+            <td>
+              {{connections(result.degree)}}
              </td>
           </tr>
         {% endfor %}
       </table>
-    </div>
 
-    <div class="col-md-4 facets">
+      {{ paginate(pager) }}
+    
+
+    <!--div class="col-md-4 facets">
       <ul class="list-group">
         {% for schema, count in schema_facet.results %}
           <li class="list-group-item {{'active' if schema.name in schema_facet.active else ''}}">
@@ -62,7 +51,6 @@
         {% endfor %}
       </ul>
     </div>
-  </div>
+  </div-->
 
-  {{ paginate(pager) }}
 {% endblock %}

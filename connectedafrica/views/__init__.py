@@ -1,6 +1,7 @@
 from datetime import datetime, date
 from urlparse import urlparse
 
+from flask import request
 from granoclient import Entity
 
 from connectedafrica.core import app, grano
@@ -18,9 +19,11 @@ app.register_blueprint(profile_blueprint)
 
 @app.context_processor
 def inject_globals():
+    query_text = request.args.get('q', '')
     return {
         'APP_NAME': app.config.get('APP_NAME'),
         'PROJECT_API': grano.api_url,
+        'query_text': query_text,
         'query_add': util.query_add,
         'query_replace': util.query_replace,
         'query_remove': util.query_remove

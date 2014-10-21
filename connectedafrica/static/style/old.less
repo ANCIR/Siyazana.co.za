@@ -1,0 +1,354 @@
+// Core variables and mixins
+@import "../vendor/bootstrap/less/variables.less";
+@import "../vendor/bootstrap/less/mixins.less";
+
+// Variables
+
+@theme-color: #1ad68f;
+@light-text-color: @gray-light;
+@border-color: #ddd;
+
+// Functional
+
+@footer-bg: @body-bg;
+@footer-fg: @gray-dark;
+@header-bg: @body-bg;
+@header-fg: @theme-color;
+
+// Bootstrap overrides
+@brand-primary: @theme-color;
+@nav-tabs-border-color: @border-color;
+@table-border-color: @border-color;
+
+@import "bootstrap.less";
+
+// Mixins
+.grayscale-image {
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+
+.cover-background {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+// Base layout 
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.5em;
+  color: @text-color;
+
+  background: url(/static/images/pics/soweto.png) no-repeat center center fixed; 
+  .cover-background();
+}
+
+.container-fluid {
+  background-color: @body-bg;
+  //max-width: 1000px;
+  padding: 2em;
+  margin: 5% 10% 0 10%;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 800;
+  text-transform: uppercase;
+
+  a {
+    text-decoration: none;
+  }
+}
+
+a, a:hover {
+  color: @text-color;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: darken(@theme-color, 10%);
+}
+
+.simple-links {
+  a {
+    text-decoration: none;
+  }
+}
+
+h3.teaser, .nav-tabs, .navbar, .list-group {
+  .simple-links;
+}
+
+// Responsive fixes. 
+
+@media (max-width: @screen-xs-max) {
+  footer {
+    .partners {
+      display: none;
+    }
+  }
+
+}
+
+@media (max-width: @screen-sm-max) {
+  .navbar-search {
+    display: none;
+  }
+
+  .container-fluid {
+    margin: 5% 0 0 0;
+    padding: 10px;
+  }
+}
+
+
+// Header style
+
+.navbar.navbar-default {
+  background-color: @header-bg;
+  border-bottom: 0px solid @gray-light;
+  color: @gray-light;
+
+  .navbar-brand {
+    color: @theme-color;
+    font-weight: 800;
+    padding-left: 0px;
+  }
+}
+
+
+// Footer style
+
+footer {
+  margin-bottom: -1em;
+  color: @footer-fg;
+
+  .simple-links;
+
+  a {
+    color: @theme-color;
+  }
+
+  hr {
+    border-top: 1px solid @border-color;
+  }
+
+  p {
+    font-size: 0.85em;
+  }
+
+  .partners {
+    text-align: right;
+
+    a, a:hover {
+      text-decoration: none;
+    }
+
+    img {
+      margin-left: 1em;
+    }
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+}
+
+
+// Modifications of bootstrap defaults
+
+ul.pagination { margin: 0; }
+
+li.active a {
+  color: white;
+}
+
+.navbar-toggle {
+  border: 0;
+}
+
+// Browser 
+
+.main-search {
+  width: 100%;
+}
+
+.form-search {
+  .form-group {
+    margin: 1em 0 1em 0;
+    padding-left: 0;
+    padding-right: 0;
+
+    input.main-search {
+      font-size: 1.2em;
+      padding: 12px 24px 12px 24px;
+      height: auto;
+    }
+  }
+}
+
+.search-results {
+  .snippet {
+    color: @light-text-color;
+  }
+
+  a {
+    text-decoration: none;
+    font-weight: 800;
+  }
+}
+
+// Facets 
+
+.facets {
+  li.active {
+    a {
+      color: @body-bg;
+    }
+  }
+}
+
+
+// Home page specifics
+
+.jumbotron {
+  background-color: @theme-color;
+  color: @body-bg;
+
+  h1 {
+    text-transform: none;
+  }
+}
+
+.data-summary {
+  width: 100%;
+
+  td {
+    padding-bottom: 0.3em;
+  }
+
+  td.number {
+    width: 30%;
+    text-align: right;
+    padding-right: 1em;
+  }
+}
+
+.teaser-image {
+  margin-right: 1em;
+  width: 150px;
+
+  .grayscale-image;
+}
+
+
+// Profiles
+
+.profile {
+
+  .header {
+    margin-bottom: 1em;
+  }
+
+
+  img.profile-image {
+    margin-bottom: 0;
+    height: 10em;
+    margin-right: 2em;
+    //.grayscale-image;
+    border-radius: 50%;
+  }
+
+  #sources {
+    font-size: small;
+
+    ol {
+      padding-left: 2em;
+    }
+  }
+}
+
+// Relation listings
+
+.relations {
+  .section {
+    margin: 0 0 1em 0;
+
+    .section-heading {
+      color: @theme-color;
+      font-size: 1.2em;
+      font-weight: 800;
+      padding: 0em 0 0.5em 0;
+    }
+  }
+
+  .relation {
+    border-bottom: 1px solid @border-color;
+    background-color: lighten(@border-color, 20%);
+    margin: 0 0 0.5em 0;
+    padding: 0 0 0.5em 0;
+
+    a {
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .details {
+      text-align: right;
+      font-size: 0.8em;
+      color: @gray-light;
+
+      a {
+        font-weight: normal;
+        color: @gray-light;
+      }
+
+      a:hover {
+        color: darken(@theme-color, 10%);
+      }
+    }
+
+    .other {
+      padding: 0 0 0.2em 0;
+    }
+  }
+}
+
+// Organisations page 
+
+.org-item {
+  margin: 1em 0 1em 0;
+}
+
+
+
+#graph-viz {
+  svg {
+    height: 20em;
+    width: 100%;
+  }
+
+  path.link {
+    fill: none;
+    stroke: #ddd;
+    stroke-width: 2px;
+  }
+
+  circle {
+    fill: @theme-color;
+    stroke: #fff;
+    cursor: pointer;
+    stroke-width: 2px;
+  }
+
+  text {
+    fill: #000;
+    font: 12px 'Open Sans', sans-serif;
+    font-weight: bold;
+    pointer-events: none;
+  }
+}
+

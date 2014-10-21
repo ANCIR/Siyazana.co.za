@@ -7,10 +7,10 @@
           {{APP_NAME}}
         </a>
       </div>
-      <form class="navbar-form" role="search">
+      <form class="navbar-form" role="search" action="{{url_for('browser.view')}}">
         <div class="input-group">
           <span class="input-group-addon"><i class="fa fa-search"></i></span>
-          <input type="text" class="form-control" placeholder="Search for politicians and companies in South Africa">
+          <input type="text" name="q" value="{{query_text}}" class="form-control" placeholder="Search for politicians and companies in South Africa">
         </div>
       </form>
     </nav>

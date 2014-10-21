@@ -7,7 +7,7 @@ from connectedafrica.core import grano, schemata
 blueprint = Blueprint('browser', __name__)
 
 
-@blueprint.route('/browse')
+@blueprint.route('/search')
 def view():
         query = grano.entities.query()
         query = query.filter('q', request.args.get('q', ''))
@@ -28,8 +28,7 @@ def view():
         }
         return render_template('browser.html',
                                schema_facet=schema_facet,
-                               pager=pager,
-                               query=request.args.get('q', ''))
+                               pager=pager)
 
 
 @blueprint.route('/organizations')
