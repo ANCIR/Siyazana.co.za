@@ -13,35 +13,44 @@
   {% endif %}
 {% endblock %}
 
-{% block content %}      
-  {% if properties.image_full %}
-    <div class="pull-left">
-      <img src="{{ entity | portrait_url }}" class="profile-image" alt="{{ display_name }}">
-    </div>
-  {% endif %}
+{% macro context_block() %}
   <h1>
     {% block displayname %}{{ display_name }}{% endblock %}
   </h1>
-  <p class="subtitle">
-    <!-- TODO: summary and/or abstract -->
-    {% block subtitle %}{{ render_property(entity, 'tagline', source_map) }}{% endblock %}
-  </p>
+  <!-- TODO: summary and/or abstract -->
 
-  <div id="graph-viz" style="height: 300px;" data-entity-id="{{entity.id}}" data-api-endpoint="{{PROJECT_API}}"></div>
-
-  <table class="table table-condensed">
+  <table class="table table-condensed table-properties">
     {% for property in properties %}
       <tr>
-        <th width="30%">{{property.label}}:</th>
+        <th width="25%">{{property.label}}:</th>
         <td>{{property.value}}</td>
       </tr>
     {% endfor %}
   </table>
-  
+{% endmacro %}
+
+{% block content %}    
+  <!-- div id="graph-viz" style="height: 300px;" data-entity-id="{{entity.id}}" data-api-endpoint="{{PROJECT_API}}"></div -->
+
+  {% if properties.image_full %}
+    <div class="row">
+    <div class="col-sm-3 col-sm-push-9">
+        <img src="{{ entity | portrait_url }}" class="profile-image" alt="{{ display_name }}">
+      </div>
+      <div class="col-sm-9 col-sm-pull-3">
+        {{ context_block() }}
+      </div>
+      
+    </div>
+  {% else %}
+    {{ context_block() }}
+  {% endif %}
+
+
   {% for section in relation_sections %}
-    <h3>{{ section.schema.meta.section_label or section.schema.meta.plural or section.schema.label }}</h3>
+    <h3 class="section-title">{{ section.schema.meta.section_label or section.schema.meta.plural or section.schema.label }}</h3>
     <p>{{section.schema.meta.get('section_text', '')}}</p>
-    <table class="table table-condensed">
+    <table class="table table-condensed table-relations">
       <tr>
         <th>&nbsp;</th>
         {% for k, v in section.schema.meta.get('section_table', {}).items() %}

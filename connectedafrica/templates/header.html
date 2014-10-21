@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <nav class="navbar navbar-default navbar-static-top" role="navigation">
-      <div class="navbar-header col-md-3">
+      <div class="navbar-header col-sm-3">
         <a class="navbar-brand" href="{{url_for('base.index')}}">
           <img src="{{ url_for('static', filename='images/logo.svg') }}">
           {{APP_NAME}}
@@ -10,7 +10,8 @@
       <form class="navbar-form" role="search" action="{{url_for('browser.view')}}">
         <div class="input-group">
           <span class="input-group-addon"><i class="fa fa-search"></i></span>
-          <input type="text" name="q" value="{{query_text}}" class="form-control" placeholder="Search for politicians and companies in South Africa">
+          <input type="text" name="q" value="{{query_text}}"
+            class="form-control" placeholder="Search for politicians and companies in South Africa">
         </div>
       </form>
     </nav>
