@@ -7,7 +7,6 @@ from lxml import html
 import networkx as nx
 import requests
 from thready import threaded
-import unicodecsv as csv
 
 from connectedafrica.scrapers.util import (ScraperException, MultiCSV,
                                            set_to_empty, gdocs_persons)
@@ -309,104 +308,158 @@ def write_to_csv(csv, data):
         csv.write('whoswho_qualifications.csv', out_data)
 
 
-class NetworkScraper(object):
+def produce_urls(shared_obj, source_url, new_urls=None):
+    with shared_obj.lock:
+        if new_urls is None:
+            shared_obj.add_primary_node(source_url)
+        else:
+            for new_url in new_urls:
+                shared_obj.add_edge(source_url, new_url)
+        shared_obj.processed_urls += 1
+        shared_obj.lock.notify()
+
+
+def consume_urls(shared_obj):
+    generated_urls = 0
+    while True:
+        with shared_obj.lock:
+            if len(shared_obj.url_to_scrape) == 0:
+                shared_obj.lock.wait()
+            if len(shared_obj.url_to_scrape) == 0:
+                if shared_obj.primary_producers_done and \
+                        generated_urls == shared_obj.processed_urls:
+                    raise StopIteration
+            else:
+                url = shared_obj.url_to_scrape.pop()
+                generated_urls += 1
+                yield url
+
+
+def thread_func(shared_obj, url):
+    with shared_obj.out_lock:
+        sys.stderr.write('Scraping %s\n' % url)
+    try:
+        data = get_data(url)
+        shared_obj.produce_urls(url, [d['url'] for d in data['related_profiles']])
+    except:
+        shared_obj.produce_urls(url, [])
+        raise
+    if shared_obj.csv is not None:
+        write_to_csv(shared_obj.csv, data)
+    else:
+        with shared_obj.out_lock:
+            shared_obj.out.write('%r\n' % data)
+
+
+class NetworkScraper(threading.Thread):
     '''
     This scraper scrapes related URLs and keeps track of their connectivity.
     Multiple scrape calls won't re-scrape a URL.
     '''
 
-    def __init__(self, csv=None, out=sys.stdout, thread_count=5):
+    def __init__(self, csv=None, out=sys.stdout, thread_count=5, degrees=0):
+        super(NetworkScraper, self).__init__()
+
         self.url_graph = nx.DiGraph()
-        self.url_scraped = set()
+        self.url_to_scrape = set()
         self.thread_count = thread_count
         self.csv = csv
         self.out = out
         self.lock = threading.Condition()
         self.out_lock = threading.Lock()
+        self.primary_producers_done = False
+        self.processed_urls = 0
+        self.degrees = degrees
 
-    def scrape(self, search_term=None, start_url=None, degrees=0):
+        def with_shared_obj(shared_obj, func):
+            def inner(*args, **kwargs):
+                return func(shared_obj, *args, **kwargs)
+            return inner
+        self.consume_urls = with_shared_obj(self, consume_urls)
+        self.produce_urls = with_shared_obj(self, produce_urls)
+        self.thread_func = with_shared_obj(self, thread_func)
+
+    def scrape(self, search_term=None, start_url=None):
         if not (search_term or start_url):
             raise ValueError("Either search_term or start_url argument "
                              "is required.")
         start_url = start_url or lookup(search_term)
-        shared_state = {'processed_urls': 0}
+        self.produce_urls(start_url)
 
-        if start_url in self.url_scraped:
-            # we have scraped the current url, but we still need to
-            # scrape all its descendants with degree <= degrees
-            url_to_scrape = set()
-            nodes = [(start_url, 0)]
-            while len(nodes) > 0:
-                url, degree = nodes.pop(0)
-                if degree <= degrees and url not in self.url_scraped:
-                    url_to_scrape.add(url)
-                elif degree < degrees:
-                    child_urls = self.url_graph[url].keys()
-                    nodes.extend([(u, degree + 1) for u in child_urls])
+    def finish(self):
+        self.primary_producers_done = True
+        self.join()
+
+    def run(self):
+        threaded(self.consume_urls(), self.thread_func,
+                 num_threads=self.thread_count)
+
+    def add_primary_node(self, url):
+        '''
+        Adds a primary node (i.e. starting node). If the distance
+        to url was > degrees, adds url to url_to_scrape.
+        '''
+        if url not in self.url_graph:
+            self.url_graph.add_node(url, min_distance=0)
+            self.url_to_scrape.add(url)
+            return
+
+        min_distance = self.url_graph.node[url]['min_distance']
+        # don't bother going further if we have not found a shorter path
+        if 0 == min_distance:
+            return
+
+        self.url_graph.node[url]['min_distance'] = 0
+        # if url used to be outside range
+        if min_distance > self.degrees:
+            self.url_to_scrape.add(url)
+        # if url's children are within range and used to be outside range
+        if 0 < self.degrees and min_distance + 1 > self.degrees:
+            for child_url in self.url_graph[url].keys():
+                self.add_edge(url, child_url)
+
+
+    def add_edge(self, src_url, dest_url):
+        '''
+        Adds an edge from src_url to dest_url. If the new minimum
+        distance to dest_url is <= degrees, adds dest_url to
+        url_to_scrape.
+        '''
+        this_distance = self.url_graph.node[src_url]['min_distance'] + 1
+        if dest_url in self.url_graph:
+            min_distance = self.url_graph.node[dest_url]['min_distance']
         else:
-            self.url_graph.add_node(start_url)
-            url_to_scrape = set([start_url])
+            min_distance = float('inf')
 
-        def produce_urls(source_url, new_urls):
-            with self.lock:
-                self.url_graph.add_edges_from([(source_url, u) for u in new_urls])
-                for url in new_urls:
-                    if (url not in self.url_scraped and
-                            url not in url_to_scrape and
-                            len(nx.shortest_path(self.url_graph, start_url, url))
-                            <= degrees + 1):
-                        url_to_scrape.add(url)
-                shared_state['processed_urls'] += 1
-                self.lock.notify()
+        # don't bother going further if we have not found a shorter path
+        if this_distance >= min_distance:
+            return
 
-        def consume_urls():
-            generated_urls = 0
-            if len(url_to_scrape) == 0:
-                return
-            while True:
-                with self.lock:
-                    if len(url_to_scrape) == 0:
-                        self.lock.wait()
-                    if len(url_to_scrape) == 0:
-                        if generated_urls == shared_state['processed_urls']:
-                            raise StopIteration
-                    else:
-                        url = url_to_scrape.pop()
-                        self.url_scraped.add(url)
-                        generated_urls += 1
-                        yield url
-
-        def thread_func(url):
-            with self.out_lock:
-                sys.stderr.write('Scraping %s\n' % url)
-            try:
-                data = get_data(url)
-                produce_urls(url, [d['url'] for d in data['related_profiles']])
-            except:
-                produce_urls(url, [])
-                raise
-            if self.csv is not None:
-                write_to_csv(self.csv, data)
-            else:
-                with self.out_lock:
-                    self.out.write('%r\n' % data)
-
-        threaded(consume_urls(), thread_func, num_threads=self.thread_count)
+        self.url_graph.add_edge(src_url, dest_url)
+        self.url_graph.node[dest_url]['min_distance'] = this_distance
+        # if dest_url is within range and it used to be outside range
+        if this_distance <= self.degrees and min_distance > self.degrees:
+            self.url_to_scrape.add(dest_url)
+        # if dest_url's children are within range and used to be outside range
+        if this_distance < self.degrees and min_distance + 1 > self.degrees:
+            for child_url in self.url_graph[dest_url].keys():
+                self.add_edge(dest_url, child_url)
 
 
 if __name__ == '__main__':
-    scraper = NetworkScraper(csv=MultiCSV(), thread_count=5)
     degrees = 0
     try:
         degrees = int(sys.argv[1])
     except (IndexError, ValueError):
         pass
+    scraper = NetworkScraper(csv=MultiCSV(), thread_count=4, degrees=degrees)
+    scraper.start()
     for data in gdocs_persons():
         try:
             scraper.scrape(
                 search_term=data['Full Name'],
                 start_url=data['WhosWho'],
-                degrees=degrees
             )
-        except ProfileNotFound as e:
+        except Exception as e:
             sys.stderr.write("%s\n" % str(e))
+    scraper.finish()
