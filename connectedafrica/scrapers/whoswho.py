@@ -315,7 +315,7 @@ def produce_urls(shared_obj, source_url, new_urls=None):
         else:
             for new_url in new_urls:
                 shared_obj.add_edge(source_url, new_url)
-        shared_obj.processed_urls += 1
+            shared_obj.processed_urls += 1
         shared_obj.lock.notify()
 
 
@@ -383,16 +383,23 @@ class NetworkScraper(threading.Thread):
         if not (search_term or start_url):
             raise ValueError("Either search_term or start_url argument "
                              "is required.")
-        start_url = start_url or lookup(search_term)
+        if not start_url:
+            start_url = lookup(search_term)
+        else:
+            start_url = urlparse.urlsplit(start_url).path
         self.produce_urls(start_url)
 
     def finish(self):
         self.primary_producers_done = True
+        with self.lock:
+            self.lock.notify()
         self.join()
 
     def run(self):
+        # infinite queue to prevent deadlock when generator can't yield
         threaded(self.consume_urls(), self.thread_func,
-                 num_threads=self.thread_count)
+                 num_threads=self.thread_count,
+                 max_queue=0)
 
     def add_primary_node(self, url):
         '''
@@ -452,7 +459,7 @@ if __name__ == '__main__':
         degrees = int(sys.argv[1])
     except (IndexError, ValueError):
         pass
-    scraper = NetworkScraper(csv=MultiCSV(), thread_count=4, degrees=degrees)
+    scraper = NetworkScraper(csv=MultiCSV(), thread_count=5, degrees=degrees)
     scraper.start()
     for data in gdocs_persons():
         try:
