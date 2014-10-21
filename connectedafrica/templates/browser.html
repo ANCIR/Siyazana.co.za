@@ -23,7 +23,7 @@
             <td>
               {{ result | snippet | truncate(60) }}
             </td>
-            <td>
+            <td class="num">
               {{connections(result.degree)}}
              </td>
           </tr>
@@ -31,26 +31,4 @@
       </table>
 
       {{ paginate(pager) }}
-    
-
-    <!--div class="col-md-4 facets">
-      <ul class="list-group">
-        {% for schema, count in schema_facet.results %}
-          <li class="list-group-item {{'active' if schema.name in schema_facet.active else ''}}">
-            {% if schema.name in schema_facet.active %}
-              <a class="facet-active" href="{{query_remove('schema', schema.name)}}">
-                {{schema.meta.plural or schema.label}}
-              </a>
-            {% else %}
-              <a href="{{query_add('schema', schema.name)}}">
-                {{schema.meta.plural or schema.label}}
-              </a>
-            {% endif %}
-            <span class="count badge">{{count}}</span>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  </div-->
-
 {% endblock %}
