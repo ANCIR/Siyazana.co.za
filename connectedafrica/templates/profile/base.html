@@ -29,9 +29,20 @@
   </table>
 {% endmacro %}
 
-{% block content %}    
-  <!-- div id="graph-viz" style="height: 300px;" data-entity-id="{{entity.id}}" data-api-endpoint="{{PROJECT_API}}"></div -->
+{% block banner %}
+  {% if entity.degree < 200 %}
+  <div class="profile-banner">
+    <div class="image-box">&nbsp;</div>
+    <div class="graph-box">
+      <div class="container">
+        <div id="graph-viz" data-entity-id="{{entity.id}}" data-api-endpoint="{{PROJECT_API}}"></div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}
 
+{% block content %}    
   {% if properties.image_full %}
     <div class="row">
     <div class="col-sm-3 col-sm-push-9">

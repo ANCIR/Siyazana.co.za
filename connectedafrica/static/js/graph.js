@@ -26,17 +26,23 @@ $(function() {
     w = $(element).width();
     h = $(element).height();
     $(element).find('svg').height(h).width(w);
-    max_r = w * (1/30);
+    max_r = h * (1/10);
     min_r = 0.3 * max_r;
 
-    d3cola.linkDistance(max_r * 2)
-        //.symmetricDiffLinkLengths(max_r * 4)
-        //.avoidOverlaps(true)
+    var graph = updateGraph(),
+        scale = radiusScale(),
+        linkLenScale = d3.scale.linear()
+          .range([min_r * 3, max_r * 3]);
+
+    d3cola
+        .linkDistance(function(d) {
+          var sd = graph.nodes[d.source].degree,
+              td = graph.nodes[d.target].degree,
+              len = Math.max(sd, td) / scale.domain()[1];
+          return linkLenScale(len);
+        })
         .size([w, h]);
 
-
-    var graph = updateGraph();
-        scale = radiusScale();
 
     var getRadius = function(d) {
       d.radius = scale(d.degree || 0);
@@ -74,10 +80,10 @@ $(function() {
     node.append('svg:circle')
       .attr('r', getRadius);
 
-    var cutoff = (max_r - min_r) * 0.5;
+    var cutoff = (max_r - min_r) * 0.7;
     node.filter(function(d) { return d.radius > cutoff; })
       .append("text")
-      .attr("x", -12)
+      .attr("x", 10)
       .attr("dy", ".4em")
       .text(function(d) { return d.name.length > 50 ? d.name.slice(0, 50) + '...' : d.name; });
   };
@@ -91,11 +97,11 @@ $(function() {
   var mouseEnter = function(d) {
     path.filter(function(p) {
       return p.source.id == d.id || p.target.id == d.id;
-    }).style('stroke', '#666');
+    }).attr('class', 'link selected');
 
     node.filter(function(dx) { return d.id == dx.id; })
       .append("text")
-      .attr("x", -12)
+      .attr("x", 10)
       .attr("dy", ".4em")
       .text(function(d) { return d.name.length > 50 ? d.name.slice(0, 50) + '...' : d.name; });
 
@@ -104,7 +110,7 @@ $(function() {
   var mouseLeave = function(d) {
     path.filter(function(p) {
       return p.source.id == d.id || p.target.id == d.id;
-    }).style('stroke', '#ccc');
+    }).attr('class', 'link');
 
     node.filter(function(dx) { return d.id == dx.id; })
       .select('text')
@@ -127,16 +133,16 @@ $(function() {
     });
 
     node
-      .filter(function(d) {
-        //console.log(d);
-        return !d.fixed;
-      })
+      //.filter(function(d) {
+      //  //console.log(d);
+      //  return !d.fixed;
+      //})
       .attr("transform", function(d) {
-        d.x = Math.max(d.radius, Math.min(w - d.radius, d.x));
-        d.y = Math.max(d.radius, Math.min(h - d.radius, d.y));
-        if (d.isRoot) {
-          d.fixed = true;
-        }
+        //d.x = Math.max(d.radius, Math.min(w - d.radius, d.x));
+        //d.y = Math.max(d.radius, Math.min(h - d.radius, d.y));
+        //if (d.isRoot) {
+        //  d.fixed = true;
+        //}
         return "translate(" + d.x + "," + d.y + ")";
       });
   });

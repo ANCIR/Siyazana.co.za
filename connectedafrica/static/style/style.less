@@ -7,6 +7,7 @@
 
 @theme-color: @col-22;
 @border-color: #ddd;
+@banner-height: 30em;
 
 // Bootstrap overrides
 @brand-primary: @theme-color;
@@ -62,6 +63,15 @@ h4 { font-size: 1.6em; }
   background-size: cover;
 }
 
+.banner-area {
+  background: url(../images/pics/soweto.png) no-repeat;
+  .cover;
+
+  .container {
+    position: relative;
+    min-height: @banner-height;
+  }  
+}
 
 //////////////////////////////////////////////////////
 // Header
@@ -155,16 +165,8 @@ footer {
 // Home page
 
 .home-banner {
-  padding: 1em 0 1em 0;
-  margin-top: -1px;
-  background: url(../images/pics/soweto.png) no-repeat;
-  .cover;
-
-  .container {
-    position: relative;
-    min-height: 25em;
-  }
-
+  .banner-area;
+  
   h1 {
     position: absolute;
     background-color: #fff;
@@ -197,8 +199,40 @@ table.table.table-search {
 
 
 //////////////////////////////////////////////////////
+// Content pages
+
+#pages {
+  p, ul {
+    .legible-text;
+  }
+}
+
+
+//////////////////////////////////////////////////////
 // Profile page
 
+.profile-banner {
+  position: relative;
+  background-color: #000;
+
+  .image-box {
+    .banner-area;  
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: @banner-height;
+    width: 100%;
+    opacity: 0.4;
+  }
+
+  .graph-box {
+    min-height: @banner-height;
+
+    .container {
+      position: relative;
+    }
+  }
+}
 
 table.table.table-properties {
   th, td {
@@ -232,40 +266,37 @@ h3.section-title {
 
 
 //////////////////////////////////////////////////////
-// Content pages
-
-#pages {
-  p, ul {
-    .legible-text;
-  }
-}
-
-//////////////////////////////////////////////////////
 // Network diagram
 
 #graph-viz {
   svg {
-    height: 20em;
+    height: @banner-height - 0.5em;
     width: 100%;
   }
 
   path.link {
     fill: none;
-    stroke: #ddd;
-    stroke-width: 2px;
+    stroke: #ccc;
+    stroke-width: 1px;
+  }
+
+  path.link.selected {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 3px;
   }
 
   circle {
     fill: @theme-color;
-    stroke: #fff;
+    stroke: #ccc;
     cursor: pointer;
-    stroke-width: 2px;
+    stroke-width: 1px;
   }
 
   text {
-    fill: #000;
+    fill: #fff;
     font: 12px 'Open Sans', sans-serif;
-    font-weight: bold;
+    //font-weight: bold;
     pointer-events: none;
   }
 }
