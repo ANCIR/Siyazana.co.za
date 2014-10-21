@@ -50,6 +50,18 @@ h4 { font-size: 1.6em; }
   filter: grayscale(100%);
 }
 
+.legible-text {
+  font-size: 1.2em; 
+  line-height: 1.6em;
+}
+
+.cover {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 
 //////////////////////////////////////////////////////
 // Header
@@ -139,6 +151,35 @@ footer {
   }
 }
 
+//////////////////////////////////////////////////////
+// Home page
+
+.home-banner {
+  padding: 1em 0 1em 0;
+  margin-top: -1px;
+  background: url(../images/pics/soweto.png) no-repeat;
+  .cover;
+
+  .container {
+    position: relative;
+    min-height: 25em;
+  }
+
+  h1 {
+    position: absolute;
+    background-color: #fff;
+    padding: 0.5em;
+    right: 0em;
+    bottom: 1em;
+  }
+}
+
+.home-teaser {
+  margin-top: 1em;
+  .legible-text;
+
+}
+
 
 //////////////////////////////////////////////////////
 // Browse page
@@ -195,8 +236,7 @@ h3.section-title {
 
 #pages {
   p, ul {
-    font-size: 1.2em; 
-    line-height: 1.6em;
+    .legible-text;
   }
 }
 

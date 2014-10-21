@@ -4,34 +4,20 @@
   Welcome
 {% endblock %}
 
-{% block content %}
-  <!--div class="jumbotron">
-    <h1>{{APP_NAME}}</h1>
-    <p>
-      We explore the links between politics, power and money in 
-      South Africa.
-    </p>
-  </div-->
-  <div class="row">
-    <div class="col-md-8">
-      <h3>What is {{APP_NAME}}?</h3>
-      <p>
-        Our database is a resource for anyone interested in how relationships -
-        biographical, professional or economic - influence the people and process
-        in South African politics.
-        <a href='{{url_for('base.page', path='about')}}'>Read more...</a>
-      </p>
-    </div>
-    <div class="col-md-4">
-      <h3>Data summary</h3>
-      <table class="data-summary">
-        {% for schema, count in schemata %}
-          <tr>
-            <td class="number"><strong>{{count}}</strong></td>
-            <td><a href='{{url_for('browser.view', schema=schema.name)}}'>{{schema.meta.plural or schema.label}}</a></td>
-          </tr>
-        {% endfor %}
-      </table>
+{% block banner %}
+  <div class="home-banner">
+    <div class="container">
+      <h1>
+        {{APP_NAME}}
+        <small>we know each other</small>
+      </h1>
     </div>
   </div>
+{% endblock %}
+
+{% block content %}
+  <p class="home-teaser">
+    Siyazana is an isiZulu word that means <strong>we know each other</strong> or <strong>we are connected</strong>. This website has been designed to provide users with a tool to investigate the connections that exist between the private and public spheres in South Africa. Specifically, it provides a unique insight into the financial connectivities that can, and often do, determine how, when, and why money is expended by government. 
+    <a href='{{url_for('base.page', path='about')}}'>Read more...</a>
+  </p>
 {% endblock %}
