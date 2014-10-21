@@ -32,7 +32,7 @@ $(function() {
     var graph = updateGraph(),
         scale = radiusScale(),
         linkLenScale = d3.scale.linear()
-          .range([min_r * 3, max_r * 3]);
+          .range([min_r * 5, max_r * 2]);
 
     d3cola
         .linkDistance(function(d) {
@@ -67,7 +67,10 @@ $(function() {
     node = vis.selectAll(".node")
         .data(d3cola.nodes())
       .enter().append("g")
-        .attr("class", "node")
+        .attr("class", function(d) {
+          d.nodeClass = "node node-" + d.schema.name
+          return d.nodeClass;
+        })
         .on('dragstart', function(d) {
             d3.event.sourceEvent.stopPropagation();
         })
@@ -89,6 +92,7 @@ $(function() {
   };
 
   var clickNode = function(d) {
+    if (d3.event.defaultPrevented) return;
     if (!d.isRoot) {
       document.location.href = '/profile/' + d.id;  
     }
@@ -98,6 +102,11 @@ $(function() {
     path.filter(function(p) {
       return p.source.id == d.id || p.target.id == d.id;
     }).attr('class', 'link selected');
+
+    node.filter(function(dx) { return d.id != dx.id; })
+      .attr('class', function(dx) {
+        return dx.nodeClass + ' inactive';
+      });
 
     node.filter(function(dx) { return d.id == dx.id; })
       .append("text")
@@ -115,6 +124,12 @@ $(function() {
     node.filter(function(dx) { return d.id == dx.id; })
       .select('text')
       .remove();
+
+    node.filter(function(dx) { return d.id != dx.id; })
+      .attr('class', function(dx) {
+        return dx.nodeClass;
+      });
+
   };
 
 

@@ -2,12 +2,13 @@
   <ul class="list-group">
     {% for schema, url, active, count in sidebar_schemata %}
       <li class="list-group-item">
-        <a href="{{url}}">{{schema.meta.plural or schema.label}}</a>
+        <a class="fg-{{schema.name}}" href="{{url}}">{{schema.meta.plural or schema.label}}</a>
         <small>{{count}}</small>
       </li>
     {% endfor %}
     <li class="list-group-item">&nbsp;</li>
     <li class="list-group-item"><a href="{{url_for('base.page', path='about')}}">About</a></li>
     <li class="list-group-item"><a href="{{url_for('base.page', path='data')}}">Data</a></li>
+    <li class="list-group-item"><a href="{{url_for('base.page', path='contact')}}">Contact</a></li>
   </ul>
 </div>
