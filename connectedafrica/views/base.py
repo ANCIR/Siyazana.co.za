@@ -1,24 +1,23 @@
 from flask import Blueprint, render_template
 
-from connectedafrica.core import pages, grano, schemata
+from connectedafrica.core import pages, grano
 
 
 blueprint = Blueprint('base', __name__)
 
 
+def get_top(schema):
+    query = grano.entities.query()
+    query = query.filter('schema', schema)
+    query = query.filter('sort', '-degree')
+    return query.limit(7)
+
+
 @blueprint.route('/')
 def index():
-    params = {
-        'limit': 0,
-        'project': grano.slug,
-        'facet': 'schema'
-    }
-    s, results = grano.client.get('/entities', params=params)
-    features = [p for p in pages if p.meta.get('featured')]
-    counts = results.get('facets').get('schema').get('results')
-    counts = [(schemata.by_name(d.get('name')), c) for d, c in counts]
-    return render_template('index.html', features=features,
-                           schemata=counts)
+    orgs = get_top(['Organization', 'Company', 'NonProfit'])
+    people = get_top('Person')
+    return render_template('index.html', orgs=orgs, people=people)
 
 
 @blueprint.route('/pages/<path:path>.html')

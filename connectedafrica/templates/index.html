@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% from 'macros/snippets.html' import connections, entity_link %}
 
 {% block title %}
   Welcome
@@ -15,9 +16,32 @@
   </div>
 {% endblock %}
 
+{% macro top_list(res, title) %}
+  <h4>{{title}}</h4>
+  <table class="table table-condensed">
+    {% for ent in res %}
+      <tr>
+        <td>{{ entity_link(ent) }}</td>
+        <td class="num">{{ ent.degree }}</td>
+      </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="2" class="num">...and {{res.data.total - res.data.limit}} more.</td>
+    </tr>
+  </table>
+{% endmacro %}
+
 {% block content %}
   <p class="home-teaser">
     Siyazana is an isiZulu word that means <strong>we know each other</strong> or <strong>we are connected</strong>. This website has been designed to provide users with a tool to investigate the connections that exist between the private and public spheres in South Africa. Specifically, it provides a unique insight into the financial connectivities that can, and often do, determine how, when, and why money is expended by government. 
     <a href='{{url_for('base.page', path='about')}}'>Read more...</a>
   </p>
+  <div class="row">
+    <div class="col-sm-6">
+      {{ top_list(people, 'Connected politicians')}}
+    </div>
+    <div class="col-sm-6">
+      {{ top_list(orgs, 'Connected companies')}}
+    </div>
+  </div>
 {% endblock %}
