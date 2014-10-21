@@ -46,7 +46,6 @@
     {{ context_block() }}
   {% endif %}
 
-
   {% for section in relation_sections %}
     <h3 class="section-title">{{ section.schema.meta.section_label or section.schema.meta.plural or section.schema.label }}</h3>
     <p>{{section.schema.meta.get('section_text', '')}}</p>
