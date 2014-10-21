@@ -1,8 +1,13 @@
 {% macro paginate(pager) %}
   {% if pager.pages > 1 %}
     <div class="row">
-      <div class="col-md-6 text-left">
-        <ul class="pagination">
+      <div class="col-sm-6 text-left">
+        <p>
+          Showing page {{pager.page}} of {{pager.pages}}.
+        </p>
+      </div>
+      <div class="col-sm-6 text-right">
+        <ul class="pagination pagination-sm">
           {% for page in pager.range %}
             {% if page == pager.page %}
               <li class="active"><a>{{page}}</a></li>
@@ -11,11 +16,6 @@
             {% endif %}
           {% endfor %}
         </ul>
-      </div>
-      <div class="col-md-6 text-right">
-        <p>
-          Showing {{pager.offset+1}} to {{pager.offset+pager.limit}} of {{pager.pages}}.
-        </p>
       </div>
     </div>
   {% endif %}
