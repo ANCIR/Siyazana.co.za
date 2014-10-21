@@ -21,7 +21,7 @@ def index():
                            schemata=counts)
 
 
-@blueprint.route('/pages/<path:path>/')
+@blueprint.route('/pages/<path:path>.html')
 def page(path):
     page = pages.get_or_404(path)
     menu = [p for p in pages if p.meta.get('menutitle')]

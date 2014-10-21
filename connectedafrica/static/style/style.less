@@ -1,5 +1,48 @@
+//////////////////////////////////////////////////////
+// Variables
+
 @import "../vendor/bootstrap/less/variables.less";
-@import "variables.less";
+@import "../vendor/bootstrap/less/mixins.less";
+@import "colors.less";
+
+@theme-color: @col-22;
+@border-color: #ddd;
+
+// Bootstrap overrides
+@brand-primary: @theme-color;
+@nav-tabs-border-color: @border-color;
+@table-border-color: @border-color;
+
+//////////////////////////////////////////////////////
+@import "bootstrap.less";
+
+
+//////////////////////////////////////////////////////
+// Page layout
+
+body {
+  font-family: 'Open Sans', 'Helvetica', sans-serif;
+  font-size: 1.3em;
+}
+
+
+//////////////////////////////////////////////////////
+// General styles
+
+td.num {
+  text-align: right;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+h1 { font-size: 2.2em; }
+h2 { font-size: 2em; }
+h3 { font-size: 1.8em; }
+h4 { font-size: 1.6em; }
+
 // Mixins
 .grayscale-image {
   -webkit-filter: grayscale(100%);
@@ -7,296 +50,183 @@
   filter: grayscale(100%);
 }
 
-.cover-background {
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
 
-// Base layout 
-body {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 1.5em;
-  color: @text-color;
+//////////////////////////////////////////////////////
+// Header
 
-  background: url(/static/images/pics/soweto.png) no-repeat center center fixed; 
-  .cover-background();
-}
-
-.container-fluid {
-  background-color: @body-bg;
-  //max-width: 1000px;
-  padding: 2em;
-  margin: 5% 10% 0 10%;
-}
-
-h1, h2, h3, h4 {
-  font-weight: 800;
-  text-transform: uppercase;
-
-  a {
-    text-decoration: none;
-  }
-}
-
-a, a:hover {
-  color: @text-color;
-  text-decoration: underline;
-}
-
-a:hover {
-  color: darken(@theme-color, 10%);
-}
-
-.simple-links {
-  a {
-    text-decoration: none;
-  }
-}
-
-h3.teaser, .nav-tabs, .navbar, .list-group {
-  .simple-links;
-}
-
-// Responsive fixes. 
-
-@media (max-width: @screen-xs-max) {
-  footer {
-    .partners {
-      display: none;
-    }
-  }
-
-}
-
-@media (max-width: @screen-sm-max) {
-  .navbar-search {
-    display: none;
-  }
-
-  .container-fluid {
-    margin: 5% 0 0 0;
-    padding: 10px;
-  }
-}
-
-
-// Header style
-
-.navbar.navbar-default {
-  background-color: @header-bg;
-  border-bottom: 0px solid @gray-light;
-  color: @gray-light;
+nav.navbar {
+  background: #fff;
+  margin-bottom: 0px;
 
   .navbar-brand {
-    color: @theme-color;
-    font-weight: 800;
-    padding-left: 0px;
+    color: #000;
+    font-weight: 900;
+
+    img {
+      width: 1.5em;
+      margin-top: -4px;
+      margin-right: 2px;
+    }  
+  }
+
+  .navbar-form {
+    .input-group {
+      display: table;
+      width: 60%;
+
+      .form-control {
+        width: 100%;
+        box-shadow: none;
+        border: none;
+        color: #999;
+        /* -webkit-box-shadow: none; */
+      }
+
+      .input-group-addon {
+        width: 40px;
+        box-shadow: none;
+        border: none;
+        color: #999;
+        background-color: #fff;
+      }
+
+    }
+  }  
+}
+
+
+//////////////////////////////////////////////////////
+// Sidebar
+
+#sidebar {
+  margin-top: 1em;
+
+  .list-group {
+    margin-top: 1em;
+  }
+
+  .list-group-item {
+    border: 0;
+
+    small {
+      color: #999;
+      display: inline-block;
+      margin-left: 0.5em;
+    }
   }
 }
 
 
-// Footer style
+//////////////////////////////////////////////////////
+// Footer
 
 footer {
-  margin-bottom: -1em;
-  color: @footer-fg;
-
-  .simple-links;
-
-  a {
-    color: @theme-color;
+  .container {
+    margin-top: 2em;
+    padding-top: 2em;
+    padding-bottom: 2em;
+    border-top: 1px solid @border-color;  
   }
-
-  hr {
-    border-top: 1px solid @border-color;
-  }
-
-  p {
-    font-size: 0.85em;
-  }
-
+  
   .partners {
     text-align: right;
 
-    a, a:hover {
-      text-decoration: none;
-    }
-
     img {
+      width: 60px;
       margin-left: 1em;
+      opacity: 0.7;
     }
   }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
 }
 
 
-// Modifications of bootstrap defaults
+//////////////////////////////////////////////////////
+// Browse page
 
-ul.pagination { margin: 0; }
-
-li.active a {
-  color: white;
-}
-
-.navbar-toggle {
-  border: 0;
-}
-
-// Browser 
-
-.main-search {
-  width: 100%;
-}
-
-.form-search {
-  .form-group {
-    margin: 1em 0 1em 0;
+table.table.table-search {
+  th, td {
+    border-top: 0;
     padding-left: 0;
-    padding-right: 0;
-
-    input.main-search {
-      font-size: 1.2em;
-      padding: 12px 24px 12px 24px;
-      height: auto;
-    }
   }
 }
 
-.search-results {
-  .snippet {
-    color: @light-text-color;
-  }
-
-  a {
-    text-decoration: none;
-    font-weight: 800;
-  }
-}
-
-// Facets 
-
-.facets {
-  li.active {
-    a {
-      color: @body-bg;
-    }
-  }
+.pagination {
+  margin-top: 0;
 }
 
 
-// Home page specifics
+//////////////////////////////////////////////////////
+// Profile page
 
-.jumbotron {
-  background-color: @theme-color;
-  color: @body-bg;
 
-  h1 {
-    text-transform: none;
+table.table.table-properties {
+  th, td {
+    border-top: 0;
+  }
+
+  th {
+    padding-left: 0;
   }
 }
 
-.data-summary {
-  width: 100%;
-
-  td {
-    padding-bottom: 0.3em;
-  }
-
-  td.number {
-    width: 30%;
-    text-align: right;
-    padding-right: 1em;
-  }
+table.table.table-relations {
+  //th {
+  //  border-top: 0;
+  //}
 }
 
-.teaser-image {
-  margin-right: 1em;
-  width: 150px;
-
+img.profile-image {
+  margin-bottom: 0;
+  margin-top: 2em;
+  height: 10em;
+  float: right;
+  m-argin-left: 2em;
   .grayscale-image;
+  border-radius: 50%;
+}
+
+h3.section-title {
+  margin-top: 2em;
 }
 
 
-// Profiles
+//////////////////////////////////////////////////////
+// Content pages
 
-.profile {
-
-  .header {
-    margin-bottom: 1em;
-  }
-
-
-  img.profile-image {
-    margin-bottom: 0;
-    height: 10em;
-    margin-right: 2em;
-    //.grayscale-image;
-    border-radius: 50%;
-  }
-
-  #sources {
-    font-size: small;
-
-    ol {
-      padding-left: 2em;
-    }
+#pages {
+  p, ul {
+    font-size: 1.2em; 
+    line-height: 1.6em;
   }
 }
 
-// Relation listings
+//////////////////////////////////////////////////////
+// Network diagram
 
-.relations {
-  .section {
-    margin: 0 0 1em 0;
-
-    .section-heading {
-      color: @theme-color;
-      font-size: 1.2em;
-      font-weight: 800;
-      padding: 0em 0 0.5em 0;
-    }
+#graph-viz {
+  svg {
+    height: 20em;
+    width: 100%;
   }
 
-  .relation {
-    border-bottom: 1px solid @border-color;
-    background-color: lighten(@border-color, 20%);
-    margin: 0 0 0.5em 0;
-    padding: 0 0 0.5em 0;
+  path.link {
+    fill: none;
+    stroke: #ddd;
+    stroke-width: 2px;
+  }
 
-    a {
-      font-weight: 800;
-      text-decoration: none;
-    }
+  circle {
+    fill: @theme-color;
+    stroke: #fff;
+    cursor: pointer;
+    stroke-width: 2px;
+  }
 
-    .details {
-      text-align: right;
-      font-size: 0.8em;
-      color: @gray-light;
-
-      a {
-        font-weight: normal;
-        color: @gray-light;
-      }
-
-      a:hover {
-        color: darken(@theme-color, 10%);
-      }
-    }
-
-    .other {
-      padding: 0 0 0.2em 0;
-    }
+  text {
+    fill: #000;
+    font: 12px 'Open Sans', sans-serif;
+    font-weight: bold;
+    pointer-events: none;
   }
 }
 
-// Organisations page 
-
-.org-item {
-  margin: 1em 0 1em 0;
-}

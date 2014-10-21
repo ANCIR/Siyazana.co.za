@@ -1,10 +1,11 @@
 from collections import OrderedDict
 
-from flask import Blueprint, render_template, abort, request
+from flask import Blueprint, render_template, redirect, url_for
 from granoclient import NotFound
 
 
-from connectedafrica.core import grano, schemata
+from connectedafrica.core import grano
+from connectedafrica import util
 from connectedafrica.util.properties import Properties
 from connectedafrica.util.relations import load_relations
 
@@ -42,6 +43,14 @@ def source_map(entity):
     '''
     sources = set(v['source_url'] for v in entity.properties.values())
     return OrderedDict((s, i + 1) for i, s in enumerate(sorted(sources)))
+
+
+@blueprint.route('/profile/<id>')
+def fwd_view(id):
+    entity = grano.entities.by_id(id)
+    name = entity.properties.get('name', {}).get('value', 'x')
+    slug = util.slugify(name)
+    return redirect(url_for('.view', id=id, slug=slug))
 
 
 @blueprint.route('/profile/<id>/<slug>')

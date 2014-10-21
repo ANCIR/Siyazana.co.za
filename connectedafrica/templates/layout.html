@@ -2,21 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>{% block title %}(Untitled){% endblock %} - {{APP_NAME}}</title>
     <meta name="description" content="{% block description %}{% endblock %}">
     <meta name="keywords" content="{% block keywords %}power, influence, south africa, politics, corruption, connectedafrica, conflicts of interest, illicit ties, pretoria, cape town{% endblock %}">
-    <meta name="author" content="Institute for Security Studies, Code for Africa, ANCIR">
-
     <meta name="og:site_name" content="{{APP_NAME}}">
 
-    {% assets filters="less,cssmin,cssrewrite", output="gen/vendor.css",
-        "style/vendor.less"
-    %}
-      <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet">
-    {% endassets %}
     {% assets filters="less,cssmin,cssrewrite", output="gen/app.css",
         "style/style.less"
     %}
@@ -28,9 +19,15 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}">
   </head>
   <body>
-    <div class="container-fluid">
-      {% include 'nav.html' %}
-      {% block content %}{% endblock %}
+    {% include 'header.html' %}
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3 hidden-xs">
+          {% include 'sidebar.html' %}
+        </div>
+        <div class="col-sm-9">
+          {% block content %}{% endblock %}
+        </div>
     </div>
     {% include 'footer.html' %}
     
@@ -38,6 +35,8 @@
           "vendor/jquery/dist/jquery.js",
           "vendor/bootstrap/js/collapse.js",
           "vendor/bootstrap/js/dropdown.js",
+          "vendor/d3/d3.js",
+          "vendor/webcola/WebCola/cola.v3.min.js",
           "js/graph.js"
       %}
       <script type="text/javascript" src="{{ ASSET_URL }}"></script>
