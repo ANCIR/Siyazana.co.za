@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="row">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+      <div class="navbar-header col-md-3">
+        <a class="navbar-brand" href="{{url_for('base.index')}}">
+          <img src="{{ url_for('static', filename='images/logo.svg') }}">
+          {{APP_NAME}}
+        </a>
+      </div>
+      <form class="navbar-form" role="search">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-search"></i></span>
+          <input type="text" class="form-control" placeholder="Search for politicians and companies in South Africa">
+        </div>
+      </form>
+    </nav>
+  </div>
+</div>

@@ -13,79 +13,62 @@
   {% endif %}
 {% endblock %}
 
-{% block content %}
-<div class="profile">
-
-  <div class="row header">
-    <div class="col-md-12">
-
-      {% if properties.image_full %}
-        <div class="pull-left">
-          <img src="{{ entity | portrait_url }}" class="profile-image" alt="{{ display_name }}">
-        </div>
-      {% endif %}
-      <h1>
-        {% block displayname %}{{ display_name }}{% endblock %}
-      </h1>
-      <p class="subtitle">
-        {% block subtitle %}{{ render_property(entity, 'tagline', source_map) }}{% endblock %}
-      </p>
-
+{% block content %}      
+  {% if properties.image_full %}
+    <div class="pull-left">
+      <img src="{{ entity | portrait_url }}" class="profile-image" alt="{{ display_name }}">
     </div>
-  </div>
+  {% endif %}
+  <h1>
+    {% block displayname %}{{ display_name }}{% endblock %}
+  </h1>
+  <p class="subtitle">
+    <!-- TODO: summary and/or abstract -->
+    {% block subtitle %}{{ render_property(entity, 'tagline', source_map) }}{% endblock %}
+  </p>
 
-  <div class="row">
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-8">
-      <!-- TODO: summary and/or abstract -->
+  <div id="graph-viz" style="height: 300px;" data-entity-id="{{entity.id}}" data-api-endpoint="{{PROJECT_API}}"></div>
 
-      <div id="graph-viz" style="height: 300px;" data-entity-id="{{entity.id}}" data-api-endpoint="{{PROJECT_API}}"></div>
-
-      <table class="table table-condensed">
-        {% for property in properties %}
-          <tr>
-            <th width="30%">{{property.label}}:</th>
-            <td>{{property.value}}</td>
-          </tr>
+  <table class="table table-condensed">
+    {% for property in properties %}
+      <tr>
+        <th width="30%">{{property.label}}:</th>
+        <td>{{property.value}}</td>
+      </tr>
+    {% endfor %}
+  </table>
+  
+  {% for section in relation_sections %}
+    <h3>{{ section.schema.meta.section_label or section.schema.meta.plural or section.schema.label }}</h3>
+    <p>{{section.schema.meta.get('section_text', '')}}</p>
+    <table class="table table-condensed">
+      <tr>
+        <th>&nbsp;</th>
+        {% for k, v in section.schema.meta.get('section_table', {}).items() %}
+          <th>{{v}}</th>
         {% endfor %}
-      </table>
-      
-      {% for section in relation_sections %}
-        <h3>{{ section.schema.meta.section_label or section.schema.meta.plural or section.schema.label }}</h3>
-        <p>{{section.schema.meta.get('section_text', '')}}</p>
-        <table class="table table-condensed">
-          <tr>
-            <th>&nbsp;</th>
-            {% for k, v in section.schema.meta.get('section_table', {}).items() %}
-              <th>{{v}}</th>
-            {% endfor %}
-            <th>Dates</th>
-            <th></th>
-          </tr>
-          {% for relation in section.relations %}
-            <tr>
-              <td>
-                {{ entity_link(relation.other) }}
-              </td>
-              {% for k, v in section.schema.meta.get('section_table', {}).items() %}
-                <td>{{ relation.props.get(k) or '-' }}</td>
-              {% endfor %}
-              <td>
-                {{ relation_ts(relation) }}
-              </td>
-              <td>
-                {% if relation | relation_source %}
-                  <a href="{{ relation | relation_source }}"><i class="fa fa-external-link-square"></i></a>
-                {% endif %}
-              </td>
-            </tr>
+        <th>Dates</th>
+        <th></th>
+      </tr>
+      {% for relation in section.relations %}
+        <tr>
+          <td>
+            {{ entity_link(relation.other) }}
+          </td>
+          {% for k, v in section.schema.meta.get('section_table', {}).items() %}
+            <td>{{ relation.props.get(k) or '-' }}</td>
           {% endfor %}
-        </table>
-        {{ paginate(section.pager) }}
+          <td width="10%">
+            {{ relation_ts(relation) }}
+          </td>
+          <td width="1%">
+            {% if relation | relation_source %}
+              <a href="{{ relation | relation_source }}"><i class="fa fa-external-link-square"></i></a>
+            {% endif %}
+          </td>
+        </tr>
       {% endfor %}
-    </div>
-  </div>
-</div>
- 
+    </table>
+    {{ paginate(section.pager) }}
+  {% endfor %}
 {% endblock %}
