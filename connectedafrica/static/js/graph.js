@@ -223,7 +223,7 @@ $(function() {
         }
       }]
     };
-    return $.getJSON(apiEndpoint + '/query', {'query': JSON.stringify(q)});
+    return $.getJSON(apiEndpoint, {'query': JSON.stringify(q)});
   };
 
   var handleResult = function(entityId, data) {

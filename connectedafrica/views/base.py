@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 
-from connectedafrica.core import pages, grano
+from connectedafrica.core import pages, grano, cache
 
 
 blueprint = Blueprint('base', __name__)
@@ -14,6 +14,7 @@ def get_top(schema):
 
 
 @blueprint.route('/')
+@cache.cached()
 def index():
     orgs = get_top(['Organization', 'Company', 'NonProfit'])
     people = get_top('Person')
@@ -21,6 +22,7 @@ def index():
 
 
 @blueprint.route('/pages/<path:path>.html')
+@cache.cached()
 def page(path):
     page = pages.get_or_404(path)
     menu = [p for p in pages if p.meta.get('menutitle')]

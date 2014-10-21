@@ -23,6 +23,7 @@ setup(
         "Flask-Assets==0.10",
         "Flask-Script==2.0.5",
         "Flask-FlatPages==0.5",
+        "Flask-Cache==0.13.1",
         "lxml==3.3.5",
         "PyYAML==3.10",
         "thready>=0.1.4",

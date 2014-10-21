@@ -6,6 +6,7 @@ ASSETS_DEBUG = True
 FLATPAGES_ROOT = '../pages'
 FLATPAGES_EXTENSION = '.md'
 
+CACHE_TYPE = 'simple'
 
 APP_NAME = 'Siyazana'
 
