@@ -27,6 +27,31 @@ body {
 
 
 //////////////////////////////////////////////////////
+// General styles
+
+td.num {
+  text-align: right;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+h1 { font-size: 2.2em; }
+h2 { font-size: 2em; }
+h3 { font-size: 1.8em; }
+h4 { font-size: 1.6em; }
+
+// Mixins
+.grayscale-image {
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+
+
+//////////////////////////////////////////////////////
 // Header
 
 nav.navbar {
@@ -111,6 +136,41 @@ footer {
       opacity: 0.7;
     }
   }
+}
+
+
+//////////////////////////////////////////////////////
+// Profile page
+
+
+table.table.table-properties {
+  th, td {
+    border-top: 0;
+  }
+
+  th {
+    padding-left: 0;
+  }
+}
+
+table.table.table-relations {
+  th {
+    border-top: 0;
+  }
+}
+
+img.profile-image {
+  margin-bottom: 0;
+  margin-top: 2em;
+  height: 10em;
+  float: right;
+  m-argin-left: 2em;
+  .grayscale-image;
+  border-radius: 50%;
+}
+
+h3.section-title {
+  margin-top: 2em;
 }
 
 
