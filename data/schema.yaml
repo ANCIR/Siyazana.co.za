@@ -311,6 +311,20 @@
 
 
 #####################################################################
+# Relation: Directorship
+#####################################################################
+- name: 'Directorship'
+  label: 'Director'
+  description: 'An entity is a director of an organization'
+  hidden: false
+  parent: 'Relation'
+  obj: relation
+  meta:
+    plural: 'Directorships'
+  attributes: []
+
+
+#####################################################################
 # Relation: Partnership
 #####################################################################
 - name: 'Partnership'
