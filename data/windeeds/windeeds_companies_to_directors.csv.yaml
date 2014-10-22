@@ -65,6 +65,9 @@ relations:
     source: 'person'
     target: 'org'
     columns:
+     - column: 'CIPC-Person Status'
+       property: 'status'
+       skip_empty: true
      - column: 'CIPC-Person Appointment date'
        property: 'date_start'
        type: datetime

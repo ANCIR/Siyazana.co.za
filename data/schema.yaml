@@ -321,7 +321,9 @@
   obj: relation
   meta:
     plural: 'Directorships'
-  attributes: []
+  attributes:
+    - name: status
+      label: 'Status'
 
 
 #####################################################################
