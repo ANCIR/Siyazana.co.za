@@ -10,16 +10,17 @@ loadschema:
 	@granoloader --create-project schema data/schema.yaml
 
 loadjse:
-	@granoloader csv -t 5 data/jse_entities.csv.yaml data/jse_entities.csv
-	@granoloader csv -t 5 data/jse_links.csv.yaml data/jse_links.csv
+	@granoloader csv -t 5 data/jse/jse_entities.csv.yaml data/jse/jse_entities.csv
+	@granoloader csv -t 5 data/jse/jse_links.csv.yaml data/jse/jse_links.csv
 
 loadpa:
-	@granoloader csv -t 5 data/pa_persons.csv.yaml data/pa_persons.csv
-	@granoloader csv -t 5 data/pa_parties.csv.yaml data/pa_parties.csv
-	@granoloader csv -t 5 data/pa_committees.csv.yaml data/pa_committees.csv
-	@granoloader csv -t 5 data/pa_memberships.csv.yaml data/pa_memberships.csv
-	@granoloader csv -t 5 data/pa_directorships.csv.yaml data/pa_directorships.csv
-	@granoloader csv -t 5 data/pa_financial.csv.yaml data/pa_financial.csv
+	@granoloader csv -t 5 data/pa/pa_persons.csv.yaml data/pa/pa_persons.csv
+	@granoloader csv -t 5 data/pa/pa_parties.csv.yaml data/pa/pa_parties.csv
+	@granoloader csv -t 5 data/pa/pa_committees.csv.yaml data/pa/pa_committees.csv
+	@granoloader csv -t 5 data/pa/pa_partymemberships.csv.yaml data/pa/pa_partymemberships.csv
+	@granoloader csv -t 5 data/pa/pa_committeememberships.csv.yaml data/pa/pa_committeememberships.csv
+	@granoloader csv -t 5 data/pa/pa_directorships.csv.yaml data/pa/pa_directorships.csv
+	@granoloader csv -t 5 data/pa/pa_financial.csv.yaml data/pa/pa_financial.csv
 
 loadnpo:
 	@granoloader csv -t 5 data/npo_organisations.csv.yaml data/npo_organisations.csv

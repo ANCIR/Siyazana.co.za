@@ -14,13 +14,8 @@ entities:
        property: 'name'
 relations:
   membership:
-    schema: 'Membership'
+    schema: 'Directorship'
     source_url_column: 'source_url'
     source: 'person'
     target: 'company'
-    columns:
-     - column: 'role'
-       property: 'role'
-       unique: true
-       default: 'Director'
-       #source_url_column: 'report'
+    columns: []
