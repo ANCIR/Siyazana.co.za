@@ -27,8 +27,10 @@ loadnpo:
 	@granoloader csv -t 5 data/npo_officers.csv.yaml data/npo_officers.csv
 
 loadwindeeds:
-	@granoloader csv -t 5 data/windeeds_companies.csv.yaml data/windeeds_companies_gn.csv
-	@granoloader csv -t 5 data/windeeds_directors.csv.yaml data/windeeds_directors_gn.csv
+	@granoloader csv -t 5 data/windeeds/windeeds_companies_to_members.csv.yaml data/windeeds/windeeds_companies_to_members.csv
+	@granoloader csv -t 5 data/windeeds/windeeds_companies_to_directors.csv.yaml data/windeeds/windeeds_companies_to_directors.csv
+	@granoloader csv -t 5 data/windeeds/windeeds_members_to_companies.csv.yaml data/windeeds/windeeds_members_to_companies.csv
+	@granoloader csv -t 5 data/windeeds/windeeds_directors_to_companies.csv.yaml data/windeeds/windeeds_directors_to_companies.csv
 
 loadwhoswho:
 	@granoloader csv -t 5 data/whoswho_persons.csv.yaml data/whoswho_persons.csv

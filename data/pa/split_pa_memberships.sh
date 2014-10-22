@@ -1,10 +1,11 @@
-cd data
+cd data/pa/
 
 COMMITTEE_LIST=`sed 's/^\(\([^,"]\+\)\|\("[^"]\+"\)\),.*/\1/g' pa_committees.csv | tr -d '"'`
 rm pa_partymemberships.csv
 touch pa_partymemberships.csv
 head -n 1 pa_memberships.csv | sed 's/organization_name/committee_name/' > pa_committeememberships.csv
-LINE_NUMBER=`wc -l pa_memberships.csv | cut -d " " -f 1`
+let LINE_NUMBER=`wc -l pa_memberships.csv | cut -d " " -f 1`
+let LINE_NUMBER-=1
 let COUNTER=0
 
 while read LINE; do

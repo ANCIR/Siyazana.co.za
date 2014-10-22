@@ -1,0 +1,55 @@
+
+entities:
+  person:
+    schema: 'Person'
+    source_url_column: 'url'
+    columns:
+     - column: 'CIPC Name'
+       property: 'name'
+     - column: 'CIPC ID'
+       property: 'national_id'
+       skip_empty: true
+     - column: 'CIPC Residential address'
+       property: 'contact_address_physical'
+       skip_empty: true
+     - column: 'CIPC Country'
+       property: 'origin_country'
+       skip_empty: true
+     - column: 'CIPC Date of birth'
+       property: 'date_birth'
+       type: datetime
+       format: '%m/%d/%Y'
+       skip_empty: true
+  org:
+    schema: 'Company'
+    source_url_column: 'url'
+    columns:
+     - column: 'company_name'
+       property: 'name'
+     - column: 'CIPC Business address'
+       property: 'contact_address_physical'
+       skip_empty: true
+     - column: 'CIPC Postal address'
+       property: 'contact_address_postal'
+       skip_empty: true
+     - column: 'company_regno'
+       property: 'registration_number'
+       skip_empty: true
+relations:
+  membership:
+    schema: 'Directorship'
+    source_url_column: 'url'
+    source: 'person'
+    target: 'org'
+    columns:
+     - column: 'CIPC Appointment date'
+       property: 'date_start'
+       type: datetime
+       format: '%m/%d/%Y'
+       skip_empty: true
+     - column: 'CIPC Resignation date'
+       property: 'date_end'
+       type: datetime
+       format: '%m/%d/%Y'
+       skip_empty: true
+
