@@ -406,16 +406,16 @@
 
 
 #####################################################################
-# Relation: Benefactor
+# Relation: Donor
 #####################################################################
-- name: 'Benefactor'
-  label: 'Benefactor'
+- name: 'Donor'
+  label: 'Donor'
   description: 'An entity has donated (or donates) money to another'
   hidden: false
   parent: 'FinancialRelation'
   obj: relation
   meta:
-    plural: 'Benefactors'
+    plural: 'Donors'
   attributes: []
 
 
