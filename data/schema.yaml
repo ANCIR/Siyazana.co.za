@@ -272,21 +272,6 @@
 
 
 #####################################################################
-# Entity: Event
-#####################################################################
-- name: 'Event'
-  label: 'Event'
-  description: 'An event such as a conference or wedding'
-  hidden: false
-  obj: 'entity'
-  meta:
-    plural: 'Events'
-  attributes:
-    - name: 'type'
-      label: 'Type of event'
-
-
-#####################################################################
 # Relation: Relation (base schema)
 #####################################################################
 - name: 'Relation'
@@ -339,23 +324,6 @@
   attributes:
     - name: extent
       label: 'Extent'
-
-
-#####################################################################
-# Relation: BoardMembership
-#####################################################################
-- name: 'BoardMembership'
-  label: 'Board member'
-  description: 'An entity is on the board of directors of an organization'
-  hidden: false
-  parent: 'Membership'
-  obj: relation
-  meta:
-    plural: 'Board memberships'
-    section_table:
-      role: 'Role'
-      status: 'Status'
-  attributes: []
 
 
 #####################################################################
