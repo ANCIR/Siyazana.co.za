@@ -1,0 +1,41 @@
+
+entities:
+  person:
+    schema: 'Person'
+    source_url_column: 'source_url'
+    columns:
+     - column: 'person_name'
+       property: 'name'
+  committee:
+    schema: 'Committee'
+    source_url_column: 'source_url'
+    columns:
+     - column: 'committee_name'
+       property: 'name'
+relations:
+  membership:
+    schema: 'Membership'
+    source_url_column: 'source_url'
+    source: 'person'
+    target: 'committee'
+    columns:
+     - column: 'role'
+       property: 'role'
+       skip_empty: true
+       unique: true
+     - column: 'start_date'
+       property: 'date_start'
+       type: datetime
+       skip_empty: true
+       format:
+          day: '%Y-%m-%d'
+          month: '%Y-%m'
+          year: '%Y'
+     - column: 'end_date'
+       property: 'date_end'
+       type: datetime
+       skip_empty: true
+       format:
+          day: '%Y-%m-%d'
+          month: '%Y-%m'
+          year: '%Y'
