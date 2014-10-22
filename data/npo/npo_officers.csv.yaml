@@ -18,10 +18,7 @@ entities:
 relations:
   relation:
     source_url_column: 'source_url'
-    schema: 'Membership'
+    schema: 'Directorship'
     source: 'officer'
     target: 'npo'
-    columns:
-      - column: 'role'
-        property: 'role'
-        unique: true
+    columns: []
