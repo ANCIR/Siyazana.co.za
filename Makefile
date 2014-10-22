@@ -23,8 +23,8 @@ loadpa:
 	@granoloader csv -t 5 data/pa/pa_financial.csv.yaml data/pa/pa_financial.csv
 
 loadnpo:
-	@granoloader csv -t 5 data/npo_organisations.csv.yaml data/npo_organisations.csv
-	@granoloader csv -t 5 data/npo_officers.csv.yaml data/npo_officers.csv
+	@granoloader csv -t 5 data/npo/npo_organisations.csv.yaml data/npo/npo_organisations.csv
+	@granoloader csv -t 5 data/npo/npo_officers.csv.yaml data/npo/npo_officers.csv
 
 loadwindeeds:
 	@granoloader csv -t 5 data/windeeds/windeeds_companies_to_members.csv.yaml data/windeeds/windeeds_companies_to_members.csv
