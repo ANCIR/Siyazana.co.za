@@ -26,4 +26,5 @@ DOCCLOUD_PROJECT = int(os.environ.get('DOCCLOUD_PROJECT', '130'))
 SOURCE_NAMES = {
     'za-new-import.popit.mysociety.org': "People's Assembly Data",
     'www.windeedsearch.co.za': "Windeed CIPC Search",
+    'www.jse.co.za': "Johannesburg Stock Exchange"
 }
