@@ -14,7 +14,3 @@ Siyazana is primarily a database containing the the financial interests of publi
 The purpose of these forms is to avoid any situation which could pose a conflict of interest. This database can therefore serve both public and private individuals as they navigate the 
 
 We highlight ownership, associations, corporate and political interests intersecting business and politics, encompassing individual and collective interest groups. 
-
-**Credits**
-
-* Icons made by Elegant Themes from [Flaticon](http://www.flaticon.com).
