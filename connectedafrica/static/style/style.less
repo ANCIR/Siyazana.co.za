@@ -5,13 +5,21 @@
 @import "../vendor/bootstrap/less/mixins.less";
 @import "colors.less";
 
-@theme-color: @col-22;
+@theme-color: #666;
 @border-color: #ddd;
+@banner-height: 30em;
 
 // Bootstrap overrides
 @brand-primary: @theme-color;
 @nav-tabs-border-color: @border-color;
 @table-border-color: @border-color;
+
+// Schema colors
+@col-Person: @col-2;
+@col-Company: @col-15;
+@col-Organization: @col-20;
+@col-Committee: @col-10;
+@col-PoliticalParty: @col-8;
 
 //////////////////////////////////////////////////////
 @import "bootstrap.less";
@@ -27,6 +35,34 @@ body {
 
 
 //////////////////////////////////////////////////////
+// Schema styles
+
+.fg-Person {
+  color: @col-Person;
+  &:hover { color: darken(@col-Person, 10%); }
+}
+
+.fg-Company {
+  color: @col-Company;
+  &:hover { color: darken(@col-Company, 10%); }
+}
+
+.fg-Organization {
+  color: @col-Organization;
+  &:hover { color: darken(@col-Organization, 10%); }
+}
+
+.fg-Committee {
+  color: @col-Committee;
+  &:hover { color: darken(@col-Committee, 10%); }
+}
+
+.fg-PoliticalParty {
+  color: @col-PoliticalParty;
+  &:hover { color: darken(@col-PoliticalParty, 10%); }
+}
+
+//////////////////////////////////////////////////////
 // General styles
 
 td.num {
@@ -36,6 +72,14 @@ td.num {
 h1, h2, h3, h4, h5 {
   font-weight: 600;
   text-transform: uppercase;
+}
+
+a {
+  text-decoration: underline;
+}
+
+.simple {
+  text-decoration: none; 
 }
 
 h1 { font-size: 2.2em; }
@@ -50,6 +94,27 @@ h4 { font-size: 1.6em; }
   filter: grayscale(100%);
 }
 
+.legible-text {
+  font-size: 1.2em; 
+  line-height: 1.6em;
+}
+
+.cover {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.banner-area {
+  background: url(../images/pics/soweto.png) no-repeat;
+  .cover;
+
+  .container {
+    position: relative;
+    min-height: @banner-height;
+  }  
+}
 
 //////////////////////////////////////////////////////
 // Header
@@ -60,7 +125,9 @@ nav.navbar {
 
   .navbar-brand {
     color: #000;
-    font-weight: 900;
+    font-weight: 600;
+    text-transform: uppercase;
+    .simple;
 
     img {
       width: 1.5em;
@@ -101,6 +168,8 @@ nav.navbar {
 #sidebar {
   margin-top: 1em;
 
+  a { .simple; }
+
   .list-group {
     margin-top: 1em;
   }
@@ -131,12 +200,43 @@ footer {
   .partners {
     text-align: right;
 
+    a { .simple; }
+
     img {
       width: 60px;
       margin-left: 1em;
       opacity: 0.7;
     }
+
+    a:hover img {
+      opacity: 1;
+    }
   }
+}
+
+//////////////////////////////////////////////////////
+// Home page
+
+.home-banner {
+  .banner-area;
+  
+  h1 {
+    position: absolute;
+    background-color: #fff;
+    padding: 0.5em;
+    right: 0em;
+    bottom: 1em;
+  }
+
+  .container {
+    min-height: @banner-height * 0.7;
+  }  
+}
+
+.home-teaser {
+  margin-top: 1em;
+  .legible-text;
+
 }
 
 
@@ -156,8 +256,40 @@ table.table.table-search {
 
 
 //////////////////////////////////////////////////////
+// Content pages
+
+#pages {
+  p, ul {
+    .legible-text;
+  }
+}
+
+
+//////////////////////////////////////////////////////
 // Profile page
 
+.profile-banner {
+  position: relative;
+  background-color: #000;
+
+  .image-box {
+    .banner-area;  
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: @banner-height;
+    width: 100%;
+    opacity: 0.4;
+  }
+
+  .graph-box {
+    min-height: @banner-height;
+
+    .container {
+      position: relative;
+    }
+  }
+}
 
 table.table.table-properties {
   th, td {
@@ -166,6 +298,16 @@ table.table.table-properties {
 
   th {
     padding-left: 0;
+  }
+
+  td.property-value {
+    .source-ref {
+      display: none;
+    }
+
+    &:hover .source-ref {
+      display: inline-block;
+    }
   }
 }
 
@@ -191,41 +333,68 @@ h3.section-title {
 
 
 //////////////////////////////////////////////////////
-// Content pages
-
-#pages {
-  p, ul {
-    font-size: 1.2em; 
-    line-height: 1.6em;
-  }
-}
-
-//////////////////////////////////////////////////////
 // Network diagram
 
 #graph-viz {
   svg {
-    height: 20em;
+    height: @banner-height - 0.5em;
     width: 100%;
   }
 
   path.link {
     fill: none;
-    stroke: #ddd;
-    stroke-width: 2px;
+    stroke: #ccc;
+    stroke-width: 1px;
+    opacity: 0.3;
+  }
+
+  path.link.selected {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 3px;
+    opacity: 1;
   }
 
   circle {
-    fill: @theme-color;
-    stroke: #fff;
+    fill: #333;
+    stroke: #ccc;
     cursor: pointer;
-    stroke-width: 2px;
+    stroke-width: 3px;
+  }
+
+  .node-Person circle {
+    stroke: @col-Person;
+    fill: darken(@col-Person, 30%);
+  }
+
+  .node-Company circle {
+    stroke: @col-Company;
+    fill: darken(@col-Company, 30%);
+  }
+
+  .node-Organization circle {
+    stroke: @col-Organization;
+    fill: darken(@col-Organization, 30%);
+  }
+
+  .node-Committee circle {
+    stroke: @col-Committee;
+    fill: darken(@col-Committee, 30%);
+  }
+
+  .node-PoliticalParty circle {
+    stroke: @col-PoliticalParty;
+    fill: darken(@col-PoliticalParty, 30%);
+  }
+
+  .inactive circle {
+    opacity: 0.5 !important;
   }
 
   text {
-    fill: #000;
+    fill: #fff;
     font: 12px 'Open Sans', sans-serif;
-    font-weight: bold;
+    //font-weight: bold;
     pointer-events: none;
   }
 }

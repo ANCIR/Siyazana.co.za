@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% from 'macros/paginator.html' import paginate %}
-{% from 'macros/snippets.html' import connections %}
+{% from 'macros/snippets.html' import connections, entity_link %}
 
 {% block title %}Explore{% endblock %}
 
@@ -20,8 +20,7 @@
         {% for result in pager %}
           <tr>
             <td>
-              <a href="{{url_for('profile.view', id=result.id, slug=result.properties.name.value|slugify)}}">
-                {{result.properties.name.value}}</a>
+              {{ entity_link(result) }}
             </td>
             <td>
               {{ result | snippet | truncate(60) }}

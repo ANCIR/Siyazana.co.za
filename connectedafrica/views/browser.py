@@ -20,7 +20,6 @@ def view():
         else:
             main_schema = schemata.by_name(schema_active[0])
         query = query.filter('schema', schema_active)
-        #query = query.filter('facet', 'schema')
         query = query.filter('sort', '-degree')
         pager = Pager(query)
         return render_template('browser.html',

@@ -1,10 +1,8 @@
 from collections import OrderedDict
 
 from flask import Blueprint, render_template, redirect, url_for
-from granoclient import NotFound
 
-
-from connectedafrica.core import grano
+from connectedafrica.core import grano, cache
 from connectedafrica import util
 from connectedafrica.util.properties import Properties
 from connectedafrica.util.relations import load_relations
@@ -33,7 +31,7 @@ def display_name(entity=None, data_dict=None):
         return '%s %s' % (properties['given_name']['value'],
                           properties['family_name']['value'])
     else:
-        return properties['name']['value'].title()
+        return properties['name']['value']
 
 
 def source_map(entity):
@@ -54,16 +52,11 @@ def fwd_view(id):
 
 
 @blueprint.route('/profile/<id>/<slug>')
+#@cache.cached()  # fucking pagination
 def view(id, slug):
     entity = grano.entities.by_id(id)
     relation_sections = load_relations(entity, id, slug)
-
-    template = 'profile/base.html'
-    if entity.schema.name == 'Person':
-        template = 'profile/person.html'
-    elif entity.schema.name == 'Organization':
-        template = 'profile/organization.html'
-    return render_template(template,
+    return render_template('profile.html',
                            entity=entity,
                            properties=Properties(entity),
                            display_name=display_name(entity),

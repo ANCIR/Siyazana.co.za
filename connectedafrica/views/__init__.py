@@ -8,6 +8,7 @@ from connectedafrica.core import app, grano
 from connectedafrica.views.base import blueprint as base_blueprint
 from connectedafrica.views.browser import blueprint as browser_blueprint
 from connectedafrica.views.profile import blueprint as profile_blueprint
+from connectedafrica.views.graph import blueprint as graph_blueprint
 from connectedafrica.views.profile import display_name
 from connectedafrica import util
 from connectedafrica.util.entities import schema_facets
@@ -16,6 +17,7 @@ from connectedafrica.util.entities import schema_facets
 app.register_blueprint(base_blueprint)
 app.register_blueprint(browser_blueprint)
 app.register_blueprint(profile_blueprint)
+app.register_blueprint(graph_blueprint)
 
 
 @app.context_processor

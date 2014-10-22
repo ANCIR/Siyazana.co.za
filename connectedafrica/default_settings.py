@@ -6,6 +6,7 @@ ASSETS_DEBUG = True
 FLATPAGES_ROOT = '../pages'
 FLATPAGES_EXTENSION = '.md'
 
+CACHE_TYPE = 'simple'
 
 APP_NAME = 'Siyazana'
 
@@ -25,4 +26,5 @@ DOCCLOUD_PROJECT = int(os.environ.get('DOCCLOUD_PROJECT', '130'))
 SOURCE_NAMES = {
     'za-new-import.popit.mysociety.org': "People's Assembly Data",
     'www.windeedsearch.co.za': "Windeed CIPC Search",
+    'www.jse.co.za': "Johannesburg Stock Exchange"
 }

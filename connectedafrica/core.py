@@ -1,5 +1,6 @@
 from flask import Flask, url_for
 from flask.ext.assets import Environment
+from flask.ext.cache import Cache
 from flask_flatpages import FlatPages
 from granoclient import Grano, NotFound
 
@@ -12,6 +13,8 @@ app.config.from_envvar('COAF_SETTINGS', silent=True)
 
 assets = Environment(app)
 pages = FlatPages(app)
+cache = Cache()
+cache.init_app(app)
 
 # Set up an API client for the grano instance:
 

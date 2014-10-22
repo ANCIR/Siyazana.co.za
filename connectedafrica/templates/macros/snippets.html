@@ -22,7 +22,7 @@
 {% endmacro %}
 
 {% macro entity_link(ent) %}
-  <a href="{{ url_for('profile.view', id=ent.id, slug=ent.properties.name.value | slugify) }}">
+  <a class="fg-{{ent.schema.name}} simple" href="{{ url_for('profile.view', id=ent.id, slug=ent.properties.name.value | slugify) }}">
     {{ ent | display_name }}
   </a>
 {% endmacro %}

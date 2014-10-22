@@ -1,6 +1,7 @@
-from connectedafrica.core import grano, schemata
+from connectedafrica.core import grano, schemata, cache
 
 
+@cache.memoize()
 def schema_facets(q=None):
     facets = []
     qy = grano.entities.query().limit(0)

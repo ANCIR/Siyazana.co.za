@@ -1,37 +1,47 @@
 {% extends "layout.html" %}
+{% from 'macros/snippets.html' import connections, entity_link %}
 
 {% block title %}
   Welcome
 {% endblock %}
 
-{% block content %}
-  <!--div class="jumbotron">
-    <h1>{{APP_NAME}}</h1>
-    <p>
-      We explore the links between politics, power and money in 
-      South Africa.
-    </p>
-  </div-->
-  <div class="row">
-    <div class="col-md-8">
-      <h3>What is {{APP_NAME}}?</h3>
-      <p>
-        Our database is a resource for anyone interested in how relationships -
-        biographical, professional or economic - influence the people and process
-        in South African politics.
-        <a href='{{url_for('base.page', path='about')}}'>Read more...</a>
-      </p>
+{% block banner %}
+  <div class="home-banner">
+    <div class="container">
+      <h1>
+        {{APP_NAME}}
+        <small>we know each other</small>
+      </h1>
     </div>
-    <div class="col-md-4">
-      <h3>Data summary</h3>
-      <table class="data-summary">
-        {% for schema, count in schemata %}
-          <tr>
-            <td class="number"><strong>{{count}}</strong></td>
-            <td><a href='{{url_for('browser.view', schema=schema.name)}}'>{{schema.meta.plural or schema.label}}</a></td>
-          </tr>
-        {% endfor %}
-      </table>
+  </div>
+{% endblock %}
+
+{% macro top_list(res, title) %}
+  <h4>{{title}}</h4>
+  <table class="table table-condensed">
+    {% for ent in res %}
+      <tr>
+        <td>{{ entity_link(ent) }}</td>
+        <td class="num">{{ ent.degree }}</td>
+      </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="2" class="num">...and {{res.data.total - res.data.limit}} more</td>
+    </tr>
+  </table>
+{% endmacro %}
+
+{% block content %}
+  <p class="home-teaser">
+    Siyazana is an isiZulu word that means <strong>we know each other</strong> or <strong>we are connected</strong>. This website has been designed to provide users with a tool to investigate the connections that exist between the private and public spheres in South Africa. Specifically, it provides a unique insight into the financial connectivities that can, and often do, determine how, when, and why money is expended by government. 
+    <a href='{{url_for('base.page', path='about')}}'>Read more...</a>
+  </p>
+  <div class="row">
+    <div class="col-sm-6">
+      {{ top_list(people, 'Connected politicians')}}
+    </div>
+    <div class="col-sm-6">
+      {{ top_list(orgs, 'Connected companies')}}
     </div>
   </div>
 {% endblock %}
