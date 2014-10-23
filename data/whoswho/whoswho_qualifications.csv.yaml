@@ -7,32 +7,33 @@ entities:
      - column: 'person_name'
        property: 'name'
   org:
-    schema: 'Organization'
+    schema: 'EducationalInstitution'
     source_url_column: 'source_url'
     columns:
      - column: 'organization_name'
        property: 'name'
-     - column: 'organization_url'
-       property: 'xurl_whos_who'
        skip_empty: true
 relations:
   membership:
-    schema: 'Membership'
+    schema: 'Education'
     source_url_column: 'source_url'
     source: 'person'
     target: 'org'
     columns:
-     - column: 'role_name'
-       property: 'role'
+     - column: 'qualification'
+       property: 'qualification_name'
        skip_empty: true
        unique: true
-     - column: 'role_start_year'
+     - column: 'level'
+       property: 'level'
+       skip_empty: true
+     - column: 'start_year'
        property: 'date_start'
        type: datetime
-       format: '%Y'
-       skip_empty: true
-     - column: 'role_end_year'
+       format:
+          year: '%Y'
+     - column: 'year_awarded'
        property: 'date_end'
        type: datetime
-       format: '%Y'
-       skip_empty: true
+       format:
+          year: '%Y'

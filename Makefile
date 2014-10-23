@@ -24,7 +24,7 @@ loadpa:
 
 loadnpo:
 	@granoloader csv -t 5 data/npo/npo_organisations.csv.yaml data/npo/npo_organisations.csv
-	@granoloader csv -t 5 data/npo/npo_officers.csv.yaml data/npo/npo_officers.csv
+	#@granoloader csv -t 5 data/npo/npo_officers.csv.yaml data/npo/npo_officers.csv  # TODO
 
 loadwindeeds:
 	@granoloader csv -t 5 data/windeeds/windeeds_companies_to_members.csv.yaml data/windeeds/windeeds_companies_to_members.csv
@@ -35,9 +35,9 @@ loadwindeeds:
 	@granoloader csv -t 5 data/windeeds/windeeds_officers_to_companies.csv.yaml data/windeeds/windeeds_officers_to_companies.csv
 
 loadwhoswho:
-	@granoloader csv -t 5 data/whoswho_persons.csv.yaml data/whoswho_persons.csv
-	@granoloader csv -t 5 data/whoswho_memberships.csv.yaml data/whoswho_memberships.csv
-	@granoloader csv -t 5 data/whoswho_qualifications.csv.yaml data/whoswho_qualifications.csv
+	@granoloader csv -t 5 data/whoswho/whoswho_persons.csv.yaml data/whoswho/whoswho_persons.csv
+	#@granoloader csv -t 5 data/whoswho/whoswho_memberships.csv.yaml data/whoswho/whoswho_memberships.csv  # TODO
+	@granoloader csv -t 5 data/whoswho/whoswho_qualifications.csv.yaml data/whoswho/whoswho_qualifications.csv
 
 loadwikipedia:
 	python connectedafrica/scrapers/wikipedia.py

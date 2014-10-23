@@ -279,7 +279,7 @@ def write_to_csv(csv, data):
     out_data = data['basic_info'].copy()
     out_data['source_url'] = data['url']
     set_to_empty(out_data, ('birth_date', 'birth_town', 'country'))
-    csv.write('whoswho_persons.csv', out_data)
+    csv.write('whoswho/whoswho_persons.csv', out_data)
     person_name = out_data['display_name']  # don't have a full name for everyone
     # Memberships (professional)
     for details in data['professional_details']:
@@ -288,7 +288,7 @@ def write_to_csv(csv, data):
         out_data['person_name'] = person_name
         set_to_empty(out_data, ('role_start_year', 'role_end_year',
                                 'organization_name', 'organization_url'))
-        csv.write('whoswho_memberships.csv', out_data)
+        csv.write('whoswho/whoswho_memberships.csv', out_data)
     # Memberships (other)
     for details in data['activities']:
         out_data = details.copy()
@@ -296,7 +296,7 @@ def write_to_csv(csv, data):
         out_data['person_name'] = person_name
         set_to_empty(out_data, ('role_start_year', 'role_end_year',
                                 'role_name', 'status'))
-        csv.write('whoswho_memberships.csv', out_data)
+        csv.write('whoswho/whoswho_memberships.csv', out_data)
     # Qualifications
     for details in data['education']:
         out_data = details.copy()
@@ -305,7 +305,7 @@ def write_to_csv(csv, data):
         set_to_empty(out_data, ('organization_name', 'place',
                                 'year_awarded', 'status',
                                 'start_year', 'qualification'))
-        csv.write('whoswho_qualifications.csv', out_data)
+        csv.write('whoswho/whoswho_qualifications.csv', out_data)
 
 
 def produce_urls(shared_obj, source_url, new_urls=None):

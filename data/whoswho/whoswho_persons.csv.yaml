@@ -20,6 +20,8 @@ entities:
      - column: 'birth_date'
        property: 'date_birth'
        type: datetime
+       format:
+         day: ['%Y-%m-%d %H:%M:%S', '%Y-%m-%d']
        skip_empty: true
      - column: 'birth_town'
        property: 'birth_town'
