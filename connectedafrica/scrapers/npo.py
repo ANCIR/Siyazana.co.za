@@ -1,6 +1,7 @@
 import logging
 import json
 import os
+import re
 #from pprint import pprint
 #from itertools import count
 from urlparse import urljoin
@@ -68,10 +69,13 @@ def scrape_npo(csv, i):
             next_heading = 'legal_form'
         elif next_heading == 'legal_form':
             data['legal_form'] = text
+            next_heading = None
     for span in doc.findall('.//span'):
         text = collapse_whitespace(span.text)
         if text is not None and 'Registered on' in text:
-            data['reg_date'] = text
+            match = re.search(r'\d+.\d+.\d+', text)
+            if match:
+                data['reg_date'] = match.group(0)
     for addr in doc.findall('.//div[@class="address"]'):
         addr_type = collapse_whitespace(addr.find('./h4').text)
         addrs = [collapse_whitespace(a) for a in
@@ -92,7 +96,7 @@ def scrape_npo(csv, i):
                 }.get(li.get('class'))
                 data[contact_type] = contact
     off_div = './/li[@data-sha-context-enttype="Npo.AppointedOfficeBearer"]'
-    csv.write('npo_organisations.csv', data)
+    csv.write('npo/npo_organisations.csv', data)
     for li in doc.findall(off_div):
         s = li.find('.//strong')
         a = s.find('./a')
@@ -112,7 +116,7 @@ def scrape_npo(csv, i):
             'officer_name': collapse_whitespace(a.text),
             'officer_id_number': id_number
         }
-        csv.write('npo_officers.csv', officer)
+        csv.write('npo/npo_officers.csv', officer)
 
 
 def scrape_npos():
