@@ -321,7 +321,32 @@
   obj: relation
   meta:
     plural: 'Directorships'
+    schema_text: >
+      Directorships are held by members of an organization's board of directors.
+      Some directors might also serve as officers, depending on the organization.
   attributes:
+    - name: status
+      label: 'Status'
+
+
+#####################################################################
+# Relation: Office
+#####################################################################
+- name: 'Office'
+  label: 'Officer'
+  description: 'An entity is an officer of an organization'
+  hidden: false
+  parent: 'Relation'
+  obj: relation
+  meta:
+    plural: 'Offices'
+    schema_text: >
+      Officers are elected by an organization's board of directors. Offices include
+      CEO, President and Secretary. Some officers might also
+      serve as directors, depending on the organization.
+  attributes:
+    - name: role
+      label: 'Role'
     - name: status
       label: 'Status'
 
