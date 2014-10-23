@@ -17,8 +17,13 @@
   <h1>
     {% block displayname %}{{ display_name }}{% endblock %}
   </h1>
-  <!-- TODO: summary and/or abstract -->
 
+  {% if entity.properties.summary %}
+    <p class="legible-text">{{ entity.properties.summary.value | pa_shorten }}</p>
+  {% elif entity.properties.tagline %}
+    <p class="legible-text">{{ entity.properties.tagline.value | pa_shorten }}</p>
+  {% endif %}
+ 
   <table class="table table-condensed table-properties">
     {% for property in properties %}
       <tr>

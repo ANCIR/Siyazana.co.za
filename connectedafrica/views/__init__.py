@@ -57,6 +57,17 @@ def display_name_filter(entity_or_data):
     return ''
 
 
+@app.template_filter('pa_shorten')
+def pa_shorten(text):
+    # this is hacky.
+    text = text.split("'s plenary attendance", 1)[0]
+    texts = text.rsplit('. ', 1)
+    if len(texts):
+        text = texts[0].strip()
+        text = text + '.'
+    return text
+
+
 @app.template_filter('snippet')
 def make_snippet(entity):
     if isinstance(entity, Entity):
