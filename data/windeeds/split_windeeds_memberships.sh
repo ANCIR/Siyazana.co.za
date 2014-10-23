@@ -25,21 +25,34 @@ let COUNTER=0
 
 HEADER=`head -n 1 windeeds_companies_gn.csv`
 echo $HEADER > windeeds_companies_to_directors.csv
+echo $HEADER > windeeds_companies_to_officers.csv
 echo $HEADER > windeeds_companies_to_members.csv
 
 tail -n +2 windeeds_companies_gn.csv | while read LINE; do
     MEMBER_TYPE=`echo "${SCRIPT}${HEADER}''','''${LINE}'''))" | python`
-    echo $MEMBER_TYPE | grep -q --ignore-case "Director"
-    if [ $? -eq 0 ]; then
-        echo $LINE >> windeeds_companies_to_directors.csv
-        let CHAR_COUNT=`echo -n $MEMBER_TYPE | wc -m`
-        if [ $CHAR_COUNT -gt 9 ]; then
-            # the individual plays other membership roles, not just director
+    if [ "$MEMBER_TYPE" = "Member" ]; then
+        echo $LINE >> windeeds_companies_to_members.csv
+    else
+        IS_DIRECTOR=false
+        IS_OFFICER=false
+        echo $MEMBER_TYPE | grep -q -i "Director"
+        if [ $? -eq 0 ]; then
+            IS_DIRECTOR=true
+            echo $LINE >> windeeds_companies_to_directors.csv
+        fi
+        for ROLE in "Secretary" "Officer"; do
+            echo $MEMBER_TYPE | grep -q -i $ROLE
+            if [ $? -eq 0 ]; then
+                IS_OFFICER=true
+                echo $LINE >> windeeds_companies_to_officers.csv
+                break
+            fi
+        done
+        if [ "$IS_DIRECTOR" = false ] && [ "$IS_OFFICER" = false ]; then
             echo $LINE >> windeeds_companies_to_members.csv
         fi
-    else
-        echo $LINE >> windeeds_companies_to_members.csv
     fi
+
     let COUNTER+=1
     echo -en "\e[1A"; echo -e "\e[0K\r $COUNTER / $LINE_NUMBER"
 done
@@ -47,21 +60,35 @@ done
 
 HEADER=`head -n 1 windeeds_directors_gn.csv`
 echo $HEADER > windeeds_directors_to_companies.csv
+echo $HEADER > windeeds_officers_to_companies.csv
 echo $HEADER > windeeds_members_to_companies.csv
 
 tail -n +2 windeeds_directors_gn.csv | while read LINE; do
     MEMBER_TYPE=`echo "${SCRIPT}${HEADER}''','''${LINE}'''))" | python`
-    echo $MEMBER_TYPE | grep -q --ignore-case "Director"
-    if [ $? -eq 0 ]; then
-        echo $LINE >> windeeds_directors_to_companies.csv
-        let CHAR_COUNT=`echo -n $MEMBER_TYPE | wc -m`
-        if [ $CHAR_COUNT -gt 9 ]; then
-            # the individual plays other membership roles, not just director
+    echo $MEMBER_TYPE | grep -q -i "Director"
+    if [ "$MEMBER_TYPE" = "Member" ]; then
+        echo $LINE >> windeeds_members_to_companies.csv
+    else
+        IS_DIRECTOR=false
+        IS_OFFICER=false
+        echo $MEMBER_TYPE | grep -q -i "Director"
+        if [ $? -eq 0 ]; then
+            IS_DIRECTOR=true
+            echo $LINE >> windeeds_directors_to_companies.csv
+        fi
+        for ROLE in "Secretary" "Officer"; do
+            echo $MEMBER_TYPE | grep -q -i $ROLE
+            if [ $? -eq 0 ]; then
+                IS_OFFICER=true
+                echo $LINE >> windeeds_officers_to_companies.csv
+                break
+            fi
+        done
+        if [ "$IS_DIRECTOR" = false ] && [ "$IS_OFFICER" = false ]; then
             echo $LINE >> windeeds_members_to_companies.csv
         fi
-    else
-        echo $LINE >> windeeds_members_to_companies.csv
     fi
+
     let COUNTER+=1
     echo -en "\e[1A"; echo -e "\e[0K\r $COUNTER / $LINE_NUMBER"
 done
