@@ -30,10 +30,12 @@ relations:
      - column: 'start_year'
        property: 'date_start'
        type: datetime
+       skip_empty: true
        format:
           year: '%Y'
      - column: 'year_awarded'
        property: 'date_end'
        type: datetime
+       skip_empty: true
        format:
           year: '%Y'
