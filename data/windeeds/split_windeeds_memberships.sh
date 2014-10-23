@@ -35,11 +35,14 @@ tail -n +2 windeeds_companies_gn.csv | while read LINE; do
     else
         IS_DIRECTOR=false
         IS_OFFICER=false
-        echo $MEMBER_TYPE | grep -q -i "Director"
-        if [ $? -eq 0 ]; then
-            IS_DIRECTOR=true
-            echo $LINE >> windeeds_companies_to_directors.csv
-        fi
+        for ROLE in "Director" "Trustee"; do
+            echo $MEMBER_TYPE | grep -q -i $ROLE
+            if [ $? -eq 0 ]; then
+                IS_DIRECTOR=true
+                echo $LINE >> windeeds_companies_to_directors.csv
+                break
+            fi
+        done
         for ROLE in "Secretary" "Officer"; do
             echo $MEMBER_TYPE | grep -q -i $ROLE
             if [ $? -eq 0 ]; then
@@ -71,11 +74,14 @@ tail -n +2 windeeds_directors_gn.csv | while read LINE; do
     else
         IS_DIRECTOR=false
         IS_OFFICER=false
-        echo $MEMBER_TYPE | grep -q -i "Director"
-        if [ $? -eq 0 ]; then
-            IS_DIRECTOR=true
-            echo $LINE >> windeeds_directors_to_companies.csv
-        fi
+        for ROLE in "Director" "Trustee"; do
+            echo $MEMBER_TYPE | grep -q -i $ROLE
+            if [ $? -eq 0 ]; then
+                IS_DIRECTOR=true
+                echo $LINE >> windeeds_directors_to_companies.csv
+                break
+            fi
+        done
         for ROLE in "Secretary" "Officer"; do
             echo $MEMBER_TYPE | grep -q -i $ROLE
             if [ $? -eq 0 ]; then
