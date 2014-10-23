@@ -21,7 +21,8 @@ entities:
      - column: 'CIPC-Person Date of birth'
        property: 'date_birth'
        type: datetime
-       format: '%m/%d/%Y'
+       format:
+         day: '%Y/%m/%d'
        skip_empty: true
   org:
     schema: 'Company'
@@ -53,7 +54,8 @@ entities:
      - column: 'CIPC-Company Business start date'
        property: 'date_founding'
        type: datetime
-       format: '%m/%d/%Y'
+       format:
+         day: '%Y/%m/%d'
        skip_empty: true
      - column: 'CIPC-Company Registration number'
        property: 'registration_number'
@@ -75,12 +77,14 @@ relations:
      - column: 'CIPC-Person Appointment date'
        property: 'date_start'
        type: datetime
-       format: '%m/%d/%Y'
+       format:
+         day: '%Y/%m/%d'
        skip_empty: true
      - column: 'CIPC-Person Resignation date'
        property: 'date_end'
        type: datetime
-       format: '%m/%d/%Y'
+       format:
+         day: '%Y/%m/%d'
        skip_empty: true
 
 

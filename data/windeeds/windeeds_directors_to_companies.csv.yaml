@@ -18,7 +18,8 @@ entities:
      - column: 'CIPC Date of birth'
        property: 'date_birth'
        type: datetime
-       format: '%m/%d/%Y'
+       format:
+         day: '%Y/%m/%d'
        skip_empty: true
   org:
     schema: 'Company'
@@ -48,11 +49,13 @@ relations:
      - column: 'CIPC Appointment date'
        property: 'date_start'
        type: datetime
-       format: '%m/%d/%Y'
+       format:
+         day: '%Y/%m/%d'
        skip_empty: true
      - column: 'CIPC Resignation date'
        property: 'date_end'
        type: datetime
-       format: '%m/%d/%Y'
+       format:
+         day: '%Y/%m/%d'
        skip_empty: true
 
