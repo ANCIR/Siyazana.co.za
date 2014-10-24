@@ -45,17 +45,18 @@ loadwikipedia:
 
 # Google docs
 loadgdocs:
-	@wget -q -O data/persons.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1657155089"
-	@granoloader csv -t 5 -f data/persons.csv.yaml data/persons.csv
-	@wget -q -O data/litigation.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1973809171"
-	@granoloader csv -t 5 -f data/litigation.csv.yaml data/litigation.csv
-	@wget -q -O data/connections.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1752160727"
-	@head -n 1 data/connections.csv > data/personalconnections.csv
-	@head -n 1 data/connections.csv > data/familyconnections.csv
-	@sed -n "/Personal,Personal >/p" data/connections.csv >> data/personalconnections.csv
-	@sed -n "/Family,Family >/p" data/connections.csv >> data/familyconnections.csv
-	@granoloader csv -t 5 -f data/personalconnections.csv.yaml data/personalconnections.csv
-	@granoloader csv -t 5 -f data/familyconnections.csv.yaml data/familyconnections.csv
+	@wget -q -O data/gdocs/persons.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1657155089"
+	@granoloader csv -t 5 -f data/gdocs/persons.csv.yaml data/gdocs/persons.csv
+	@wget -q -O data/gdocs/litigation.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1973809171"
+	@granoloader csv -t 5 -f data/gdocs/litigation.csv.yaml data/gdocs/litigation.csv
+	@wget -q -O data/gdocs/connections.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1752160727"
+	./data/gdocs/split_connections.sh
+	@granoloader csv -t 5 -f data/gdocs/personal.csv.yaml data/gdocs/personal.csv
+	@granoloader csv -t 5 -f data/gdocs/family.csv.yaml data/gdocs/family.csv
+	@granoloader csv -t 5 -f data/gdocs/donors.csv.yaml data/gdocs/donors.csv
+	@granoloader csv -t 5 -f data/gdocs/memberships.csv.yaml data/gdocs/memberships.csv
+	@granoloader csv -t 5 -f data/gdocs/partnerships.csv.yaml data/gdocs/partnerships.csv
+	@granoloader csv -t 5 -f data/gdocs/financialrelations.csv.yaml data/gdocs/financialrelations.csv
 	# TODO: also split up financial, affiliation, event connections
 
 cleangdocs:

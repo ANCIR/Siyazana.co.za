@@ -1,0 +1,36 @@
+entities:
+  person:
+    schema: 'Person'
+    source_url_column: 'Source URL'
+    columns:
+     - column: 'Person A'
+       property: 'name'
+  entity:
+    schema: 'Entity'
+    source_url_column: 'Source URL'
+    columns:
+     - column: 'Person B'
+       property: 'name'
+relations:
+  tie:
+    schema: 'FinancialRelation'
+    source_url_column: 'Source URL'
+    source: 'person'
+    target: 'entity'
+    columns:
+     - column: 'Date start'
+       property: 'date_start'
+       type: datetime
+       format:
+          day: ['%d/%m/%Y', '%d-%m-%Y']
+          month: ['%m/%Y', '%m-%Y']
+          year: '%Y'
+       skip_empty: true
+     - column: 'Date end'
+       property: 'date_end'
+       type: datetime
+       format:
+          day: ['%d/%m/%Y', '%d-%m-%Y']
+          month: ['%m/%Y', '%m-%Y']
+          year: '%Y'
+       skip_empty: true

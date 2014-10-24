@@ -11,16 +11,9 @@ connectedafrica/static/gen/*
 connectedafrica/static/.webassets-cache/*
 
 data/.cache/*
-data/npo_officers.csv
-data/npo_organisations.csv
-data/windeeds_companies.csv
-data/windeeds_directors.csv
+data/gdocs/*.csv
+data/npo/*.csv
+data/whoswho/*.csv
 data/cipc_pdfs/*
-
-data/family.csv
-data/litigation.csv
-data/persons.csv
-data/wikipedia_images.csv
-data/directorships.csv
 
 reports/*
