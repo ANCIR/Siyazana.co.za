@@ -31,6 +31,7 @@ All good!
 # gdocs (INCOMPLETE)
 
 **litigation.csv** is fine.
+
 **persons.csv** is being loaded but body, post and portfolio fields are skipped.
 
 **split_connections.sh** splits **connections.csv** into **family.csv**, **personal.csv**, **donors.csv**, **partnerships.csv**, **financialrelations.csv** and **memberships.csv**. These load Family, Personal, Donor, Partnership, FinancialRelation and Membership relations respectively.
