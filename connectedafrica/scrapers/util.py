@@ -11,6 +11,7 @@ from unicodecsv import DictWriter, DictReader
 from connectedafrica.core import app
 
 
+ACCEPTED_IMAGE_EXTENSIONS = set(('.png', '.jpg', '.jpeg', '.bmp'))
 DATA_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
 DATA_PATH = os.path.abspath(DATA_PATH)
 PERSONS_CSV_URL = 'https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1657155089'

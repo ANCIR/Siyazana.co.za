@@ -7,10 +7,10 @@ from thready import threaded
 from unicodecsv import csv
 
 from connectedafrica.core import grano
-from connectedafrica.scrapers.util import MultiCSV, DATA_PATH
+from connectedafrica.scrapers.util import (MultiCSV, DATA_PATH,
+                                           ACCEPTED_IMAGE_EXTENSIONS)
 
 
-ACCEPTED_EXTENSIONS = set(('.png', '.jpg', '.jpeg', '.bmp'))
 ENDPOINT_URL = 'http://en.wikipedia.org/w/api.php'
 DEFAULT_PARAMS = {
     'format': 'json',
@@ -43,7 +43,7 @@ def scrape_image(name, csv):
     for k in results.keys():
         result = results[k]
         if os.path.splitext(result['imageinfo'][0]['url'])[1] \
-                not in ACCEPTED_EXTENSIONS:
+                not in ACCEPTED_IMAGE_EXTENSIONS:
             del results[k]
     # in case we have no valid image files
     if len(results) == 0:
