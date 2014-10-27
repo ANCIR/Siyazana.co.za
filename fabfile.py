@@ -18,7 +18,7 @@ PACKAGES = (
     'supervisor',
 )
 # Nginx & Supervisor constants
-SERVER_NAMES = 'sa.connectedafrica.org ec2-54-76-245-198.eu-west-1.compute.amazonaws.com'
+SERVER_NAMES = 'siyazana.co.za'
 PROXY_PORT = 5001
 PROXY_HOST = '127.0.0.1'
 LOG_DIR = 'connectedafrica_logs'
