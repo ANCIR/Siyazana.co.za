@@ -1,4 +1,5 @@
 import os
+import re
 import urlparse
 
 from lxml import html
@@ -8,9 +9,17 @@ from thready import threaded
 from connectedafrica.scrapers.util import (ScraperException, MultiCSV,
                                            gdocs_persons, make_abs_url,
                                            ACCEPTED_IMAGE_EXTENSIONS)
+from connectedafrica.scrapers.wikipedia import ENDPOINT_URL as WIKI_ENDPOINT_URL
 
 
 THREAD_COUNT = 10
+WIKI_PARAMS = {
+    'format': 'json',
+    'action': 'query',
+    'prop': 'imageinfo',
+    'iiprop': 'url',
+    'iiurlwidth': 512
+}
 
 
 def get_document_root(url):
@@ -40,8 +49,25 @@ def _scrape_from_whoswho(url):
 
 
 def _scrape_from_wikipedia(url):
-    raise NotImplementedError
-    root = get_document_root(url)
+    parts = urlparse.urlparse(url)
+    match = re.match(r'mediaviewer/(?P<filename>File:.*)$', parts.fragment)
+    if match:
+        filename = match.group('filename')
+    else:
+        root = get_document_root(url)
+        image_el = root.find_class('vcard')[0].find_class('image')
+        if not image_el:
+            raise ScraperException("Image not found at %s" % url)
+        filename = image_el[0].get('href')
+        filename = filename[filename.index('File:'):]
+    # use the Wikimedia API to get the file url at a reasonable size
+    params = WIKI_PARAMS.copy()
+    params['titles'] = filename.replace('_', ' ')
+    response = requests.get(WIKI_ENDPOINT_URL, params=params)
+    data = response.json()['query']
+    if 'pages' not in data or len(data['pages']) == 0:
+        raise ScraperException("Image not found at %s" % url)
+    return data['pages'].values()[0]['imageinfo'][0]['thumburl']
 
 
 VALID_ENDPOINTS = {
@@ -53,6 +79,9 @@ VALID_ENDPOINTS = {
 
 
 def scrape_image(name, url, csv):
+    if not url:
+        return
+
     print "scraping %s" % name
     parts = urlparse.urlparse(url)
     extension = os.path.splitext(parts.path)[1]
@@ -62,10 +91,10 @@ def scrape_image(name, url, csv):
             raise ScraperException("Cannot scrape image from %s" % parts.netloc)
         image_url = scrape_func(url)
         url = make_abs_url(url, image_url)
-    elif extension not in ACCEPTED_IMAGE_EXTENSIONS:
+    elif extension.lower() not in ACCEPTED_IMAGE_EXTENSIONS:
         raise ScraperException("Unsupported image format at %s" % url)
 
-    csv.write('pa/pa_images.csv', {
+    csv.write('profileimages.csv', {
         'name': name,
         'image_url': url
     })
