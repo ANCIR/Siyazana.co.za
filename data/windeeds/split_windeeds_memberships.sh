@@ -1,3 +1,4 @@
+#!/bin/bash
 cd data/windeeds/
 
 SCRIPT="

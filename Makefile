@@ -1,4 +1,4 @@
-load: loadschema loadgdocs loadwikipedia loadjse loadpa loadnpo
+load: loadschema loadgdocs loadjse loadpa loadwindeeds
 
 install:
 	bower install
@@ -14,6 +14,7 @@ loadjse:
 	@granoloader csv -t 5 data/jse/jse_links.csv.yaml data/jse/jse_links.csv
 
 loadpa:
+	./data/pa/split_pa_memberships.sh
 	@granoloader csv -t 5 data/pa/pa_persons.csv.yaml data/pa/pa_persons.csv
 	@granoloader csv -t 5 data/pa/pa_parties.csv.yaml data/pa/pa_parties.csv
 	@granoloader csv -t 5 data/pa/pa_committees.csv.yaml data/pa/pa_committees.csv
@@ -27,6 +28,7 @@ loadnpo:
 	#@granoloader csv -t 5 data/npo/npo_officers.csv.yaml data/npo/npo_officers.csv  # TODO
 
 loadwindeeds:
+	./data/windeeds/split_windeeds_memberships.sh
 	@granoloader csv -t 5 data/windeeds/windeeds_companies_to_members.csv.yaml data/windeeds/windeeds_companies_to_members.csv
 	@granoloader csv -t 5 data/windeeds/windeeds_companies_to_directors.csv.yaml data/windeeds/windeeds_companies_to_directors.csv
 	@granoloader csv -t 5 data/windeeds/windeeds_companies_to_officers.csv.yaml data/windeeds/windeeds_companies_to_officers.csv
