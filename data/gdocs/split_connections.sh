@@ -1,3 +1,4 @@
+#!/bin/bash
 cd data/gdocs/
 
 HEADER=`head -n 1 connections.csv`

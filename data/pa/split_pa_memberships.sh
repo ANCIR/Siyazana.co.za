@@ -1,3 +1,4 @@
+#!/bin/bash
 cd data/pa/
 
 COMMITTEE_LIST=`sed 's/^\(\([^,"]\+\)\|\("[^"]\+"\)\),.*/\1/g' pa_committees.csv | tr -d '"'`
