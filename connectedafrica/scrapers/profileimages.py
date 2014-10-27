@@ -44,8 +44,13 @@ def _scrape_from_google(url):
 
 
 def _scrape_from_whoswho(url):
-    raise NotImplementedError
     root = get_document_root(url)
+    pic_el = root.get_element_by_id('profile-pic', None)
+    if pic_el is not None:
+        pic_el = pic_el.xpath('a[1]/img')
+        if pic_el:
+            return pic_el[0].get('src')
+    raise ScraperException("Image not found at %s" % url)
 
 
 def _scrape_from_wikipedia(url):
@@ -78,7 +83,7 @@ VALID_ENDPOINTS = {
 }
 
 
-def scrape_image(name, url, csv):
+def scrape_image(name, url, csv, image_credit=''):
     if not url:
         return
 
@@ -96,7 +101,8 @@ def scrape_image(name, url, csv):
 
     csv.write('profileimages.csv', {
         'name': name,
-        'image_url': url
+        'image_url': url,
+        'image_credit': image_credit
     })
 
 
@@ -104,7 +110,8 @@ def scrape():
     csv = MultiCSV()
     threaded(
         gdocs_persons(),
-        lambda data: scrape_image(data['Full Name'], data['Image URL'], csv),
+        lambda data: scrape_image(data['Full Name'], data['Image URL'], csv,
+                                  data['Image Credit']),
         num_threads=THREAD_COUNT
     )
     csv.close()
