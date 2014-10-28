@@ -1,4 +1,3 @@
-import os
 import re
 import urlparse
 
@@ -22,47 +21,41 @@ WIKI_PARAMS = {
 }
 
 
-def get_document_root(url):
-    response = requests.get(url)
-    response.raise_for_status()
-    return html.fromstring(response.text)
-
-
-def _scrape_from_pa(url):
-    root = get_document_root(url)
+def _scrape_from_pa(resp):
+    root = html.fromstring(resp.text)
     pic_el = root.find_class('profile-pic')
     if pic_el:
         pic_el = pic_el[0].xpath('img[1]')
         if pic_el:
             return pic_el[0].get('src')
-    raise ScraperException("Image not found at %s" % url)
+    raise ScraperException("Image not found at %s" % resp.url)
 
 
-def _scrape_from_google(url):
+def _scrape_from_google(resp):
     raise NotImplementedError
-    root = get_document_root(url)
+    root = html.fromstring(resp.text)
 
 
-def _scrape_from_whoswho(url):
-    root = get_document_root(url)
+def _scrape_from_whoswho(resp):
+    root = html.fromstring(resp.text)
     pic_el = root.get_element_by_id('profile-pic', None)
     if pic_el is not None:
         pic_el = pic_el.xpath('a[1]/img')
         if pic_el:
             return pic_el[0].get('src')
-    raise ScraperException("Image not found at %s" % url)
+    raise ScraperException("Image not found at %s" % resp.url)
 
 
-def _scrape_from_wikipedia(url):
-    parts = urlparse.urlparse(url)
+def _scrape_from_wikipedia(resp):
+    parts = urlparse.urlparse(resp.url)
     match = re.match(r'mediaviewer/(?P<filename>File:.*)$', parts.fragment)
     if match:
         filename = match.group('filename')
     else:
-        root = get_document_root(url)
+        root = html.fromstring(resp.text)
         image_el = root.find_class('vcard')[0].find_class('image')
         if not image_el:
-            raise ScraperException("Image not found at %s" % url)
+            raise ScraperException("Image not found at %s" % resp.url)
         filename = image_el[0].get('href')
         filename = filename[filename.index('File:'):]
     # use the Wikimedia API to get the file url at a reasonable size
@@ -71,32 +64,40 @@ def _scrape_from_wikipedia(url):
     response = requests.get(WIKI_ENDPOINT_URL, params=params)
     data = response.json()['query']
     if 'pages' not in data or len(data['pages']) == 0:
-        raise ScraperException("Image not found at %s" % url)
+        raise ScraperException("Image not found at %s" % resp.url)
     return data['pages'].values()[0]['imageinfo'][0]['thumburl']
+
+
+def _scrape_from_parliament(resp):
+    raise NotImplementedError
 
 
 VALID_ENDPOINTS = {
     "www.pa.org.za": _scrape_from_pa,
     "www.google.co.za": _scrape_from_google,
     "whoswho.co.za": _scrape_from_whoswho,
-    "en.wikipedia.org": _scrape_from_wikipedia
+    "en.wikipedia.org": _scrape_from_wikipedia,
+    "www.parliament.gov.za": _scrape_from_parliament
 }
 
 
 def scrape_image(name, url, csv, image_credit=''):
-    if not url:
+    if not url.strip():
         return
 
     print "scraping %s" % name
     parts = urlparse.urlparse(url)
-    extension = os.path.splitext(parts.path)[1]
-    if not extension:
+    if not parts.scheme:
+        url = urlparse.urlunparse(['http'] + parts[1:])
+    resp = requests.get(url)
+    mime_type = resp.headers['content-type']
+    if not mime_type.startswith('image/'):
         scrape_func = VALID_ENDPOINTS.get(parts.netloc, None)
         if scrape_func is None:
             raise ScraperException("Cannot scrape image from %s" % parts.netloc)
-        image_url = scrape_func(url)
+        image_url = scrape_func(resp)
         url = make_abs_url(url, image_url)
-    elif extension.lower() not in ACCEPTED_IMAGE_EXTENSIONS:
+    elif '.%s' % mime_type.split('/')[1] not in ACCEPTED_IMAGE_EXTENSIONS:
         raise ScraperException("Unsupported image format at %s" % url)
 
     csv.write('profileimages.csv', {
