@@ -58,8 +58,7 @@ def _scrape_from_whoswho(resp):
 
 
 def _scrape_from_wikipedia(resp):
-    parts = urlparse.urlparse(resp.url)
-    match = re.match(r'mediaviewer/(?P<filename>File:.*)$', parts.fragment)
+    match = re.search(r'(#mediaviewer|wiki)/(?P<filename>File:.*)$', resp.url)
     if match:
         filename = match.group('filename')
     else:
@@ -80,7 +79,13 @@ def _scrape_from_wikipedia(resp):
 
 
 def _scrape_from_parliament(resp):
-    raise NotImplementedError
+    root = html.fromstring(resp.text)
+    # selects the first image after the brownHeading el
+    # NOTE: should we rather not scrape this at all?
+    img_el = root.xpath("//*[@class='brownHeading']//following::*//img")
+    if len(img_el) > 0:
+        return img_el[0].get('src')
+    raise ScraperException("Image not found at %s" % resp.url)
 
 
 VALID_ENDPOINTS = {
@@ -93,13 +98,15 @@ VALID_ENDPOINTS = {
 
 
 def scrape_image(name, url, csv, image_credit=''):
-    if not url.strip():
+    url = url.strip()
+    if not url:
         return
 
     print "scraping %s" % name
     parts = urlparse.urlparse(url)
     if not parts.scheme:
-        url = urlparse.urlunparse(['http'] + parts[1:])
+        url = 'http://%s' % url
+        parts = urlparse.urlparse(url)
     resp = requests.get(url)
     mime_type = resp.headers['content-type']
     if not mime_type.startswith('image/'):
