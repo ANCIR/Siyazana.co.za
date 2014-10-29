@@ -41,10 +41,6 @@ loadwhoswho:
 	#@granoloader csv -t 5 data/whoswho/whoswho_memberships.csv.yaml data/whoswho/whoswho_memberships.csv  # TODO
 	@granoloader csv -t 5 data/whoswho/whoswho_qualifications.csv.yaml data/whoswho/whoswho_qualifications.csv
 
-loadwikipedia:
-	python connectedafrica/scrapers/wikipedia.py
-	@granoloader csv -t 5 data/wikipedia_images.csv.yaml data/wikipedia_images.csv
-
 # Google docs
 loadgdocs:
 	@wget -q -O data/gdocs/persons.csv "https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1657155089"
@@ -63,3 +59,11 @@ loadgdocs:
 
 cleangdocs:
 	rm data/litigation.csv data/persons.csv data/*connections.csv
+
+# Profile images
+loadprofileimages:
+	@if [ ! -f data/profileimages.csv ]; then python connectedafrica/scrapers/profileimages.py; fi
+	@granoloader csv -t 5 -f data/profileimages.csv.yaml data/profileimages.csv
+
+cleanprofileimages:
+	rm data/profileimages.csv
