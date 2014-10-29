@@ -1,4 +1,5 @@
 import re
+import urllib
 import urlparse
 
 from lxml import html
@@ -32,8 +33,18 @@ def _scrape_from_pa(resp):
 
 
 def _scrape_from_google(resp):
-    raise NotImplementedError
-    root = html.fromstring(resp.text)
+    parts = urlparse.urlparse(resp.url)
+    if parts.path == '/imgres':
+        params = dict(urlparse.parse_qsl(parts.query, True))
+        if 'imgurl' in params:
+            return params['imgurl']
+    elif parts.path == '/search':
+        if parts.fragment.strip() != '':
+            params = dict(urlparse.parse_qsl(parts.fragment, True))
+            if 'imgrc' in params:
+                url = urllib.unquote(params['imgrc']).split(';')[-4]
+                return urllib.unquote(url)
+    raise ScraperException("Image not found at %s" % resp.url)
 
 
 def _scrape_from_whoswho(resp):
