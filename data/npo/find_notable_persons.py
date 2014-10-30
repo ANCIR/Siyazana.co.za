@@ -5,7 +5,7 @@ import re
 import string
 import sys
 
-from Levenshtein import jaro_winkler, distance
+from Levenshtein import distance
 from unicodecsv import DictReader, DictWriter
 from unidecode import unidecode
 
@@ -14,6 +14,49 @@ from connectedafrica.scrapers.util import gdocs_persons, DATA_PATH
 
 PUNCTCTRL_RE = re.compile(ur'[%s\u0000-\u0008\u000A-\u001F\u007F]'
                           % re.escape(string.punctuation), re.UNICODE)
+
+
+class FingerprintStorage(object):
+    '''
+    Store fingerprints in buckets. This splits them up into words and
+    puts them in buckets keyed by each word's first letter. About
+    double as fast as brute force.
+    '''
+    def __init__(self):
+        self.buckets = {}
+        self.id_to_bucket = {}
+
+    def put(self, id, fingerprint):
+        parts = fingerprint.split()
+        for part in parts:
+            self.buckets.setdefault(part[0], {})
+            self.buckets[part[0]][id] = fingerprint
+        if not fingerprint:
+            raise ValueError("Empty fingerprint for id %s" % id)
+        self.id_to_bucket[id] = fingerprint[0]
+
+    def get(self, id):
+        return self.buckets[self.id_to_bucket[id]][id]
+
+    def get_all(self, fingerprint):
+        parts = fingerprint.split()
+        matching_buckets = {}
+        for part in parts:
+            matching_buckets.update(self.buckets[part[0]])
+        return matching_buckets
+
+    def to_dict(self):
+        all_data = {}
+        for bucket in self.buckets.values():
+            all_data.update(bucket)
+        return all_data
+
+    @classmethod
+    def from_dict(cls, data):
+        storage = cls()
+        for id, fingerprint in data.iteritems():
+            storage.put(id, fingerprint)
+        return storage
 
 
 def make_fingerprint(name):
@@ -47,9 +90,9 @@ def get_all_officer_fingerprints():
     cache_path = _get_cache_path(officer_csv_path)
     if os.path.exists(cache_path):
         with open(cache_path) as f:
-            return json.loads(f.read())
+            return FingerprintStorage.from_dict(json.loads(f.read()))
 
-    id_to_fingerprint = {}
+    fingerprints = FingerprintStorage()
     total = sum(1 for line in open(officer_csv_path))
     sys.stderr.write("\nMaking officer fingerprints...\n")
 
@@ -57,25 +100,27 @@ def get_all_officer_fingerprints():
         reader = DictReader(f)
         for i, data in enumerate(reader):
             officer_id = data['officer_id'].strip()
-            if not officer_id:
+            officer_name = data['officer_name'].strip()
+            if not (officer_id and officer_name):
                 continue
-            id_to_fingerprint[officer_id] = make_fingerprint(data['officer_name'])
+            fingerprints.put(officer_id, make_fingerprint(officer_name))
             sys.stderr.write("\r%d of %d" % (i + 1, total))
             sys.stderr.flush()
 
     # write to cache
     with open(cache_path, 'w') as f:
-        f.write(json.dumps(id_to_fingerprint))
+        f.write(json.dumps(fingerprints.to_dict()))
 
     sys.stderr.write("\nDone\n")
-    return id_to_fingerprint
+    return fingerprints
 
 
 def find_matching_officers(fingerprint, officer_fingerprints,
                            excluded_ids=tuple(), min_percentage=0.75):
     matches = set()
 
-    for officer_id, officer_fingerprint in officer_fingerprints.iteritems():
+    for officer_id, officer_fingerprint in \
+            officer_fingerprints.get_all(fingerprint).iteritems():
         if officer_id in excluded_ids:
             continue
         dist = distance(fingerprint, officer_fingerprint)
@@ -111,7 +156,7 @@ def find_notable_officers(min_percentage=0.75):
                 'name': data['Full Name'],
                 'officer_id': officer_id,
                 'fingerprint': fingerprint,
-                'fingerprint_officer': officer_fingerprints[officer_id]
+                'fingerprint_officer': officer_fingerprints.get(officer_id)
             })
 
         notable_officers.update(matching_ids)
