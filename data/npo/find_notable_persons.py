@@ -72,7 +72,7 @@ def get_all_officer_fingerprints():
 
 
 def find_matching_officers(fingerprint, officer_fingerprints,
-                           excluded_ids=tuple(), min_percentage=0.85):
+                           excluded_ids=tuple(), min_percentage=0.75):
     matches = set()
 
     for officer_id, officer_fingerprint in officer_fingerprints.iteritems():
@@ -90,7 +90,7 @@ def find_matching_officers(fingerprint, officer_fingerprints,
     return matches
 
 
-def find_notable_officers():
+def find_notable_officers(min_percentage=0.75):
     notable_officers = set()
     officer_fingerprints = get_all_officer_fingerprints()
     sys.stderr.write("\nFinding matches...\n")
@@ -102,7 +102,8 @@ def find_notable_officers():
         matching_ids = find_matching_officers(
             fingerprint,
             officer_fingerprints,
-            excluded_ids=notable_officers
+            excluded_ids=notable_officers,
+            min_percentage=min_percentage
         )
 
         for officer_id in matching_ids:
@@ -121,4 +122,12 @@ def find_notable_officers():
 
 
 if __name__ == '__main__':
-    find_notable_officers()
+    if len(sys.argv) > 1:
+        try:
+            percentage = float(sys.argv[1])
+            assert 0.0 <= percentage <= 1.0
+            find_notable_officers(float(sys.argv[1]))
+        except (ValueError, AssertionError):
+            sys.stderr.write("\nUsage: python find_notable_officers.py [MIN_PERCENTAGE {0.0 - 1.0}]\n")
+    else:
+        find_notable_officers()
