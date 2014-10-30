@@ -135,12 +135,15 @@ def find_matching_officers(fingerprint, officer_fingerprints,
     return matches
 
 
-def find_notable_officers(min_percentage=0.75):
+def find_all_matching_officers(min_percentage=0.75):
     notable_officers = set()
     officer_fingerprints = get_all_officer_fingerprints()
     sys.stderr.write("\nFinding matches...\n")
-    writer = DictWriter(sys.stdout, ['name', 'fingerprint', 'officer_id',
-                                     'fingerprint_officer'])
+    writer = DictWriter(sys.stdout, [
+        'Full Name (from persons)',
+        'officer_id (from npo_officers)'
+    ])
+    writer.writeheader()
 
     for i, data in enumerate(gdocs_persons()):
         fingerprint = make_fingerprint(data['Full Name'])
@@ -153,10 +156,8 @@ def find_notable_officers(min_percentage=0.75):
 
         for officer_id in matching_ids:
             writer.writerow({
-                'name': data['Full Name'],
-                'officer_id': officer_id,
-                'fingerprint': fingerprint,
-                'fingerprint_officer': officer_fingerprints.get(officer_id)
+                'Full Name (from persons)': data['Full Name'],
+                'officer_id (from npo_officers)': officer_id,
             })
 
         notable_officers.update(matching_ids)
@@ -171,8 +172,8 @@ if __name__ == '__main__':
         try:
             percentage = float(sys.argv[1])
             assert 0.0 <= percentage <= 1.0
-            find_notable_officers(float(sys.argv[1]))
+            find_all_matching_officers(float(sys.argv[1]))
         except (ValueError, AssertionError):
             sys.stderr.write("\nUsage: python find_notable_officers.py [MIN_PERCENTAGE {0.0 - 1.0}]\n")
     else:
-        find_notable_officers()
+        find_all_matching_officers()
