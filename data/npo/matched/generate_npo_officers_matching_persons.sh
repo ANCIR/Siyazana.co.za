@@ -35,4 +35,4 @@ def print_matching_officers(matched_officer_ids):
 print_matching_officers(get_matches())
 "
 
-echo "$SCRIPT" | python > npo_officers_matching_persons.csv
+echo "$SCRIPT" | python > npo_officers.csv

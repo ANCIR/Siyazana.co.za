@@ -1,0 +1,702 @@
+[
+  {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column role using expression value.trim()",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value.trim()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+  {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column role using expression value.toLowercase()",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value.toLowercase()",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+  {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column role using expression value.replace(/\\s+/,' ')",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value.replace(/\\s+/,' ')",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+  {
+    "op": "core/text-transform",
+    "description": "Text transform on cells in column role using expression grel:value.replace(/\\p{Punct}/,'')",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "grel:value.replace(/\\p{Punct}/,'')",
+    "onError": "keep-original",
+    "repeat": false,
+    "repeatCount": 10
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "treasurer",
+          "trreasurer"
+        ],
+        "to": "treasurer"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "vice chairperson",
+          "vice chairpeson"
+        ],
+        "to": "vice chairperson"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "additional member",
+          "addditional member"
+        ],
+        "to": "additional member"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "counsellor",
+          "counselor"
+        ],
+        "to": "counsellor"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "vice president",
+          "vicepresident"
+        ],
+        "to": "vice president"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "treasurer",
+          "treasure"
+        ],
+        "to": "treasurer"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "vice secretary",
+          "vicesecretary"
+        ],
+        "to": "vice secretary"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "vice chairperson",
+          "vice chaireperson"
+        ],
+        "to": "vice chairperson"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "ass secretary",
+          "asst secretary"
+        ],
+        "to": "assistant secretary"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "principal",
+          "proncipal"
+        ],
+        "to": "principal"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "deputy secretary",
+          "depuy secretary"
+        ],
+        "to": "deputy secretary"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "deputy chairperson",
+          "deputy chaiperson"
+        ],
+        "to": "deputy chairperson"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "archbishop",
+          "archibishop"
+        ],
+        "to": "archbishop"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "deputy chairperson",
+          "deputy chairpeson"
+        ],
+        "to": "deputy chairperson"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "dep chairperson",
+          "dept chairperson"
+        ],
+        "to": "deputy chairperson"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "d chairperson"
+        ],
+        "to": "deputy chairperson"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "d secretary"
+        ],
+        "to": "deputy secretary"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "v secretary"
+        ],
+        "to": "vice secretary"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "sec"
+        ],
+        "to": "secretary"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "lid"
+        ],
+        "to": "member"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "verteenwoordiger"
+        ],
+        "to": "representative"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "dep sec"
+        ],
+        "to": "deputy secretary"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "dep chair"
+        ],
+        "to": "deputy chair"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "dep director general"
+        ],
+        "to": "deputy director general"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "chairpersondirector"
+        ],
+        "to": "chairperson director"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "add member"
+        ],
+        "to": "additional member"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "add memberprincipal"
+        ],
+        "to": "additional member principal"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "secretary general",
+          "general secretary"
+        ],
+        "to": "secretary general"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "trustee",
+          "truastee"
+        ],
+        "to": "trustee"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "chairman",
+          "chaiarman"
+        ],
+        "to": "chairman"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "deputy chairperson",
+          "deputy cahirperson"
+        ],
+        "to": "deputy chairperson"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "vice chairman",
+          "vice chairlady"
+        ],
+        "to": "vice chairperson"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "vice chairman",
+          "vice chair"
+        ],
+        "to": "vice chairperson"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "manager",
+          "manageress"
+        ],
+        "to": "manager"
+      },
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "deputy chair",
+          "deputy chairman"
+        ],
+        "to": "deputy chairperson"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "gen secretary"
+        ],
+        "to": "general secretary"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "chairman"
+        ],
+        "to": "chairperson"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "chairman of da"
+        ],
+        "to": "chairperson of da"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "chairman of trustees"
+        ],
+        "to": "chairperson of trustees"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "vice sec"
+        ],
+        "to": "vice secretary"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "secretary general",
+          "general secretary"
+        ],
+        "to": "general secretary"
+      }
+    ]
+  },
+  {
+    "op": "core/mass-edit",
+    "description": "Mass edit cells in column role",
+    "engineConfig": {
+      "facets": [],
+      "mode": "row-based"
+    },
+    "columnName": "role",
+    "expression": "value",
+    "edits": [
+      {
+        "fromBlank": false,
+        "fromError": false,
+        "from": [
+          "secretaryfield worker"
+        ],
+        "to": "secretary field worker"
+      }
+    ]
+  }
+]
