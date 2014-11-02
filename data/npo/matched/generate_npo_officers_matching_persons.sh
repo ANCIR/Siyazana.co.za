@@ -13,25 +13,26 @@ import sys
 from unicodecsv import DictReader, DictWriter
 
 
-def get_officer_data():
-    officer_data = {}
-    with open('npo_officers.csv') as f:
-        reader = DictReader(f)
-        for data in reader:
-            officer_data[data['officer_id']] = data
-    return officer_data
-
-
-def print_matching_officers(officer_data):
-    writer = DictWriter(sys.stdout, officer_data.values()[0].keys())
+def get_matches():
+    officer_ids = set()
     with open('.persons_to_npo_officers.csv') as f:
         reader = DictReader(f)
         for data in reader:
-            officer_id = data['officer_id (from npo_officers)']
-            writer.writerow(officer_data[officer_id])
+            officer_ids.add(data['officer_id (from npo_officers)'])
+    return officer_ids
 
 
-print_matching_officers(get_officer_data())
+def print_matching_officers(matched_officer_ids):
+    with open('../npo_officers.csv') as f:
+        reader = DictReader(f)
+        writer = DictWriter(sys.stdout, reader.fieldnames)
+        writer.writeheader()
+        for data in reader:
+            if data['officer_id'] in matched_officer_ids:
+                writer.writerow(data)
+
+
+print_matching_officers(get_matches())
 "
 
 echo "$SCRIPT" | python > npo_officers_matching_persons.csv
