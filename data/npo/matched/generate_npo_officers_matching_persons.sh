@@ -1,9 +1,9 @@
 #!/bin/bash
 workon connectedafrica
-cd data/npo/
+cd data/npo/matched
 
-if [ ! -f persons_to_npo_officers.csv ]; then
-    python find_matching_persons.py 0.7 1> persons_to_npo_officers.csv
+if [ ! -f .persons_to_npo_officers.csv ]; then
+    python find_matching_persons.py 0.7 1> .persons_to_npo_officers.csv
 fi
 
 SCRIPT="
@@ -24,7 +24,7 @@ def get_officer_data():
 
 def print_matching_officers(officer_data):
     writer = DictWriter(sys.stdout, officer_data.values()[0].keys())
-    with open('persons_to_npo_officers.csv') as f:
+    with open('.persons_to_npo_officers.csv') as f:
         reader = DictReader(f)
         for data in reader:
             officer_id = data['officer_id (from npo_officers)']

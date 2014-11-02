@@ -5,6 +5,7 @@ _site/
 *.egg-info
 pyenv/*
 *.pyc
+.cache
 
 connectedafrica/static/vendor/*
 connectedafrica/static/gen/*
