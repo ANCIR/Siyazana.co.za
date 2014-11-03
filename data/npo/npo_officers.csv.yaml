@@ -9,6 +9,7 @@ entities:
         property: 'xid_popolo'
       - column: 'officer_id_number'
         property: 'national_id'
+        skip_empty: true
   npo:
     schema: 'NonProfit'
     source_url_column: 'source_url'
@@ -18,7 +19,10 @@ entities:
 relations:
   relation:
     source_url_column: 'source_url'
-    schema: 'Directorship'
+    schema: 'Office'
     source: 'officer'
     target: 'npo'
-    columns: []
+    columns:
+      - column: 'role'
+        property: 'role'
+        skip_empty: true

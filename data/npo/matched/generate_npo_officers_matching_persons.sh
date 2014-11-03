@@ -1,5 +1,4 @@
 #!/bin/bash
-workon connectedafrica
 cd data/npo/matched
 
 if [ ! -f .persons_to_npo_officers.csv ]; then

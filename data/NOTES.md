@@ -7,7 +7,9 @@ All good!
 
 **npo_organisations.csv** is fine.
 
-**npo_officers.csv** needs to be split into directors, officers and members (complete **split_npo_memberships.sh**). This is tricky since spelling variations/misspellings abound. Best effort is probably good enough.
+~~**npo_officers.csv** needs to be split into directors, officers and members (complete **split_npo_memberships.sh**). This is tricky since spelling variations/misspellings abound. Best effort is probably good enough.~~ Efforts to split **npo_officers.csv** up into directors, officers and members have been shelved for now.
+
+Update: A subset of **npo_officers.csv** is being loaded using Office relations only. **generate_npo_officers_matching_persons.sh** generates this subset by matching up names to people on GDocs. Relevants scripts are in the **matched** subfolder.
 
 
 # pa

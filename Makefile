@@ -25,6 +25,8 @@ loadpa:
 
 loadnpo:
 	@granoloader csv -t 5 data/npo/npo_organisations.csv.yaml data/npo/npo_organisations.csv
+	./data/npo/matched/generate_npo_officers_matching_persons.sh
+	@granoloader csv -t 5 data/npo/npo_officers.csv.yaml data/npo/matched/npo_officers.csv
 	#@granoloader csv -t 5 data/npo/npo_officers.csv.yaml data/npo/npo_officers.csv  # TODO
 
 loadwindeeds:
