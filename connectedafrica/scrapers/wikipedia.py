@@ -4,11 +4,10 @@ from operator import itemgetter
 
 import requests
 from thready import threaded
-from unicodecsv import csv
 
 from connectedafrica.core import grano
-from connectedafrica.scrapers.util import (MultiCSV, DATA_PATH,
-                                           ACCEPTED_IMAGE_EXTENSIONS)
+from connectedafrica.scrapers.util import (MultiCSV, ACCEPTED_IMAGE_EXTENSIONS,
+                                           gdocs_persons)
 
 
 ENDPOINT_URL = 'http://en.wikipedia.org/w/api.php'
@@ -65,13 +64,9 @@ def scrape_image(name, csv):
                'source_url': 'http://www.wikimedia.org/'})
 
 
-def make_names_from_persons_csv():
-    with open(os.path.join(DATA_PATH, 'persons.csv')) as f:
-        reader = csv.reader(f)
-        row = next(reader)
-        name_index = row.index('Full Name')
-        for row in csv.reader(f):
-            yield row[name_index]
+def make_names_from_gdocs():
+    for data in gdocs_persons():
+        yield data['Full Name']
 
 
 def make_names_from_person_entities():
@@ -82,7 +77,7 @@ def make_names_from_person_entities():
 
 def scrape():
     csv = MultiCSV()
-    threaded(make_names_from_person_entities(),
+    threaded(make_names_from_gdocs(),
              lambda name: scrape_image(name, csv),
              num_threads=THREAD_COUNT)
     csv.close()

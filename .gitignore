@@ -6,6 +6,7 @@ _site/
 pyenv/*
 *.pyc
 .cache
+*.sublime*
 
 connectedafrica/static/vendor/*
 connectedafrica/static/gen/*
@@ -14,7 +15,9 @@ connectedafrica/static/.webassets-cache/*
 data/.cache/*
 data/gdocs/*.csv
 data/npo/*.csv
+data/npo/matched/*.csv
 data/whoswho/*.csv
 data/cipc_pdfs/*
+data/profileimages.csv
 
 reports/*
