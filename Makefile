@@ -24,6 +24,7 @@ loadpa:
 	@granoloader csv -t 5 data/pa/pa_financial.csv.yaml data/pa/pa_financial.csv
 
 loadnpo:
+	@if [ ! -f data/npo/npo_organisations.csv ]; then python connectedafrica/scrapers/npo.py; fi
 	@granoloader csv -t 5 data/npo/npo_organisations.csv.yaml data/npo/npo_organisations.csv
 	./data/npo/matched/generate_npo_officers_matching_persons.sh
 	@granoloader csv -t 5 data/npo/npo_officers.csv.yaml data/npo/matched/npo_officers.csv
