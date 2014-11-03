@@ -17,8 +17,9 @@ GRANO_PROJECT = os.environ.get('GRANO_PROJECT', 'southafrica')
 WINDEEDS_USER = os.environ.get('WINDEEDS_USER')
 WINDEEDS_PASS = os.environ.get('WINDEEDS_PASS')
 
+# must use https for authorized requests
 DOCCLOUD_HOST = os.environ.get('DOCCLOUD_HOST',
-                               'http://sourceafrica.net/')
+                               'https://sourceafrica.net/')
 DOCCLOUD_USER = os.environ.get('DOCCLOUD_USER')
 DOCCLOUD_PASS = os.environ.get('DOCCLOUD_PASS')
 DOCCLOUD_PROJECT = int(os.environ.get('DOCCLOUD_PROJECT', '130'))

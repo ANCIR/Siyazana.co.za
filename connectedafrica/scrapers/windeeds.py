@@ -154,7 +154,7 @@ def director_details(csv, session, data):
         data['company_regno'] = company_regno
         data.update(box_to_kv(block, prefix="CIPC"))
         scraper.log.info("Director's details: %s" % company_name)
-        csv.write('windeeds_directors.csv', data)
+        csv.write('windeeds/windeeds_directors.csv', data)
 
 
 @scraper.task
@@ -174,7 +174,7 @@ def company_details(csv, session, data):
         data['director_name'] = collapse_whitespace(title)
         scraper.log.info("Company details: %s" % data['director_name'])
         data.update(box_to_kv(block, prefix="CIPC-Person"))
-        csv.write('windeeds_companies.csv', data)
+        csv.write('windeeds/windeeds_companies.csv', data)
 
 
 def scrape():
