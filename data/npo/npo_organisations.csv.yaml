@@ -15,6 +15,7 @@ entities:
       - column: 'reg_date'
         property: 'date_founding'
         type: 'datetime'
+        skip_empty: true
         format:
           day: '%d/%m/%Y'
       - column: 'legal_form'
