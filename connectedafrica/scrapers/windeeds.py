@@ -1,6 +1,5 @@
 import os
 from time import time
-from pprint import pprint
 from itertools import count
 from urlparse import urljoin
 
@@ -20,10 +19,11 @@ def documentcloudify(file_name, data):
     auth = (app.config.get('DOCCLOUD_USER'),
             app.config.get('DOCCLOUD_PASS'))
     host = app.config.get('DOCCLOUD_HOST')
-    project_id = app.config.get('DOCCLOUD_PROJECT')
+    project_name = app.config.get('DOCCLOUD_PROJECT')
+    project_id = app.config.get('DOCCLOUD_PROJECTID')
     title = data.get('Description')
     search_url = urljoin(host, '/api/search.json')
-    params = {'q': 'projectid:%s title:"%s"' % (project_id, title)}
+    params = {'q': 'project:"%s" title:"%s"' % (project_name, title)}
     res = requests.get(search_url, params=params, auth=auth,
                        verify=False)
     found = res.json()

@@ -22,7 +22,9 @@ DOCCLOUD_HOST = os.environ.get('DOCCLOUD_HOST',
                                'https://sourceafrica.net/')
 DOCCLOUD_USER = os.environ.get('DOCCLOUD_USER')
 DOCCLOUD_PASS = os.environ.get('DOCCLOUD_PASS')
-DOCCLOUD_PROJECT = int(os.environ.get('DOCCLOUD_PROJECT', '130'))
+DOCCLOUD_PROJECT = os.environ.get('DOCCLOUD_PROJECT',
+                                  'connectedAfrica')
+DOCCLOUD_PROJECTID = int(os.environ.get('DOCCLOUD_PROJECTID', '130'))
 
 SOURCE_NAMES = {
     'za-new-import.popit.mysociety.org': "People's Assembly Data",
