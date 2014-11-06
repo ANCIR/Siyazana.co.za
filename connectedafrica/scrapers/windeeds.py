@@ -1,4 +1,3 @@
-import collections
 import os
 from time import time
 from itertools import count
@@ -82,14 +81,34 @@ def box_to_kv(block, prefix=None):
     return data
 
 
+def login_session(session):
+    url = urljoin(URL, '/Account/LoginByEmailPartial')
+    params = {
+        'GetCampaigns': 'True',
+        'EmailIntegrationMode': 'False',
+        'EmailAddress': app.config.get('WINDEEDS_USER'),
+        'Password': app.config.get('WINDEEDS_PASS'),
+        'RememberMe': 'true',
+        'submitemail': 'Log%20In',
+    }
+    res = session.get(url, params=params)
+    assert res.json().get('success'), res.json()
+
+
 class ResultsScraper(Scraper):
     data_path = DATA_PATH
 
-    def __init__(self):
-        super(ResultsScraper, self).__init__('windeeds', config={
+    def __init__(self, name='windeeds', config=None):
+        defaults = {
             'threads': 4,
             'data_path': self.data_path
-        })
+        }
+        if config is None:
+            config = {}
+        for key, val in defaults.iteritems():
+            config.setdefault(key, val)
+
+        super(ResultsScraper, self).__init__(name, config=config)
         # turn a bunch of methods into tasks
         for fn_name in ('init_session', 'all_results', 'scrape_result',
                         'director_details', 'company_details'):
@@ -97,18 +116,8 @@ class ResultsScraper(Scraper):
             setattr(self, fn_name, task)
 
     def init_session(self, csv):
-        url = urljoin(URL, '/Account/LoginByEmailPartial')
-        params = {
-            'GetCampaigns': 'True',
-            'EmailIntegrationMode': 'False',
-            'EmailAddress': app.config.get('WINDEEDS_USER'),
-            'Password': app.config.get('WINDEEDS_PASS'),
-            'RememberMe': 'true',
-            'submitemail': 'Log%20In',
-        }
         session = self.Session()
-        res = session.get(url, params=params)
-        assert res.json().get('success'), res.json()
+        login_session(session)
         self.all_results.queue(csv, session)
 
     def all_results(self, csv, session):
