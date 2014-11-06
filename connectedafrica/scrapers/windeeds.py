@@ -1,18 +1,19 @@
+import collections
 import os
 from time import time
 from itertools import count
 from urlparse import urljoin
 
 import requests
+from scrapekit import Scraper
+from scrapekit.tasks import Task
 from scrapekit.util import collapse_whitespace
 
 from connectedafrica.core import app
-from connectedafrica.scrapers.util import make_scraper
-from connectedafrica.scrapers.util import MultiCSV
+from connectedafrica.scrapers.util import MultiCSV, DATA_PATH
 
 
 URL = 'https://www.windeedsearch.co.za/'
-scraper = make_scraper('windeeds', config={'threads': 4})
 
 
 def documentcloudify(file_name, data):
@@ -48,7 +49,7 @@ def documentcloudify(file_name, data):
 def download_pdf(session, data):
     key = data.get('DbKey')
     file_name = 'windeeds_' + str(key) + '.pdf'
-    file_name = os.path.join(scraper.config.data_path, 'cipc_pdfs', file_name)
+    file_name = os.path.join(ResultsScraper.data_path, 'cipc_pdfs', file_name)
     if not os.path.exists(file_name):
         dir_name = os.path.dirname(file_name)
         try:
@@ -60,63 +61,6 @@ def download_pdf(session, data):
         with open(file_name, 'wb') as fh:
             fh.write(res.content)
     return documentcloudify(file_name, data)
-
-
-@scraper.task
-def init_session(csv):
-    url = urljoin(URL, '/Account/LoginByEmailPartial')
-    params = {
-        'GetCampaigns': 'True',
-        'EmailIntegrationMode': 'False',
-        'EmailAddress': app.config.get('WINDEEDS_USER'),
-        'Password': app.config.get('WINDEEDS_PASS'),
-        'RememberMe': 'true',
-        'submitemail': 'Log%20In',
-    }
-    session = scraper.Session()
-    res = session.get(url, params=params)
-    assert res.json().get('success'), res.json()
-    all_results.queue(csv, session)
-
-
-@scraper.task
-def all_results(csv, session):
-    url = urljoin(URL, '/Client/AllResultsList')
-    for page_no in count(1):
-        params = {
-            'SortOrder': 'Descending',
-            'ColumnToSortBy': 'SearchDate',
-            'firstLoad': 'false',
-            'dateFilter': '4',
-            'userScope': '1',
-            'ResultCategoryFilter': '0',
-            '_search': 'false',
-            'nd': str(int(time() * 1000)),
-            'rows': '50',
-            'page': page_no,
-            'sidx': 'SearchDate',
-            'sord': 'desc'
-        }
-        res = session.post(url, params)
-        data = res.json()
-        for row in data.get('Data'):
-            scrape_result.queue(csv, session, row)
-
-        if page_no >= data.get('Total'):
-            break
-
-
-@scraper.task
-def scrape_result(csv, session, data):
-    url = urljoin(URL, data.get('SearchAction'))
-    if 'Cipc' not in url:
-        return
-    data['url'] = url
-    data['pdf'] = download_pdf(session, data)
-    if 'DirectorResult' in url:
-        director_details(csv, session, data)
-    if 'CompanyResult' in url:
-        company_details(csv, session, data)
 
 
 def box_to_kv(block, prefix=None):
@@ -138,48 +82,111 @@ def box_to_kv(block, prefix=None):
     return data
 
 
-@scraper.task
-def director_details(csv, session, data):
-    doc = session.get(data['url'], cache='force').html()
-    for block in doc.findall('.//div[@class="result-section-block"]'):
-        prof = block.find('./a[@rel="DirectorCompanyProfile"]')
-        if prof is None:
-            continue
-        title = collapse_whitespace(block.findtext('./h4'))
-        _, title = title.split('COMPANY:', 1)
-        title, _ = title.rsplit('(', 1)
-        title = map(collapse_whitespace, title.rsplit(', ', 1))
-        company_name, company_regno = title
-        data['company_name'] = company_name
-        data['company_regno'] = company_regno
-        data.update(box_to_kv(block, prefix="CIPC"))
-        scraper.log.info("Director's details: %s" % company_name)
-        csv.write('windeeds/windeeds_directors.csv', data)
+class ResultsScraper(Scraper):
+    data_path = DATA_PATH
 
+    def __init__(self):
+        super(ResultsScraper, self).__init__('windeeds', config={
+            'threads': 4,
+            'data_path': self.data_path
+        })
+        # turn a bunch of methods into tasks
+        for fn_name in ('init_session', 'all_results', 'scrape_result',
+                        'director_details', 'company_details'):
+            task = Task(self, getattr(self, fn_name))
+            setattr(self, fn_name, task)
 
-@scraper.task
-def company_details(csv, session, data):
-    doc = session.get(data['url'], cache='force').html()
-    for block in doc.findall('.//div[@class="result-block"]'):
-        if block.find('./a[@name="CompanyInformation"]') is None:
-            continue
-        data.update(box_to_kv(block, prefix="CIPC-Company"))
+    def init_session(self, csv):
+        url = urljoin(URL, '/Account/LoginByEmailPartial')
+        params = {
+            'GetCampaigns': 'True',
+            'EmailIntegrationMode': 'False',
+            'EmailAddress': app.config.get('WINDEEDS_USER'),
+            'Password': app.config.get('WINDEEDS_PASS'),
+            'RememberMe': 'true',
+            'submitemail': 'Log%20In',
+        }
+        session = self.Session()
+        res = session.get(url, params=params)
+        assert res.json().get('success'), res.json()
+        self.all_results.queue(csv, session)
 
-    for block in doc.findall('.//div[@class="result-section-block"]'):
-        prof = block.find('./a[@rel="Directors"]')
-        if prof is None:
-            continue
-        title = collapse_whitespace(block.findtext('./h4'))
-        title, _ = title.rsplit(' - ', 1)
-        data['director_name'] = collapse_whitespace(title)
-        scraper.log.info("Company details: %s" % data['director_name'])
-        data.update(box_to_kv(block, prefix="CIPC-Person"))
-        csv.write('windeeds/windeeds_companies.csv', data)
+    def all_results(self, csv, session):
+        url = urljoin(URL, '/Client/AllResultsList')
+        for page_no in count(1):
+            params = {
+                'SortOrder': 'Descending',
+                'ColumnToSortBy': 'SearchDate',
+                'firstLoad': 'false',
+                'dateFilter': '4',
+                'userScope': '1',
+                'ResultCategoryFilter': '0',
+                '_search': 'false',
+                'nd': str(int(time() * 1000)),
+                'rows': '50',
+                'page': page_no,
+                'sidx': 'SearchDate',
+                'sord': 'desc'
+            }
+            res = session.post(url, params)
+            data = res.json()
+            for row in data.get('Data'):
+                self.scrape_result.queue(csv, session, row)
+
+            if page_no >= data.get('Total'):
+                break
+
+    def scrape_result(self, csv, session, data):
+        url = urljoin(URL, data.get('SearchAction'))
+        if 'Cipc' not in url:
+            return
+        data['url'] = url
+        data['pdf'] = download_pdf(session, data)
+        if 'DirectorResult' in url:
+            self.director_details(csv, session, data)
+        if 'CompanyResult' in url:
+            self.company_details(csv, session, data)
+
+    def director_details(self, csv, session, data):
+        doc = session.get(data['url'], cache='force').html()
+        for block in doc.findall('.//div[@class="result-section-block"]'):
+            prof = block.find('./a[@rel="DirectorCompanyProfile"]')
+            if prof is None:
+                continue
+            title = collapse_whitespace(block.findtext('./h4'))
+            _, title = title.split('COMPANY:', 1)
+            title, _ = title.rsplit('(', 1)
+            title = map(collapse_whitespace, title.rsplit(', ', 1))
+            company_name, company_regno = title
+            data['company_name'] = company_name
+            data['company_regno'] = company_regno
+            data.update(box_to_kv(block, prefix="CIPC"))
+            self.log.info("Director's details: %s" % company_name)
+            csv.write('windeeds/windeeds_directors.csv', data)
+
+    def company_details(self, csv, session, data):
+        doc = session.get(data['url'], cache='force').html()
+        for block in doc.findall('.//div[@class="result-block"]'):
+            if block.find('./a[@name="CompanyInformation"]') is None:
+                continue
+            data.update(box_to_kv(block, prefix="CIPC-Company"))
+
+        for block in doc.findall('.//div[@class="result-section-block"]'):
+            prof = block.find('./a[@rel="Directors"]')
+            if prof is None:
+                continue
+            title = collapse_whitespace(block.findtext('./h4'))
+            title, _ = title.rsplit(' - ', 1)
+            data['director_name'] = collapse_whitespace(title)
+            self.log.info("Company details: %s" % data['director_name'])
+            data.update(box_to_kv(block, prefix="CIPC-Person"))
+            csv.write('windeeds/windeeds_companies.csv', data)
 
 
 def scrape():
+    scraper = ResultsScraper()
     csv = MultiCSV()
-    init_session.run(csv)
+    scraper.init_session.run(csv)
     csv.close()
     scraper.report()
 
