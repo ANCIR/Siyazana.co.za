@@ -2,12 +2,14 @@ import os
 import re
 import json
 import requests
+import string
 import urlparse
 from StringIO import StringIO
 from threading import RLock
 
 from scrapekit import Scraper
 from unicodecsv import DictWriter, DictReader
+from unidecode import unidecode
 
 from connectedafrica.core import app
 
@@ -16,6 +18,8 @@ ACCEPTED_IMAGE_EXTENSIONS = set(('.png', '.jpg', '.jpeg', '.bmp'))
 DATA_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
 DATA_PATH = os.path.abspath(DATA_PATH)
 PERSONS_CSV_URL = 'https://docs.google.com/spreadsheets/d/1HPYBRG899R_WVW5qkvHoUwliU42Czlx8_N1l58XYc7c/export?format=csv&gid=1657155089'
+PUNCTCTRL_RE = re.compile(ur'[%s\u0000-\u0008\u000A-\u001F\u007F]'
+                          % re.escape(string.punctuation), re.UNICODE)
 
 
 def make_scraper(name, config=None):
@@ -31,6 +35,23 @@ def make_path(file_name):
     if not os.path.isdir(dir_name):
         os.makedirs(dir_name)
     return file_path
+
+
+def normalize_string(name):
+    name = name.strip()
+    name = name.lower()
+    name = PUNCTCTRL_RE.sub(u'', name)
+    return unicode(unidecode(name))
+
+
+def make_fingerprint(name):
+    '''
+    Uses algorithm here:
+    https://github.com/OpenRefine/OpenRefine/wiki/Clustering-In-Depth#fingerprint
+    '''
+    name = normalize_string(name)
+    fragments = set(name.split())
+    return u' '.join(sorted(fragments))
 
 
 def make_abs_url(abs_source_url, url):
