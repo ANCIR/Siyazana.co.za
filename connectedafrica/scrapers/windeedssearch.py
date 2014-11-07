@@ -31,8 +31,26 @@ class SearchedPerson(object):
         return self.url.__hash__()
 
     def __repr__(self):
-        return '<SearchedPerson(name="%s %s")>' % \
-                (self.first_name, self.last_name)
+        return '<%s(name="%s %s")>' % \
+                (self.__class__.__name__, self.first_name, self.last_name)
+
+
+class SearchedPersonNotFound(SearchedPerson):
+
+    def __init__(self, url, description):
+        super(SearchedPersonNotFound, self).__init__(url, description)
+
+        if not self.description_re.match(description):
+            parts = description.split(', ')
+            if re.match(ur'^\d+$', parts[-1]):
+                self.national_id = parts[-1]
+                names = parts[0:-1]
+            else:
+                names = parts
+            if len(names) >= 2:
+                self.first_name = ', '.join(names[1:])
+            if len(names) >= 1:
+                self.last_name = names[0]
 
 
 persons = set()
@@ -79,8 +97,16 @@ def find_searchedperson(first_name, last_name, national_id):
     first_name_norm = normalize_string(first_name)
     for match in matches:
         key = normalize_string(match.first_name)
-        # check for at least one closely matching first name
-        if has_matching_word(first_name_norm, key):
+        '''
+        A match is valid if:
+        1. We don't have a first name because only last name
+           was used in a failed search.
+        2. The entire first name string is similar.
+        3. One of the first names are similar.
+        '''
+        if (not key and isinstance(match, SearchedPersonNotFound)) \
+                or jaro(first_name_norm, key) > 0.9 \
+                or has_matching_word(first_name_norm, key):
             yield match
 
 
@@ -113,14 +139,17 @@ class Searcher(windeeds.ResultsScraper):
 
 
     def scrape_result(self, csv, session, data):
-        # TODO: record unsuccessful searches too
         url = data.get('SearchAction')
         if 'Cipc' not in url:
             return
-        if 'DirectorResult' not in url:
+        if 'DirectorResult' in url:
+            cls = SearchedPerson
+        elif 'NoResult' in url and 'Director' in data.get('SearchType'):
+            cls = SearchedPersonNotFound
+        else:
             return
         description = data.get('Description').decode('utf8')
-        record_searchedperson(SearchedPerson(
+        record_searchedperson(cls(
             url=url,
             description=description,
         ))
