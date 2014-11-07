@@ -1,3 +1,4 @@
+import argparse
 from itertools import chain
 import json
 import re
@@ -123,9 +124,10 @@ class Searcher(windeeds.ResultsScraper):
     resultsdialog_re = re.compile(ur'^\s*ShowCipcListDialog\("(?P<html>.*)"\);\s*$')
     pricingdialog_re = re.compile(ur'^\s*PriceWarningDialog\.Load\("(?P<html>.*)"\);\s*$')
 
-    def __init__(self, name='windeedssearch', config=None):
+    def __init__(self, limit, name='windeedssearch', config=None):
         super(Searcher, self).__init__(name, config)
 
+        self.limit = limit
         for fn_name in ('search_persons', 'search_director', 'select_directors'):
             task = Task(self, getattr(self, fn_name))
             setattr(self, fn_name, task)
@@ -156,6 +158,7 @@ class Searcher(windeeds.ResultsScraper):
         ))
 
     def search_persons(self, csv, session):
+        search_count = 0
         for data in gdocs_persons():
             matches = list(find_searchedperson(
                 data['First Name'],
@@ -170,6 +173,9 @@ class Searcher(windeeds.ResultsScraper):
                 # Windeeds keeps track of the sequence of form
                 # submissions in the session
                 self.search_director(csv, session, data)
+                search_count += 1
+                if search_count >= self.limit:
+                    break
 
     def search_director(self, csv, session, data):
         self.log.debug('Searching %s' % data['Full Name'])
@@ -242,8 +248,8 @@ class Searcher(windeeds.ResultsScraper):
         assert res.status_code == 200
 
 
-def scrape():
-    searcher = Searcher()
+def scrape(limit):
+    searcher = Searcher(limit)
     csv = MultiCSV()
     searcher.init_session(csv)
     csv.close()
@@ -251,4 +257,14 @@ def scrape():
 
 
 if __name__ == '__main__':
-    scrape()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--limit',
+        type=int,
+        help="The maximum number of names that will be searched",
+        default=10,
+        action='store',
+        dest='limit'
+    )
+    limit = parser.parse_args().limit
+    scrape(limit)
