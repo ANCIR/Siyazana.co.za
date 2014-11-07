@@ -1,11 +1,19 @@
+from itertools import chain
+import json
 import re
+from urlparse import urljoin
 
+from lxml import html
 from Levenshtein import jaro
 from scrapekit.tasks import Task
 
 from connectedafrica.scrapers import windeeds
 from connectedafrica.scrapers.util import (MultiCSV, gdocs_persons,
                                            normalize_string)
+
+
+DIRECTOR_SEARCH_URL = urljoin(windeeds.URL, '/Cipc/CipcDirectorSearch')
+DIRECTOR_SELECT_URL = urljoin(windeeds.URL, '/Cipc/DirectorListSearchOffOfInput?Length=4')
 
 
 class SearchedPerson(object):
@@ -31,8 +39,9 @@ class SearchedPerson(object):
         return self.url.__hash__()
 
     def __repr__(self):
-        return '<%s(name="%s %s")>' % \
-                (self.__class__.__name__, self.first_name, self.last_name)
+        return '<%s(first_name=%r, last_name=%r, id=%r)>' % \
+                (self.__class__.__name__, self.first_name,
+                 self.last_name, self.national_id)
 
 
 class SearchedPersonNotFound(SearchedPerson):
@@ -111,11 +120,13 @@ def find_searchedperson(first_name, last_name, national_id):
 
 
 class Searcher(windeeds.ResultsScraper):
+    resultsdialog_re = re.compile(ur'^\s*ShowCipcListDialog\("(?P<html>.*)"\);\s*$')
+    pricingdialog_re = re.compile(ur'^\s*PriceWarningDialog\.Load\("(?P<html>.*)"\);\s*$')
 
     def __init__(self, name='windeedssearch', config=None):
         super(Searcher, self).__init__(name, config)
 
-        for fn_name in ():
+        for fn_name in ('search_persons', 'search_director', 'select_directors'):
             task = Task(self, getattr(self, fn_name))
             setattr(self, fn_name, task)
 
@@ -125,18 +136,8 @@ class Searcher(windeeds.ResultsScraper):
         windeeds.login_session(session)
         # collect existing results before searching
         self.all_results.run(csv, session)
-
-        for data in gdocs_persons():
-            matches = list(find_searchedperson(
-                data['First Name'],
-                data['Last Name'],
-                data['ID #']
-            ))
-            if matches:
-                self.log.debug('%s matched %r' % (data['Full Name'], matches))
-            else:
-                self.log.debug('%s unmatched' % data['Full Name'])
-
+        # run searches for unmatched persons
+        self.search_persons.run(csv, session)
 
     def scrape_result(self, csv, session, data):
         url = data.get('SearchAction')
@@ -153,6 +154,92 @@ class Searcher(windeeds.ResultsScraper):
             url=url,
             description=description,
         ))
+
+    def search_persons(self, csv, session):
+        for data in gdocs_persons():
+            matches = list(find_searchedperson(
+                data['First Name'],
+                data['Last Name'],
+                data['ID #']
+            ))
+            if matches:
+                self.log.debug('Skipping %s (matched %r)' %
+                               (data['Full Name'], matches))
+            else:
+                # NOTE: don't run this concurrently
+                # Windeeds keeps track of the sequence of form
+                # submissions in the session
+                self.search_director(csv, session, data)
+
+    def search_director(self, csv, session, data):
+        self.log.debug('Searching %s' % data['Full Name'])
+        params = {
+            'Surname': data['Last Name'],
+            'FirstNames': data['First Name'],
+            'IdNumber': data['ID #'].strip(),
+            'ReferenceRequired': 'False',
+            'Reference': '',
+        }
+        data = session.post(DIRECTOR_SEARCH_URL, params).json()
+        if not data['success'] or data['type'] != 'DATA':
+            return
+        match = self.resultsdialog_re.match(data['action'])
+        if not match:
+            return
+        doc = html.fromstring(match.group('html').decode('unicode-escape'))
+        self.select_directors(csv, session, doc)
+
+    def select_directors(self, csv, session, doc):
+        params = {}
+        for el in doc.get_element_by_id('CipcListDialogForm') \
+                     .findall('./input[@type="hidden"]'):
+            params[el.get('name')] = el.get('value')
+
+        selection = []
+        count = 0
+        el = doc.get_element_by_id('DirectorList')
+        el = el.find_class('list-row')[0]  # select first result only
+        if 'highlight-level-0' in el.get('class'):
+            el = el.find_class('list-subrow')
+        else:
+            el = el.find_class('highlight-level-1')
+        for result in chain.from_iterable([e.findall('.//input[1]') for e in el]):
+            selection.append({
+                'Description': result.get('data-description'),
+                'DbKey': result.get('value'),
+            })
+            count += int(result.get('directorshipcount'))
+
+        if not selection:
+            self.log.debug('Cannot select directors')
+            return
+
+        params['DirectorshipCount'] = str(count)
+        params['SerializedSelection'] = json.dumps([{'Items': selection}])
+        # request results for selected directors
+        data = session.post(DIRECTOR_SELECT_URL, params).json()
+        if not data['success']:
+            self.log.debug('Bad search')
+            return
+        if data['type'] != 'DIALOG':
+            # no confirmation necessary
+            return
+        match = self.pricingdialog_re.match(data['action'])
+        if not match:
+            self.log.debug('Cannot confirm search')
+            return
+        doc = html.fromstring(match.group('html').encode('utf8')
+                                                 .decode('string-escape'))
+        price_type = doc.get_element_by_id('PriceWarningTypeHidden').get('value')
+        params = {
+            'PriceWarningType': price_type,
+            'DoNotShowAgain': 'false',
+            'ListHistoricLoadedSearch': '',
+            'FlagKeyReferenceSpecified': '',
+        }
+        # confirm payment
+        res = session.post(DIRECTOR_SELECT_URL, params)
+        assert res.status_code == 200
 
 
 def scrape():
