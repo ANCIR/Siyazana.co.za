@@ -21,6 +21,7 @@
     # Core identifier.
     - name: name
       label: Name
+      unique: true
 
     # URL-ready form of the name
     # WARNING: as slugification is a lossy process, this may no longer be
