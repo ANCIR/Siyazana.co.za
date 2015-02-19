@@ -17,7 +17,7 @@
   {% elif 'date_end' in rel.props %}
     until {{ rel.props.date_end.value.strftime('%b %Y') }}
   {% else %}
-    unknown
+    &mdash;
   {% endif %}
 {% endmacro %}
 
