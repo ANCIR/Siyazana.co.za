@@ -14,3 +14,18 @@ Siyazana is primarily a database containing the the financial interests of publi
 The purpose of these forms is to avoid any situation which could pose a conflict of interest. This database can therefore serve both public and private individuals as they navigate the 
 
 We highlight ownership, associations, corporate and political interests intersecting business and politics, encompassing individual and collective interest groups. 
+
+<div class="row">
+    <div class="col-md-8">
+        <p>
+            Siyazana is based on <a href="http://granoproject.org">Grano</a>, a re-usable toolkit for mapping out political and economic influence. If you want to create a similar project, you can re-use the <a href="https://github.com/ANCIR/siyazana.co.za">open source code behind Siyazana</a>.
+        </p>
+    </div>
+    <div class="col-md-4">
+        <p>
+            <a href="http://granoproject.org">
+                <img src="http://granoproject.org/static/images/logo.png" width="200px">
+            </a>
+        </p>
+    </div>
+</div>

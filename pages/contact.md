@@ -12,6 +12,7 @@ If you are experiencing technical issues while exploring the site or would like 
 
 **Credits**
 
+* Based on [Grano](http://granoproject.org), an open source influence mapping platform.
 * Links icon designed by <a href="http://www.thenounproject.com/barredespace">Pascal Conil-lacoste</a> from the <a href="http://www.thenounproject.com">Noun Project</a>
 * Icons made by Elegant Themes from [Flaticon](http://www.flaticon.com).
 
