@@ -1,4 +1,4 @@
-from restpager import Pager
+from apikit import Pager
 
 from connectedafrica.core import grano, schemata
 from connectedafrica.util.properties import Properties
