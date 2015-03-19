@@ -3,12 +3,13 @@ import os
 DEBUG = True
 ASSETS_DEBUG = True
 
-FLATPAGES_ROOT = '../pages'
+FLATPAGES_ROOT = '../pages/siyazana'
 FLATPAGES_EXTENSION = '.md'
 
 CACHE_TYPE = 'simple'
 
 APP_NAME = 'Siyazana'
+APP_SLOGAN = 'We know each other'
 
 GRANO_HOST = os.environ.get('GRANO_HOST', 'http://beta.grano.cc/')
 GRANO_APIKEY = os.environ.get('GRANO_APIKEY')

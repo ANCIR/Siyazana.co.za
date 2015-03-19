@@ -32,6 +32,7 @@ def inject_globals():
 
     return {
         'APP_NAME': app.config.get('APP_NAME'),
+        'APP_SLOGAN': app.config.get('APP_SLOGAN'),
         'PROJECT_API': grano.api_url,
         'query_text': query_text,
         'sidebar_schemata': sidebar_schemata,
