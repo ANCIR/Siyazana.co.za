@@ -42,7 +42,9 @@ class Properties(object):
     @property
     def properties(self):
         for name, data in self.obj.properties.items():
-            yield Property(data, self.attributes.get(name))
+            attr = self.attributes.get(name)
+            if attr is not None:
+                yield Property(data, attr)
 
     def __getattr__(self, name):
         return self.get(name)
