@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 setup(
     name='connectedAFRICA',
     version='0.1',
-    description="Politically exposed persons in South Africa",
+    description="Politically exposed persons in Senegal",
     long_description=None,
     classifiers=[],
     keywords='',
