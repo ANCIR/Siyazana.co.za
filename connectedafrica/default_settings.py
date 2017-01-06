@@ -3,17 +3,17 @@ import os
 DEBUG = True
 ASSETS_DEBUG = True
 
-FLATPAGES_ROOT = '../pages/siyazana'
+FLATPAGES_ROOT = '../pages/senegal'
 FLATPAGES_EXTENSION = '.md'
 
 CACHE_TYPE = 'simple'
 
-APP_NAME = 'Siyazana'
-APP_SLOGAN = 'We know each other'
+APP_NAME = 'Grano Senegal'
+APP_SLOGAN = 'Senegal entities'
 
 GRANO_HOST = os.environ.get('GRANO_HOST', 'http://beta.grano.cc/')
 GRANO_APIKEY = os.environ.get('GRANO_APIKEY')
-GRANO_PROJECT = os.environ.get('GRANO_PROJECT', 'southafrica')
+GRANO_PROJECT = os.environ.get('GRANO_PROJECT', 'senegal')
 
 WINDEEDS_USER = os.environ.get('WINDEEDS_USER')
 WINDEEDS_PASS = os.environ.get('WINDEEDS_PASS')
