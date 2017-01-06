@@ -7,6 +7,7 @@ pyenv/*
 *.pyc
 .cache
 *.sublime*
+*.log
 
 connectedafrica/static/vendor/*
 connectedafrica/static/gen/*
