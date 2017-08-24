@@ -2,25 +2,25 @@ from setuptools import setup, find_packages
 
 
 setup(
-    name='connectedAFRICA',
+    name='Siyazana',
     version='0.1',
     description="Politically exposed persons in South Africa",
     long_description=None,
     classifiers=[],
     keywords='',
-    author='Friedrich Lindenberg',
-    author_email='info@connectedafrica.org',
-    url='https://github.com/codeforafrica/connectedAFRICA',
+    author='Code for Africa',
+    author_email='support@codeforafrica.org',
+    url='https://github.com/ANCIR/siyazana.co.za',
     license='MIT',
     packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
     zip_safe=False,
     install_requires=[
-        "granoloader>=0.1",
-        "grano-client>=0.2.4",
+        "granoloader",
+        "grano-client",
         "gunicorn==19.0",
         "Fabric==1.9.0",
-        "Flask==0.10.1",
-        "Flask-Assets==0.10",
+        "Flask==0.12.2",
+        "Flask-Assets==0.12",
         "Flask-Script==2.0.5",
         "Flask-FlatPages==0.5",
         "Flask-Cache==0.13.1",
@@ -36,10 +36,9 @@ setup(
         "apikit>=0.0.1",
         "Unidecode==0.04.16"
     ],
-    # until file support branches have landed
     dependency_links=[
-        "git+https://github.com/granoproject/granoloader.git@file-support#egg=granoloader",
-        "git+https://github.com/Rizziepit/grano-client.git@file_support#egg=grano-client",
+        "https://github.com/CodeForAfrica/granoloader/tarball/master#egg=granoloader",
+        "https://github.com/CodeForAfrica/grano-client/tarball/master#egg=grano-client",
     ],
     tests_require=[],
     entry_points=""" """,

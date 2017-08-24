@@ -5,7 +5,7 @@ from fabric.contrib.files import exists, upload_template
 from fabric.context_managers import shell_env
 
 
-VIRTUALENV_DIR = 'connectedafrica_ve'
+VIRTUALENV_DIR = 'siyazana'
 CODE_DIR = 'connectedafrica'
 PROD_HOSTS = ['ec2-54-76-245-198.eu-west-1.compute.amazonaws.com']
 PACKAGES = (
@@ -21,13 +21,13 @@ PACKAGES = (
 SERVER_NAMES = 'siyazana.co.za'
 PROXY_PORT = 5001
 PROXY_HOST = '127.0.0.1'
-LOG_DIR = 'connectedafrica_logs'
+LOG_DIR = 'siyazana_logs'
 
 
 @task
 def prod():
-    env.deploy_user = 'connectedafrica'
-    env.deploy_dir = '/home/connectedafrica/'
+    env.deploy_user = 'ubuntu'
+    env.deploy_dir = '/home/ubuntu/siyazana'
     env.branch = 'master'
     env.nginx_bind = '127.0.0.1:80'
     env.hosts = PROD_HOSTS
@@ -59,7 +59,7 @@ def deploy():
 
     if not exists(repo_dir):
         with cd(env.deploy_dir):
-            sudo('git clone -b %s https://github.com/codeforafrica/connectedAFRICA.git %s'
+            sudo('git clone -b %s https://github.com/ANCIR/siyazana.co.za.git %s'
                  % (env.branch, repo_dir), user=env.deploy_user)
     else:
         with cd(repo_dir):
@@ -72,10 +72,10 @@ def deploy():
 
     # render and upload templates
     upload_template(os.path.join(os.path.dirname(__file__), 'deploy/nginx.template'),
-                    '/etc/nginx/sites-enabled/connectedafrica.conf',
+                    '/etc/nginx/sites-enabled/siyazana.conf',
                     get_nginx_template_context(), use_sudo=True, backup=False)
     upload_template(os.path.join(os.path.dirname(__file__), 'deploy/supervisor.template'),
-                    '/etc/supervisor/conf.d/connectedafrica.conf',
+                    '/etc/supervisor/conf.d/siyazana.conf',
                     get_supervisor_template_context(), use_sudo=True, backup=False)
     # make sure logging dir exists and update processes
     log_dir = os.path.join(env.deploy_dir, LOG_DIR)

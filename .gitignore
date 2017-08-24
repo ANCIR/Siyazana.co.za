@@ -8,9 +8,13 @@ pyenv/*
 .cache
 *.sublime*
 
+build
+dist
+
 connectedafrica/static/vendor/*
 connectedafrica/static/gen/*
 connectedafrica/static/.webassets-cache/*
+settings.py
 
 data/.cache/*
 data/gdocs/*.csv
