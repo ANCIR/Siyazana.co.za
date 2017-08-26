@@ -1,7 +1,7 @@
 import os
 
-from flask.ext.script import Manager
-from flask.ext.assets import ManageAssets
+from flask_script import Manager
+from flask_assets import ManageAssets
 
 from connectedafrica.core import assets, grano
 from connectedafrica.views import app
