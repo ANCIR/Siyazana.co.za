@@ -7,4 +7,4 @@ COPY . /siyazana
 WORKDIR /siyazana
 RUN python setup.py -qq install
 
-CMD gunicorn -w 3 -t 1800 connectedafrica.manage:app
+CMD gunicorn -w 3 connectedafrica.manage:app

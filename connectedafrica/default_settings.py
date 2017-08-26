@@ -11,6 +11,9 @@ CACHE_TYPE = 'simple'
 APP_NAME = 'Siyazana'
 APP_SLOGAN = 'We know each other'
 
+# Force HTTPS here:
+PREFERRED_URL_SCHEME = os.getenv('GRANO_URL_SCHEME', 'http')
+
 GRANO_HOST = os.environ.get('GRANO_HOST', 'http://beta.grano.cc/')
 GRANO_APIKEY = os.environ.get('GRANO_APIKEY')
 GRANO_PROJECT = os.environ.get('GRANO_PROJECT', 'southafrica')
