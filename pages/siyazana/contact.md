@@ -5,10 +5,10 @@ We're keen to hear your feedback on the site: whether you'd like to suggest an i
 
 Please consider contacting the following people: 
 
-* [Stefan Gilbert](mailto:sgilbert@issafrica.org), Senior Researcher: Governance and Corruption, [Institute for Security Studies](http://www.issafrica.org) with any questions about the content of the site and media inquiries.
-* [Khadija Sharife](mailto:ksharife@gmail.com), Lead Investigator, [African Network of Centers for Investigative Reporting](http://investigativecenters.org) with offers of investigative collaborations
+* [Ferial Haffajee](mailto:ferial@investigativecenters.org), Managing Editor, [African Network of Centers for Investigative Reporting](http://investigativecenters.org) with offers of investigative collaborations.
+* [Amanda Strydom](mailto:amanda@investigativecenters.org), Programme Manager, [African Network of Centers for Investigative Reporting](http://investigativecenters.org) with any questions about the content of the site and media inquiries.
 
-If you are experiencing technical issues while exploring the site or would like to implement a similar project in a different country, please [contact our technical team](mailto:flindenberg@icfj.org).
+If you are experiencing technical issues while exploring the site or would like to implement a similar project in a different country, please [contact our technical team](mailto:support@codeforafrica.org).
 
 **Credits**
 

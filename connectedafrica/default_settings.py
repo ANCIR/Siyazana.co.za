@@ -23,7 +23,7 @@ WINDEEDS_PASS = os.environ.get('WINDEEDS_PASS')
 
 # must use https for authorized requests
 DOCCLOUD_HOST = os.environ.get('DOCCLOUD_HOST',
-                               'https://sourceafrica.net/')
+                               'https://dc.sourceafrica.net/')
 DOCCLOUD_USER = os.environ.get('DOCCLOUD_USER')
 DOCCLOUD_PASS = os.environ.get('DOCCLOUD_PASS')
 DOCCLOUD_PROJECT = os.environ.get('DOCCLOUD_PROJECT',
