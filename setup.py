@@ -37,8 +37,8 @@ setup(
         "Unidecode>=0.04.16"
     ],
     dependency_links=[
-        "https://github.com/CodeForAfrica/granoloader/tarball/master#egg=granoloader",
-        "https://github.com/CodeForAfrica/grano-client/tarball/master#egg=grano-client",
+        "https://github.com/ANCIR/granoloader/tarball/master#egg=granoloader",
+        "https://github.com/ANCIR/grano-client/tarball/master#egg=grano-client",
     ],
     tests_require=[],
     entry_points=""" """,
