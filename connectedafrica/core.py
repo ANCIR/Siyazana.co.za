@@ -1,6 +1,6 @@
 from flask import Flask, url_for
 from flask_assets import Environment
-from flask_cache import Cache
+from flask_caching import Cache
 from flask_flatpages import FlatPages
 from granoclient import Grano, NotFound
 
